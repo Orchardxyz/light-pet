@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/community/community",
+    "pages/notification/notification",
+    "pages/record/record",
+    "pages/personalCenter/personalCenter"
+  ],
+  "window": {
+    "backgroundColor": "#F6F6F6",
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#009A61",
+    "navigationBarTitleText": "轻宠社区",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "",
+    "selectedColor": "",
+    "list": [
+      {
+        "pagePath": "pages/community/community",
+        "text": "社区",
+        "iconPath": "images/community.png",
+        "selectedIconPath": "images/community-selected.png"
+      },
+      {
+        "pagePath": "pages/notification/notification",
+        "text": "消息",
+        "iconPath": "images/notification.png",
+        "selectedIconPath": "images/notification-selected.png"
+      },
+      {
+        "pagePath": "pages/record/record",
+        "text": "记录",
+        "iconPath": "images/record.png",
+        "selectedIconPath": "images/record-selected.png"
+      },
+      {
+        "pagePath": "pages/personalCenter/personalCenter",
+        "text": "我的",
+        "iconPath": "images/personalCenter.png",
+        "selectedIconPath": "images/personalCenter-selected.png"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}
