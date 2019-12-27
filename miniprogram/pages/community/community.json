@@ -1,3 +1,5 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "LP-login": "/components/login/login"
+  }
 }

@@ -1,0 +1,15 @@
+<LP-bottom-modal modalShow="{{modalShow}}">
+  <view slot="modal-content">
+    <view class="container">
+      <text class="title">请先登录</text>
+      <button 
+      class="login"
+      open-type="getUserInfo"
+      bindgetuserinfo="getUserInfoLogin"
+      >
+        <i class="iconfont icon-weixin"></i>
+        <text>微信快捷登录</text>
+      </button>
+    </view>
+  </view>  
+</LP-bottom-modal>

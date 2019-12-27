@@ -1,1 +1,11 @@
 /* pages/community/community.wxss */
+.icon-biji {
+    position: absolute;
+    width: 85rpx;
+    height: 85rpx;
+    top: 85%;
+    left: 80%;
+    font-size: 120rpx;
+    color: #009A61;
+    z-index: 99;
+}

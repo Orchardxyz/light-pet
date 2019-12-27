@@ -1,2 +1,14 @@
-<!--pages/community/community.wxml-->
-<text>pages/community/community.wxml</text>
+<view class="container">
+
+    <!-- 发布动态的悬浮钮 -->
+    <view class="publish" bind:tap="onPublish">
+        <i class="iconfont icon-biji"></i>
+    </view>
+
+    <!-- 登录框 -->
+    <LP-login 
+    modalShow="{{modalShow}}"
+    bind:loginSuccess="{{onLoginSuccess}}"
+    bind:loginFail="{{onLoginFail}}"
+    />
+</view>

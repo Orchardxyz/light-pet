@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/community/community",
+    "pages/moment-edit-box/moment-edit-box",
     "pages/notification/notification",
     "pages/record/record",
     "pages/personalCenter/personalCenter"

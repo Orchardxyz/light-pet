@@ -5,7 +5,47 @@ Page({
    * 页面的初始数据
    */
   data: {
+    modalShow: false,
+  },
 
+  // 发布动态
+  onPublish() {
+    // 判断有无授权登录
+    wx.getSetting({
+      success: (result)=>{
+        if (result.authSetting['scope.userInfo']) {
+          wx.getUserInfo({
+            withCredentials: 'false',
+            lang: 'zh_CN',
+            timeout:10000,
+            success: (result)=>{
+              this.onLoginSuccess({
+                detail: result.userInfo
+              })
+            },
+          });
+        } else {
+          this.setData({
+            modalShow: true
+          })
+        }
+      },
+    });
+  },
+
+  // 登录成功
+  onLoginSuccess(event) {
+    const detail = event.detail
+    wx.navigateTo({
+      url: `../moment-edit-box/moment-edit-box?nickName=${detail.nickName}&avatarUrl=${detail.avatarUrl}`
+    })
+  },
+  // 登录失败
+  onLoginFail() {
+    wx.showModal({
+      title: '只有已登录的用户才能够发布动态',
+      content: '',
+    });
   },
 
   /**
