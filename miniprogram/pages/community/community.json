@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "LP-login": "/components/login/login"
+    "LP-login": "/components/login/login",
+    "LP-navbar": "/components/navbar/navbar"
   }
 }

@@ -1,4 +1,6 @@
-<view class="container">
+<view>
+    <!-- tab栏内容切换 -->
+    <LP-navbar></LP-navbar>
 
     <!-- 发布动态的悬浮钮 -->
     <view class="publish" bind:tap="onPublish">

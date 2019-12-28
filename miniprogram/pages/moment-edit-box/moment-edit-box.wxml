@@ -1,1 +1,22 @@
-<view class="container">edit-box</view>
+<view class="container">
+    <textarea 
+    class="content" 
+    placeholder="在这里分享你和宠物之间的新鲜事...."
+    bindinput="handleInput"
+    bindfocus="handleFocus"
+    bindblur="handleBlur"
+    auto-focus="{{true}}"
+    maxlength="140"
+    />
+    <!-- 选择图片 -->
+    <view class="img-list">
+        <block>
+            <view class="img-wrapper">
+                <image 
+                class="img"
+                >
+                </image>
+            </view>
+        </block>
+    </view>
+</view>
