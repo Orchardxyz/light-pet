@@ -6,6 +6,11 @@ Page({
    */
   data: {
     modalShow: false,
+    navbarActiveIndex: 0,
+    navbarTitle: [
+      "社区",
+      "关注",
+    ]
   },
 
   // 发布动态

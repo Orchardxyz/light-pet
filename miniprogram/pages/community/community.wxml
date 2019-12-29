@@ -1,6 +1,9 @@
 <view>
     <!-- tab栏内容切换 -->
-    <LP-navbar></LP-navbar>
+    <LP-navbar 
+    navbarActiveIndex="{{navbarActiveIndex}}"
+    navbarTitle="{{navbarTitle}}"
+    />
 
     <!-- 发布动态的悬浮钮 -->
     <view class="publish" bind:tap="onPublish">

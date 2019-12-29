@@ -2,13 +2,20 @@
   <!-- 导航栏 -->
   <view class="navbar">
     <block wx:for="{{navbarTitle}}" wx:key="index">
-      <view class="navbar-item {{navbarActiveIndex === index ? 'navbar-item-active' : ''}}" data-navbar-index="{{index}}" catchtap="onNavBarTap">
+      <view 
+      class="navbar-item {{navbarActiveIndex === index ? 'navbar-item-active' : ''}}" 
+      data-navbar-index="{{index}}" 
+      catchtap="handleNavBarTap"
+      >
         <text>{{item}}</text>
       </view>
     </block>
   </view>
   <view class="movie-content-wrapper">
-    <swiper current="{{navbarActiveIndex}}" bindanimationfinish="onBindAnimationFinish">
+    <swiper 
+    current="{{navbarActiveIndex}}" 
+    bindanimationfinish="handleBindAnimationFinish"
+    >
       <swiper-item wx:for="{{navbarTitle}}" wx:key="index">
         <scroll-view scroll-y="{{true}}">
           {{item}}

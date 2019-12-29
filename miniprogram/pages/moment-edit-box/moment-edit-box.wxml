@@ -1,22 +1,45 @@
 <view class="container">
     <textarea 
-    class="content" 
-    placeholder="在这里分享你和宠物之间的新鲜事...."
-    bindinput="handleInput"
-    bindfocus="handleFocus"
-    bindblur="handleBlur"
-    auto-focus="{{true}}"
-    maxlength="140"
+        class="content" 
+        placeholder="在这里分享你和宠物之间的趣事儿...."
+        bindinput="handleInput"
+        bindfocus="handleFocus"
+        bindblur="handleBlur"
+        auto-focus="{{true}}"
+        maxlength="140"
     />
-    <!-- 选择图片 -->
+
     <view class="img-list">
-        <block>
+        <!-- 显示图片 -->
+        <block wx:for="{{images}}" wx:key="*this">
             <view class="img-wrapper">
                 <image 
-                class="img"
-                >
-                </image>
+                    class="img"
+                    src="{{item}}"
+                    mode="aspectFill"
+                    bind:tap="previewImage"
+                    data-imgsrc="item"
+                />
+                <i 
+                    class="iconfont icon-shanchudelete30" 
+                    bind:tap="delImage" 
+                    data-index="{{index}}" 
+                />
             </view>
         </block>
+
+        <!-- 选择图片 --> 
+        <view 
+            class="img-wrapper selectphoto" 
+            bind:tap="chooseImage"
+            hidden="{{!selectPhoto}}"
+        >
+            <i class="iconfont icon-tianjia"></i>
+        </view>  
     </view>
+</view>
+
+<view class="footer" style="bottom:{{footerBottom}}px">
+    <text class="words-num">{{inputWordsNum}}</text>
+    <button class="send-btn" size="mini" bind:tap="handleSend">发布</button>
 </view>
