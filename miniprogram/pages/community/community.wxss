@@ -11,3 +11,52 @@
     font-size: 120rpx;
     color: #009A61;
 }
+
+/* navbar样式 */
+
+.movie-container {
+    display: flex;
+    flex-direction: column;
+}
+.navbar{
+    display: flex;
+    position: absolute;
+    flex-direction: row;
+    left: 0;
+    top: 0;
+    z-index: 99;
+
+    width: 100%;
+    background-color: #FFF;
+    border-bottom: 1rpx solid #DFDFDF;
+    box-sizing: border-box;
+    
+    font-size: 33rpx;
+    color: #A8A8A8;
+    text-align: center;
+}
+.navbar-item{
+    flex: 1;
+    padding: 10rpx 0px;
+}
+.navbar-item-active{
+    border-bottom: 5rpx solid #009A61;
+    font-weight: 500;
+    color: #009A61;
+    transition: all 0.4s;
+}
+
+.movie-content-wrapper{
+    padding-top: 70rpx;
+}
+
+/* 社区的动态列表样式 */
+
+.moment-list {
+    margin-top: 60rpx;
+}
+
+.moment-panel {
+    margin-bottom: 20rpx;
+    box-sizing: border-box;
+}

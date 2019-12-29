@@ -151,6 +151,11 @@ Page({
                 wx.showToast({
                     title: '发布成功',
                 });
+                // 返回上一页并刷新
+                wx.navigateBack();
+                const pages = getCurrentPages();
+                const prevPage = pages[pages.length - 2];
+                prevPage.onPullDownRefresh();
             })
             .catch(err => {
                 wx.hideLoading();

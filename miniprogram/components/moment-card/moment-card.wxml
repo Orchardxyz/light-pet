@@ -1,0 +1,27 @@
+<view class="moment">
+  <!-- 顶部（包括头像，昵称，发表时间） -->
+  <view class="moment-title">
+    <image class="moment-avatar" src="{{moment.avatarUrl}}"/>
+    <view class="moment-box">
+      <view>{{moment.nickName}}</view>
+      <view class="moment-time">{{createTime}}</view>
+    </view>
+  </view>
+
+  <!-- 文字内容 -->
+  <view class="moment-content">{{moment.content}}</view>
+
+  <!-- 图片 -->
+  <view class="moment-img">
+    <block wx:for="{{moment.image}}" wx:key="index">
+      <image 
+        class="img" 
+        src="{{item}}"
+        mode="aspectFill"
+        catch:tap="previewImage"
+        data-imgsrc="{{item}}"
+        data-imgs="{{moment.img}}"
+      />
+    </block>
+  </view>
+</view>

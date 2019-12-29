@@ -1,6 +1,6 @@
 {
   "usingComponents": {
     "LP-login": "/components/login/login",
-    "LP-navbar": "/components/navbar/navbar"
+    "LP-moment-card": "/components/moment-card/moment-card"
   }
 }

@@ -1,4 +1,7 @@
 // pages/community/community.js
+// 每页获取的最大数据
+const MAX_COUNT = 10
+
 Page({
 
   /**
@@ -7,10 +10,8 @@ Page({
   data: {
     modalShow: false,
     navbarActiveIndex: 0,
-    navbarTitle: [
-      "社区",
-      "关注",
-    ]
+    navbarTitle: ["社区", "关注"],
+    momentList: [],
   },
 
   // 发布动态
@@ -57,8 +58,71 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this._loadCommunityMoments()
   },
+
+  // 初始化动态列表
+  _initMomentsList() {
+    this.setData({
+      momentList: [],
+    })
+  },
+
+  // 加载社区所有动态
+  _loadCommunityMoments(start = 0) {
+    if (start === 0) {
+      this._initMomentsList()
+    }
+    wx.showLoading({
+      title: '拼命加载中',
+      mask: true,
+    });
+    // 请求数据
+    wx.cloud.callFunction({
+      name: 'community',
+      data: {
+        start,
+        count: MAX_COUNT,
+        $url: 'getAllMomentList',
+      }
+    })
+    .then(res => {
+      this.setData({
+        momentList: this.data.momentList.concat(res.result),
+      })
+      wx.hideLoading();
+      wx.stopPullDownRefresh();
+    })
+  }, 
+
+  // 加载关注的好友动态列表
+  _loadCommunityFollowingList(start = 0) {
+    if (start === 0) {
+      this._initMomentsList()
+    }
+    wx.showLoading({
+      title: '拼命加载中',
+      mask: true,
+    });
+    this.setData({
+      momentList: this.data.momentList.concat(['follow1', 'follow2', 'follow3'])
+    })
+    wx.hideLoading();
+  },
+
+  /**
+   * 点击导航栏
+   */
+  handleNavBarTap(event) {
+    let navbarTapIndex = event.currentTarget.dataset.navbarIndex
+    this.setData({
+      navbarActiveIndex: navbarTapIndex      
+    })
+    navbarTapIndex === 0 
+    ? this._loadCommunityMoments()
+    : this._loadCommunityFollowingList()
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -90,14 +154,20 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    this._initMomentsList()
+    navbarActiveIndex === 0
+    ? this._loadCommunityMoments()
+    : this._loadCommunityFollowingList()
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    const start = this.data.momentList.length
+    navbarActiveIndex === 0
+    ? this._loadCommunityMoments(start)
+    : this._loadCommunityFollowingList(start)
   },
 
   /**
