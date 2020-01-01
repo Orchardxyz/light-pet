@@ -155,7 +155,7 @@ Page({
    */
   onPullDownRefresh: function () {
     this._initMomentsList()
-    navbarActiveIndex === 0
+    this.data.navbarActiveIndex === 0
     ? this._loadCommunityMoments()
     : this._loadCommunityFollowingList()
   },
@@ -165,7 +165,7 @@ Page({
    */
   onReachBottom: function () {
     const start = this.data.momentList.length
-    navbarActiveIndex === 0
+    this.data.navbarActiveIndex === 0
     ? this._loadCommunityMoments(start)
     : this._loadCommunityFollowingList(start)
   },

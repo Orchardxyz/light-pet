@@ -126,24 +126,16 @@ Page({
         }
         // 存入云数据库
         Promise.all(allImagesPromise).then(() => {
-            // const moment = {
-            //     ...userInfo,
-            //     content,
-            //     img: fileIDs,
-            // }
-            // wx.cloud.callFunction({
-            //     name: 'community',
-            //     data: {
-            //         moment,
-            //         $url: 'addMoment',
-            //     }
-            // })
-            db.collection('moments').add({
+            const moment = {
+                ...userInfo,
+                content,
+                img: fileIDs,
+            }
+            wx.cloud.callFunction({
+                name: 'community',
                 data: {
-                    ...userInfo,
-                    content,
-                    image: fileIDs,
-                    createTime: db.serverDate(),
+                    moment,
+                    $url: 'addMoment',
                 }
             })
             .then(res => {

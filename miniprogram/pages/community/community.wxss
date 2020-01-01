@@ -1,6 +1,6 @@
 /* pages/community/community.wxss */
 .icon-biji {
-    position: absolute;
+    position: fixed;
     top: 85%;
     left: 80%;
     z-index: 99;

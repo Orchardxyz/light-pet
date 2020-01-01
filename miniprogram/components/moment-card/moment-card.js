@@ -17,11 +17,11 @@ Component({
     }
   },
   methods: {
-    preveiwImage(event) {
+    previewImage(event) {
       const dataset = event.target.dataset
       wx.previewImage({
         current: dataset.imgsrc,
-        urls: dataset.imgs,
+        urls: dataset.images,
       });
     }
   }

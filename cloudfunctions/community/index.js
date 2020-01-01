@@ -38,16 +38,20 @@ exports.main = async (event, context) => {
   })
 
   // 添加动态到数据库中
-  // app.router('addMoment', async(ctx, next) => {
-  //   const moment = event.moment
-  //   const result = await db.collection('moments').add({
-  //     data: {
-  //       ...moment,
-  //       createTime: db.serverDate(),
-  //     }
-  //   })
-  //   return result
-  // })
+  app.router('addMoment', async(ctx, next) => {
+    // 获取openid
+    const wxContext = cloud.getWXContext()
+    const { OPENID } = wxContext
+    const moment = event.moment
+    const result = await db.collection('moments').add({
+      data: {
+        _openid: OPENID,
+        ...moment,
+        createTime: db.serverDate(),
+      }
+    })
+    return result
+  })
 
   return app.serve()
 }

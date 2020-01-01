@@ -20,7 +20,7 @@
         mode="aspectFill"
         catch:tap="previewImage"
         data-imgsrc="{{item}}"
-        data-imgs="{{moment.img}}"
+        data-images="{{moment.image}}"
       />
     </block>
   </view>
