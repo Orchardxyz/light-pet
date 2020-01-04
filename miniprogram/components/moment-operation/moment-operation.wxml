@@ -5,8 +5,17 @@
   <view class="operation-item">
     <i class="iconfont icon-pet"><text>{{likeCount}}</text></i>
   </view>
-  <view class="operation-item share">
-    <i class="iconfont icon-fenxiang-1"></i>
+  <view class="operation-item" >
+    <button 
+      size="mini"
+      open-type="share"
+      data-moment="{{moment}}"
+      data-momentId="{{moment._id}}"
+      class="operation-share-btn"
+      hover-class="operation-share-btn-hover"
+    >
+      <i class="iconfont icon-fenxiang-1"></i>
+    </button>
   </view>
 </view>
 

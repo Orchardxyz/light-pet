@@ -3,7 +3,6 @@
     align-items: center;
     background-color: #FFF;
     height: 100%;
-    padding-bottom: 20rpx;
 }
 
 .operation-item {
@@ -17,6 +16,20 @@
     font-size: 30rpx;
     padding-left: 5rpx;
     color: #888A88;
+}
+
+.operation-share-btn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFF;
+    font-weight: 500;
+}
+
+.operation-share-btn::after {
+    display: none;
+    border: 0;
 }
 
 .comment-txta {

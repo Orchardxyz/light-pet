@@ -5,7 +5,9 @@ Component({
     loginShow: false,
     commentShow: false,
   },
-  properties: {},
+  properties: {
+    moment: Object,
+  },
   options: {
     styleIsolation: 'apply-shared',
   },
