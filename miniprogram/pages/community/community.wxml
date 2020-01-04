@@ -21,6 +21,7 @@
                 <LP-moment-card 
                     moment="{{item}}"
                 />
+                <LP-moment-operation />
             </view>
         </block>
     </view>

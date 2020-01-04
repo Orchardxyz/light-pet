@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "LP-login": "/components/login/login",
+    "LP-bottom-modal": "/components/bottom-modal/bottom-modal"
+  }
+}

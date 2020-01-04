@@ -1,0 +1,42 @@
+<view class="operation">
+  <view class="operation-item" bind:tap="handleComment">
+    <i class="iconfont icon-speechbubble"><text>{{commentCount}}</text></i>
+  </view>
+  <view class="operation-item">
+    <i class="iconfont icon-pet"><text>{{likeCount}}</text></i>
+  </view>
+  <view class="operation-item share">
+    <i class="iconfont icon-fenxiang-1"></i>
+  </view>
+</view>
+
+<!-- 登录 -->
+<LP-login 
+  modalShow="{{loginShow}}"
+  bind:loginsuccess="{{handleLoginSuccess}}"
+  bind:loginfail="{{handleLoginFail}}"
+/>
+
+<!-- 评论弹出框 -->
+<LP-bottom-modal modalShow="{{commentShow}}">
+  <form 
+    slot="modal-content"
+    report-submit="{{true}}"
+    bindsubmit="handleSubmit"
+  >
+    <textarea 
+      class="comment-txta"
+      placeholder="请在此处输入评论"
+      value="{{content}}"
+      maxlength="200"
+      fixed="true"
+    />
+    <button 
+      class="comment-btn"
+      size="mini"
+      form-type="submit"
+    >
+      发送
+    </button>
+  </form>
+</LP-bottom-modal>

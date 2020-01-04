@@ -2,7 +2,7 @@
 const MAX_WORDS_NUM = 140
 const MAX_IMAGE_NUM = 9
 let content = ''
-let userInfo = ''
+let userInfo = {}
 
 const db = wx.cloud.database()
 

@@ -21,7 +21,6 @@
 
 .icon-guanbi-01 {
     position: absolute;
-    top: 10rpx;
     right: 10rpx;
     padding: 20rpx;
 }

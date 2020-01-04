@@ -1,0 +1,35 @@
+.operation {
+    display: flex;
+    align-items: center;
+    background-color: #FFF;
+    height: 100%;
+    padding-bottom: 20rpx;
+}
+
+.operation-item {
+    flex: 1;
+    text-align: center;
+    font-size: 30rpx;
+    color: #686666;
+}
+
+.operation-item text {
+    font-size: 30rpx;
+    padding-left: 5rpx;
+    color: #888A88;
+}
+
+.comment-txta {
+    margin-top: 55rpx;
+    padding: 20rpx;
+    font-size: 35rpx;
+    text-align: left;
+} 
+
+.comment-btn {
+    position: absolute;
+    right: 20rpx;
+    bottom: 20rpx;
+    background-color: #009A61;
+    font-weight: 500;
+}
