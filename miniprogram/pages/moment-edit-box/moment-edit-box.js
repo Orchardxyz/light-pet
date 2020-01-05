@@ -130,6 +130,7 @@ Page({
                 ...userInfo,
                 content,
                 img: fileIDs,
+                likes: [],  // 点赞列表
             }
             wx.cloud.callFunction({
                 name: 'community',

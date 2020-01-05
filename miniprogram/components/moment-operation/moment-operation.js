@@ -1,15 +1,28 @@
+const app = getApp()
 let userInfo = {}
 
 Component({
   data: {
     loginShow: false,
     commentShow: false,
+    isLike: false,
+    likeCount: 0, // 点赞数
   },
   properties: {
     moment: Object,
   },
   options: {
     styleIsolation: 'apply-shared',
+  },
+  lifetimes: {
+    ready() {
+      const { globalData: { openid } } = app
+      const { likes = [] } = this.properties.moment
+      this.setData({
+        isLike: likes.includes(openid),
+        likeCount: likes.length,
+      })
+    }
   },
   methods: {
     handleLoginSuccess(event) {
@@ -28,6 +41,33 @@ Component({
         title: '只有已登录的用户才能进行评论',
         content: '',
       });
+    },
+
+    // 点赞功能
+    handleClickLike() {
+      const { isLike, likeCount } = this.data
+      const { moment: { _id: momentId } } = this.properties
+      const url = isLike ? 'cancelLike' : 'giveLike'
+      wx.cloud.callFunction({
+        name: 'community',
+        data: {
+          momentId,
+          $url: url,
+        }
+      })
+      .then(() => {
+        this.setData({
+          likeCount: isLike ? likeCount - 1 : likeCount + 1,
+          isLike: !isLike,
+        })
+      })
+      .catch((err) => {
+        console.log(err)
+        wx.showToast({
+          title: '点赞失败',
+          icon: 'none',
+        });
+      })
     },
 
     // 点击评论图标

@@ -46,3 +46,8 @@
     background-color: #009A61;
     font-weight: 500;
 }
+
+.icon-pets {
+    color: #FF1F18;
+    font-size: 45rpx;
+}

@@ -8,6 +8,9 @@ const TcbRouter = require('tcb-router')
 const db = cloud.database()
 const momentCollection = db.collection('moments')
 
+// 获取openid
+const { OPENID } = cloud.getWXContext()
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   const app = new TcbRouter({ event })
@@ -39,17 +42,47 @@ exports.main = async (event, context) => {
 
   // 添加动态到数据库中
   app.router('addMoment', async(ctx, next) => {
-    // 获取openid
-    const wxContext = cloud.getWXContext()
-    const { OPENID } = wxContext
     const moment = event.moment
-    const result = await db.collection('moments').add({
+    const result = await momentCollection.add({
       data: {
         _openid: OPENID,
         ...moment,
         createTime: db.serverDate(),
       }
     })
+    return result
+  })
+
+  // 点赞
+  app.router('giveLike', async(ctx, next) => {
+    const { momentId } = event
+    console.log(event)
+    let condition = {
+      _id: momentId
+    }
+    const data = await momentCollection.where(condition).get().then(res => res.data)
+    let likes = data[0].likes
+    likes.push(OPENID)
+    const result = await momentCollection.where(condition).update({
+      data: { likes }
+    })
+
+    return result
+  })
+
+  // 取消点赞
+  app.router('cancelLike', async(ctx, next) => {
+    const { momentId } = event
+    let condition = {
+      _id: momentId
+    }
+    const data = await momentCollection.where(condition).get().then(res => res.data)
+    let likes = data[0].likes
+    likes.splice(likes.findIndex(item => item === OPENID), 1)
+    const result = await momentCollection.where(condition).update({
+      data: { likes }
+    })
+
     return result
   })
 

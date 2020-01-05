@@ -2,8 +2,10 @@
   <view class="operation-item" bind:tap="handleComment">
     <i class="iconfont icon-speechbubble"><text>{{commentCount}}</text></i>
   </view>
-  <view class="operation-item">
-    <i class="iconfont icon-pet"><text>{{likeCount}}</text></i>
+  <view class="operation-item" bind:tap="handleClickLike">
+    <i class="iconfont {{!isLike ? 'icon-pet' : 'icon-pets'}}">
+      <text>{{likeCount === 0 ? undefined : likeCount}}</text>
+    </i>
   </view>
   <view class="operation-item" >
     <button 

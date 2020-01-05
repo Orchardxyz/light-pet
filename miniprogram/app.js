@@ -15,6 +15,21 @@ App({
       })
     }
 
-    this.globalData = {}
-  }
+    // 获取openId
+    this.getOpenId()
+
+    this.globalData = {
+      openid: -1,
+    }
+  },
+
+  getOpenId() {
+    wx.cloud.callFunction({
+      name: 'login'
+    })
+    .then(res => {
+      const { result: { openid } } = res
+      this.globalData.openid = openid
+    })
+  },
 })
