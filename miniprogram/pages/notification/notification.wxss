@@ -1,1 +1,38 @@
 /* pages/notification/notification.wxss */
+.notification {
+    margin-top: 20rpx;
+    padding: 0;
+}
+
+.notification-item {
+    display: flex;
+    margin: 20rpx 15rpx;
+}
+
+.iconfont-wrapper {
+    padding: 12rpx;
+    border-radius: 50%;
+    color: #FFF;
+}
+
+.iconfont {
+    font-size: 45rpx;
+}
+
+.content-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border-bottom:1rpx solid #CCC;
+}
+
+.content {
+    padding-left: 15rpx;
+    font-size: 38rpx;
+}
+
+.icon-xuanzeqixiayige_o {
+    margin-left: auto;
+    font-size: 30rpx;
+    color: #CCC;
+}

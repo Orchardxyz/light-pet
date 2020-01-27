@@ -1,2 +1,29 @@
-<!--pages/notification/notification.wxml-->
-<text>pages/notification/notification.wxml</text>
+<view class="notification">
+    <view class="notification-item">
+        <view class="iconfont-wrapper" style="background-color: #FF6666">
+            <i class="iconfont icon-xitong" />
+        </view>
+        <view class="content-wrapper">
+            <view class="content">系统通知</view>
+            <i class="iconfont icon-xuanzeqixiayige_o" />
+        </view>
+    </view>
+    <view class="notification-item">
+         <view class="iconfont-wrapper" style="background-color: #FFCC33">
+            <i class="iconfont icon-pet" />
+        </view>
+        <view class="content-wrapper">
+            <view class="content">收到的爪</view>
+            <i class="iconfont icon-xuanzeqixiayige_o" />
+        </view>
+    </view>
+    <view class="notification-item">
+         <view class="iconfont-wrapper" style="background-color: #009A61">
+            <i class="iconfont icon-pinglun" />
+        </view>
+        <view class="content-wrapper">
+            <view class="content">宠友的评论</view>
+            <i class="iconfont icon-xuanzeqixiayige_o" />
+        </view>
+    </view>
+</view>
