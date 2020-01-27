@@ -4,7 +4,7 @@
     "pages/moment-edit-box/moment-edit-box",
     "pages/notification/notification",
     "pages/record/record",
-    "pages/personalCenter/personalCenter"
+    "pages/user/user"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -36,10 +36,10 @@
         "selectedIconPath": "images/record-selected.png"
       },
       {
-        "pagePath": "pages/personalCenter/personalCenter",
+        "pagePath": "pages/user/user",
         "text": "我的",
-        "iconPath": "images/personalCenter.png",
-        "selectedIconPath": "images/personalCenter-selected.png"
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/user-selected.png"
       }
     ]
   },

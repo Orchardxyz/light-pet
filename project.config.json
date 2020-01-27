@@ -49,6 +49,12 @@
 					"name": "消息",
 					"pathName": "pages/notification/notification",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的",
+					"pathName": "pages/user/user",
+					"scene": null
 				}
 			]
 		}

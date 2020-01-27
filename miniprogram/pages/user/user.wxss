@@ -1,0 +1,76 @@
+/* pages/user/user.wxss */
+page {
+  background-color: #f1f1f1;
+}
+
+.user-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 440rpx;
+  background-color: #fff;
+}
+
+.user-avatarUrl {
+  display: block;
+  overflow: hidden;
+  width: 150rpx;
+  height: 150rpx;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+}
+
+.user-nickname {
+  margin-top: 15rpx;
+}
+
+.user-intro {
+  margin-top: 15rpx;
+  color: #666;
+  font-size: 28rpx;
+}
+
+.user-content {
+  margin-top: 15rpx;
+}
+
+.user-content-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 25rpx;
+  background-color: #fff;
+}
+
+.item-left text {
+  display: inline-block;
+  padding-left: 20rpx;
+}
+
+.item-right {
+  padding-top: 5rpx;
+  margin-left: auto;
+}
+
+.iconfont {
+  font-size: 55rpx;
+}
+
+.icon-xuanzeqixiayige_o {
+  margin-left: auto;
+  font-size: 35rpx;
+  color: #ccc;
+}
+
+/* 突出字体 */
+.strong-font {
+  font-size: 50rpx;
+  font-weight: 500;
+}
+
+/* 一些突出字体之外的小字样式 */
+.small-font {
+  color: #666;
+  font-size: 35rpx;
+  font-weight: normal;
+}

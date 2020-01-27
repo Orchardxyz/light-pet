@@ -1,4 +1,4 @@
-// pages/personalCenter/personalCenter.js
+// pages/user/user.js
 Page({
 
   /**

@@ -1,0 +1,57 @@
+<view class="user-header">
+    <view class="user-avatarUrl">
+        <open-data type="userAvatarUrl" />
+    </view>
+    <open-data type="userNickName" class="user-nickname" />
+    <text class="user-intro">这个人很懒，什么也没写~</text>
+</view>
+<view class="user-content">
+    <view class="user-content-item">
+        <view class="item-left">
+            <i class="iconfont icon-chongwufuwu" style="color: #FF9900" />
+            <text>爱宠</text>
+        </view>
+        <view class="item-right">
+            <text class="strong-font">0</text>
+            <text class="small-font">只</text>
+        </view>
+    </view>
+    <view class="user-content-item">
+        <view class="item-left">
+            <i class="iconfont icon-yonghuxiangce" style="color: #0099CC" />
+            <text>养宠日记</text>
+        </view>
+        <view class="item-right">
+            <i class="iconfont icon-xuanzeqixiayige_o" />
+        </view>
+    </view>
+    <view class="user-content-item" style="margin-top: 15rpx">
+        <view class="item-left">
+            <i class="iconfont icon-guanzhu" style="font-size: 58rpx; color: #333399" />
+            <text>关注</text>
+        </view>
+        <view class="item-right">
+            <text class="small-font">已关注</text>
+            <text class="strong-font">38</text>
+            <text class="small-font">人</text>
+        </view>
+    </view>
+    <view class="user-content-item">
+        <view class="item-left">
+            <i class="iconfont icon-shoucang" style="font-size: 58rpx; color: #CC0033" />
+            <text>收藏</text>
+        </view>
+        <view class="item-right">
+            <i class="iconfont icon-xuanzeqixiayige_o" />
+        </view>
+    </view>
+    <view class="user-content-item" style="margin-top: 15rpx">
+        <view class="item-left">
+            <i class="iconfont icon-xiaochengxu" style="color: #009A61" />
+            <text>分享</text>
+        </view>
+        <view class="item-right">
+            <i class="iconfont icon-xuanzeqixiayige_o" />
+        </view>
+    </view>
+</view>
