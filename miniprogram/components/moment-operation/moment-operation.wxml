@@ -1,53 +1,42 @@
 <view class="operation">
   <view class="operation-item" bind:tap="handleComment">
-    <i class="iconfont icon-speechbubble"><text>{{commentCount}}</text></i>
+    <i class="iconfont icon-speechbubble">
+      <text>{{commentCount === 0 ? undefined : commentCount}}</text>
+    </i>
   </view>
   <view class="operation-item" bind:tap="handleClickLike">
     <i class="iconfont {{!isLike ? 'icon-pet' : 'icon-pets'}}">
       <text>{{likeCount === 0 ? undefined : likeCount}}</text>
     </i>
   </view>
-  <view class="operation-item" >
-    <button 
-      size="mini"
-      open-type="share"
-      data-moment="{{moment}}"
-      data-momentId="{{moment._id}}"
-      class="operation-share-btn"
-      hover-class="operation-share-btn-hover"
-    >
+  <view class="operation-item">
+    <button size="mini" open-type="share" data-moment="{{moment}}" data-momentId="{{moment._id}}" class="operation-share-btn" hover-class="operation-share-btn-hover">
       <i class="iconfont icon-fenxiang-1"></i>
     </button>
   </view>
 </view>
-
 <!-- 登录 -->
-<LP-login 
-  modalShow="{{loginShow}}"
-  bind:loginsuccess="{{handleLoginSuccess}}"
-  bind:loginfail="{{handleLoginFail}}"
-/>
-
+<LP-login modalShow="{{loginShow}}" bind:loginsuccess="{{handleLoginSuccess}}" bind:loginfail="{{handleLoginFail}}" />
 <!-- 评论弹出框 -->
-<LP-bottom-modal modalShow="{{commentShow}}">
+<LP-bottom-modal 
+ modalShow="{{commentShow}}" 
+ style="bottom: {{footerBottom}}">
   <form 
-    slot="modal-content"
-    report-submit="{{true}}"
-    bindsubmit="handleSubmit"
-  >
+    slot="modal-content" 
+    report-submit="{{true}}" 
+    bindsubmit="handleSubmit">
     <textarea 
-      class="comment-txta"
-      placeholder="请在此处输入评论"
+      class="comment-txta" 
+      placeholder="请在此处输入评论" 
+      name="content" 
+      maxlength="200" 
+      fixed="true" 
       value="{{content}}"
-      maxlength="200"
-      fixed="true"
-    />
+      bindfocus="handleFocus" 
+      bindblur="handleBlur" />
     <button 
-      class="comment-btn"
-      size="mini"
-      form-type="submit"
-    >
-      发送
-    </button>
+      class="comment-btn" 
+      form-type="submit" 
+      size="mini">发送</button>
   </form>
 </LP-bottom-modal>

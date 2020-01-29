@@ -36,24 +36,33 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": -1,
 			"list": [
-				{
-					"id": -1,
-					"name": "db guide",
-					"pathName": "pages/databaseGuide/databaseGuide",
-					"query": ""
-				},
 				{
 					"id": -1,
 					"name": "消息",
 					"pathName": "pages/notification/notification",
+					"query": "",
 					"scene": null
 				},
 				{
 					"id": -1,
 					"name": "我的",
 					"pathName": "pages/user/user",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "记录",
+					"pathName": "pages/record/record",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "社区",
+					"pathName": "pages/community/community",
 					"scene": null
 				}
 			]

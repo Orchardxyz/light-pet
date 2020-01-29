@@ -35,6 +35,7 @@
 .comment-txta {
     margin-top: 55rpx;
     padding: 20rpx;
+    width: 550rpx;
     font-size: 35rpx;
     text-align: left;
 } 
@@ -43,8 +44,10 @@
     position: absolute;
     right: 20rpx;
     bottom: 20rpx;
-    background-color: #009A61;
+
+    background-color: rgb(44, 235, 165);
     font-weight: 500;
+    color: #333;
 }
 
 .icon-pets {
