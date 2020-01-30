@@ -20,6 +20,8 @@ exports.main = async (event, context) => {
   // 获取社区所有动态
   app.router("getAllMomentList", async (ctx, next) => {
     const { keyword = "", start, count } = event;
+    // 会出现进入路由时OPENID还没有读到的情况，所以要在这里先执行一次
+    const { OPENID } = cloud.getWXContext();
     let condition = {};
     // 支持模糊查询
     if (keyword.trim() !== "") {
@@ -39,12 +41,36 @@ exports.main = async (event, context) => {
       .then(res => {
         return res.data;
       });
+    for (let i = 0; i < momentList.length; i += 1) {
+      const { likes = [] } = momentList[i]
+      const isLike = likes.includes(OPENID)
+      momentList[i] = {
+        ...momentList[i],
+        isLike,
+        likeCount: likes.length
+      }
+    }
     ctx.body = momentList;
   });
 
   // 获取关注的好友动态（包括自己）
   app.router("getFllowingMomentList", async (ctx, next) => {
     // TODO
+  });
+
+  // 获取动态详情
+  app.router("detail", async (ctx, next) => {
+    const { momentId = "" } = event;
+    const detail = await momentCollection.doc(momentId).get();
+    const comment = await commentCollection
+      .where({ momentId })
+      .orderBy("createTime", "desc")
+      .limit(1)
+      .get();
+    ctx.body = {
+      detail,
+      comment
+    };
   });
 
   // 添加动态到数据库中
@@ -63,7 +89,7 @@ exports.main = async (event, context) => {
   // 点赞
   app.router("giveLike", async (ctx, next) => {
     const { momentId } = event;
-    console.log(event);
+    const { OPENID } = cloud.getWXContext();
     let condition = {
       _id: momentId
     };
@@ -83,6 +109,7 @@ exports.main = async (event, context) => {
   // 取消点赞
   app.router("cancelLike", async (ctx, next) => {
     const { momentId } = event;
+    const { OPENID } = cloud.getWXContext();
     let condition = {
       _id: momentId
     };
@@ -102,13 +129,6 @@ exports.main = async (event, context) => {
     return result;
   });
 
-  /**
-   * 评论回复
-   * @param type
-   * 0 直接对动态进行评论
-   * 1 评论下面的评论
-   * 2 评论的回复
-   */
   // 添加评论c
   app.router("comment", async (ctx, next) => {
     const {
@@ -131,9 +151,9 @@ exports.main = async (event, context) => {
       data: {
         commentCount: command.inc(1)
       }
-    })
-    
-    ctx.body = result
+    });
+
+    ctx.body = result;
   });
 
   // 添加回复
@@ -171,9 +191,9 @@ exports.main = async (event, context) => {
       data: {
         commentCount: command.inc(1)
       }
-    })
+    });
 
-    ctx.body = result
+    ctx.body = result;
   });
 
   return app.serve();

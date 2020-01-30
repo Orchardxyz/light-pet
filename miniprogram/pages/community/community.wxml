@@ -20,6 +20,9 @@
             <view class="moment-panel">
                 <LP-moment-card 
                     moment="{{item}}"
+                    data-moment="{{item}}"
+                    data-momentid="{{item._id}}"
+                    bind:tap="enterMomentDetail"
                 />
                 <LP-moment-operation 
                     moment="{{item}}"

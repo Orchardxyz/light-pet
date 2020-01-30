@@ -1,0 +1,61 @@
+.bar-wrapper {
+  display: flex;
+  padding: 5rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #ccc;
+  background-color: #fff;
+}
+
+.bar-comment {
+  width: 650rpx;
+  height: 50rpx;
+  border-radius: 20rpx;
+  padding-left: 15rpx;
+  padding-top: 5rpx;
+  background-color: #f7f7f7;
+
+  font-size: 33rpx;
+}
+
+button[size="mini"] {
+  background-color: rgba(0, 0, 0, 0);
+  font-size: 25rpx;
+}
+
+/* 评论弹框样式 */
+.comment-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+
+  width: 100%;
+  padding: 20rpx;
+  background-color: #fff;
+}
+.comment-content {
+  width: 100%;
+  height: 150rpx;
+  border-radius: 20rpx;
+  padding-left: 15rpx;
+  padding-top: 5rpx;
+  background-color: #f7f7f7;
+}
+
+.comment-ctrl {
+  display: flex;
+}
+
+.comment-btn {
+  margin-left: auto;
+  margin-top: 10rpx;
+  margin-right: 30rpx;
+  padding: 5rpx;
+  width: 120rpx;
+  border-radius: 25rpx;
+
+  background-color: rgb(143, 240, 204);
+  text-align: center;
+  font-size: 35rpx;
+}

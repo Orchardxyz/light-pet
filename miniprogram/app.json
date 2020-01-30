@@ -4,7 +4,8 @@
     "pages/moment-edit-box/moment-edit-box",
     "pages/notification/notification",
     "pages/record/record",
-    "pages/user/user"
+    "pages/user/user",
+    "pages/moment/moment-detail/moment-detail"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

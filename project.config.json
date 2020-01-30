@@ -63,6 +63,14 @@
 					"id": -1,
 					"name": "社区",
 					"pathName": "pages/community/community",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "动态详情",
+					"pathName": "pages/moment/moment-detail/moment-detail",
+					"query": "momentId=1dfdda755e0c306e00964ec42844fe28",
 					"scene": null
 				}
 			]

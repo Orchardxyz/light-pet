@@ -1,0 +1,23 @@
+<scroll-view scroll-y="{{true}}" class="moment-detail">
+    <view class="detail-card">
+        <LP-moment-card moment="{{moment}}" />
+    </view>
+    <view class="detail-tab">
+        <text class="tab-item">评论 {{commentCount}}</text>
+        <text class="tab-item">点赞 {{likeCount}}</text>
+    </view>
+    <view class="detail-comment">
+        <view class="comment-title">
+            <image class="comment-portrait" src="{{firstComment.avatarUrl}}"></image>
+            <text class="comment-nickname">{{firstComment.nickName}}</text>
+        </view>
+        <view class="comment-contentWrapper">
+            <view class="comment-content">{{firstComment.content}}</view>
+            <view class="comment-time">{{firstComment.createTime}}</view>
+        </view>
+    </view>
+    <button style="width: 90%; margin-bottom: 25rpx; background-color: #009A61; font-weight: normal; font-size: 38rpx; color: #FFF">查看更多评论</button>
+</scroll-view>
+<view class="detail-operation">
+    <LP-comment-bar />
+</view>
