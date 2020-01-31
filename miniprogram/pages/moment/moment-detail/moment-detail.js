@@ -1,4 +1,9 @@
 import formatTime from "../../../utils/formatTime";
+import { FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
+
+const DEFAULT_PLACHOLDER = "请在此输入评论";
+const DEFAULT_COMMENT = "";
+const app = getApp();
 
 Page({
   /**
@@ -7,9 +12,16 @@ Page({
   data: {
     momentId: "",
     moment: {},
+    currentCommentId: "",
     likeCount: 0,
     commentCount: 0,
     firstComment: {},
+    commentShow: false, // 评论弹框是否显示
+    placeholderTxt: DEFAULT_PLACHOLDER, // 评论弹框中的默认文字
+    defaultCommentValue: DEFAULT_COMMENT, // 评论框默认值
+    isReply: false,
+    commentLevel: 0,
+    replyUser: {}
   },
 
   /**
@@ -42,21 +54,106 @@ Page({
           }
         } = res;
         const { likes = [], commentCount } = moment;
-        const firstComment = commentList[0]
-        firstComment.createTime = formatTime(
-          new Date(firstComment.createTime)
-        );
-        const { children = [] } = firstComment
+        const firstComment = commentList[0];
+        firstComment.createTime = formatTime(new Date(firstComment.createTime));
+        const { children = [] } = firstComment;
 
         this.setData({
           moment,
           momentId,
           commentCount,
           firstComment,
-          likeCount: likes.length,
+          likeCount: likes.length
         });
 
         wx.hideLoading();
+      });
+  },
+
+  // 初始化数据
+  _initData() {
+    this.setData({
+      currentCommentId: "",
+      commentShow: false,
+      placeholderTxt: DEFAULT_PLACHOLDER,
+      defaultCommentValue: DEFAULT_COMMENT,
+      isReply: false
+    });
+  },
+
+  // 一级评论：对评论进行评论
+  handleComment(event) {
+    const {
+      currentTarget: {
+        dataset: { commentid, nickname }
+      }
+    } = event;
+    this.setData({
+      isReply: true,
+      currentCommentId: commentid,
+      placeholderTxt: `回复@${nickname}：`,
+      commentShow: true,
+      defaultCommentValue: "",
+      commentLevel: FIRST_REPLY
+    });
+  },
+
+  // 二级评论回复
+  handleSecComment(event) {
+    const {
+      currentTarget: {
+        dataset: { comment = {}, commentid }
+      }
+    } = event;
+    const { _openid, avatarUrl, nickName } = comment;
+    const replyUser = {
+      _openid,
+      avatarUrl,
+      nickName
+    };
+    this.setData({
+      replyUser,
+      isReply: true,
+      currentCommentId: commentid,
+      placeholderTxt: `回复@${nickName}：`,
+      commentShow: true,
+      defaultCommentValue: "",
+      commentLevel: SECOND_REPLY
+    });
+  },
+
+  // 回复
+  onReply(event) {
+    const { detail } = event;
+    const { momentId, currentCommentId, commentLevel, replyUser } = this.data;
+    wx.showLoading({
+      title: "发表中"
+    });
+    const {
+      globalData: { userInfo }
+    } = app;
+    const reply = {
+      ...userInfo,
+      replyUser,
+      currentMomentId: momentId,
+      currentCommentId,
+      content: detail,
+      type: commentLevel
+    };
+    wx.cloud
+      .callFunction({
+        name: "community",
+        data: {
+          reply,
+          $url: "reply"
+        }
+      })
+      .then(() => {
+        wx.hideLoading();
+        this._getMomentDetail(momentId);
+        wx.showToast({
+          title: "回复成功!"
+        });
       });
   },
 

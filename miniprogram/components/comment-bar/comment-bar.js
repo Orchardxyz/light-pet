@@ -1,11 +1,15 @@
 // components/comment-bar/comment-bar.js
+let current_content = "";
+
 Component({
   /**
    * 组件的属性列表
    */
   properties: {
-    // barShow: Boolean,
-    // commentShow: Boolean
+    placeholderTxt: String,
+    defaultValue: String,
+    commentShow: Boolean,
+    isReply: Boolean,
   },
 
   /**
@@ -13,7 +17,6 @@ Component({
    */
   data: {
     barShow: true,
-    commentShow: false,
     footerBottom: 0,
   },
 
@@ -26,19 +29,35 @@ Component({
    */
   methods: {
     handleFocus(event) {
-      const { detail: { height } = {} } = event
+      const { detail: { height } = {} } = event;
       this.setData({
         barShow: false,
         commentShow: true,
-        footerBottom: height,
-      })
+        footerBottom: height
+      });
     },
     handleBlur() {
       this.setData({
         barShow: true,
         commentShow: false,
-        footerBottom: 0,
-      })
+        footerBottom: 0
+      });
     },
+
+    // 监听评论弹框输入事件
+    handleInput(event) {
+      const {
+        detail: { value }
+      } = event;
+      current_content = value;
+    },
+
+    // 发送评论
+    handleSubmit() {
+      const { isReply } = this.properties
+      if (isReply) {
+        this.triggerEvent("handleReply", current_content);
+      }
+    }
   }
 });

@@ -25,6 +25,7 @@ button[size="mini"] {
 /* 评论弹框样式 */
 .comment-container {
   position: fixed;
+  z-index: 9;
   left: 0;
   right: 0;
   bottom: 0;

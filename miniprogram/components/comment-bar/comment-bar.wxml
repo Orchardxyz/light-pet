@@ -1,14 +1,12 @@
 <view class="bar-wrapper" hidden="{{!barShow}}">
-    <textarea class="bar-comment" name="content" maxlength="200" placeholder="我也来说一句" bindfocus="handleFocus"  />
+    <textarea class="bar-comment" name="content" maxlength="200" placeholder="我也来说一句" bindfocus="handleFocus" />
     <button size="mini" open-type="share">
         <i class="iconfont icon-fenxiang-1" style="font-size: 35rpx"></i>
     </button>
 </view>
 <view class="comment-container" hidden="{{!commentShow}}" style="bottom: {{footerBottom}}">
-    <form report-submit="{{true}}" bindsubmit="handleSubmit">
-        <textarea class="comment-content" placeholder="请在此处输入评论" name="content" maxlength="200" fixed="true" value="{{content}}" bindblur="handleBlur" />
-        <view class="comment-ctrl">
-            <view class="comment-btn" form-type="submit" size="default">发送</view>
-        </view>
-    </form>
+    <textarea class="comment-content" placeholder="{{placeholderTxt}}" name="content" maxlength="200" fixed="true" value="{{defaultValue}}" auto-focus="{{true}}" bindblur="handleBlur" bindinput="handleInput" />
+    <view class="comment-ctrl">
+        <view class="comment-btn" bind:tap="handleSubmit">发送</view>
+    </view>
 </view>

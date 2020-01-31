@@ -10,9 +10,6 @@ const command = db.command;
 const momentCollection = db.collection("moments");
 const commentCollection = db.collection("comment");
 
-// 获取openid
-const { OPENID } = cloud.getWXContext();
-
 // 云函数入口函数
 exports.main = async (event, context) => {
   const app = new TcbRouter({ event });
@@ -42,13 +39,13 @@ exports.main = async (event, context) => {
         return res.data;
       });
     for (let i = 0; i < momentList.length; i += 1) {
-      const { likes = [] } = momentList[i]
-      const isLike = likes.includes(OPENID)
+      const { likes = [] } = momentList[i];
+      const isLike = likes.includes(OPENID);
       momentList[i] = {
         ...momentList[i],
         isLike,
         likeCount: likes.length
-      }
+      };
     }
     ctx.body = momentList;
   });
@@ -64,7 +61,7 @@ exports.main = async (event, context) => {
     const detail = await momentCollection.doc(momentId).get();
     const comment = await commentCollection
       .where({ momentId })
-      .orderBy("createTime", "desc")
+      .orderBy("createTime", "asc")
       .limit(1)
       .get();
     ctx.body = {
@@ -75,6 +72,7 @@ exports.main = async (event, context) => {
 
   // 添加动态到数据库中
   app.router("addMoment", async (ctx, next) => {
+    const { OPENID } = cloud.getWXContext();
     const moment = event.moment;
     const result = await momentCollection.add({
       data: {
@@ -131,6 +129,7 @@ exports.main = async (event, context) => {
 
   // 添加评论c
   app.router("comment", async (ctx, next) => {
+    const { OPENID } = cloud.getWXContext();
     const {
       comment: { momentId, avatarUrl, nickName, content, type } = {}
     } = event;
@@ -158,6 +157,7 @@ exports.main = async (event, context) => {
 
   // 添加回复
   app.router("reply", async (ctx, next) => {
+    const { OPENID } = cloud.getWXContext();
     const {
       reply: {
         currentMomentId,
@@ -166,9 +166,7 @@ exports.main = async (event, context) => {
         nickName,
         content,
         type,
-        replyOpenid = "",
-        replyAvatarUrl = "",
-        replyNickName = ""
+        replyUser = {}
       } = {}
     } = event;
     const result = await commentCollection.doc(currentCommentId).update({
@@ -178,9 +176,7 @@ exports.main = async (event, context) => {
           nickName,
           content,
           type,
-          replyOpenid,
-          replyAvatarUrl,
-          replyNickName,
+          replyUser,
           _openid: OPENID,
           createTime: db.serverDate()
         })

@@ -17,9 +17,12 @@ App({
 
     // 获取openId
     this.getOpenId()
+    // 获取用户信息
+    this.getUserInfo()
 
     this.globalData = {
       openid: -1,
+      userInfo: {},
     }
   },
 
@@ -32,4 +35,22 @@ App({
       this.globalData.openid = openid
     })
   },
+
+  getUserInfo() {
+    wx.getSetting({
+      success: (result)=>{
+        if (result.authSetting["scope.userInfo"]) {
+          wx.getUserInfo({
+            withCredentials: 'false',
+            lang: 'zh_CN',
+            timeout:10000,
+            success: (result)=>{
+              this.globalData.userInfo = result.userInfo
+            },
+            fail: ()=>{},
+          });
+        }
+      },
+    })
+  }
 })
