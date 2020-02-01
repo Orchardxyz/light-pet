@@ -33,6 +33,7 @@ button[size="mini"] {
 
   width: 100%;
   padding: 20rpx;
+  border-top: 1rpx solid #ccc;
   background-color: #fff;
 }
 .comment-content {

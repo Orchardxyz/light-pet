@@ -1,0 +1,12 @@
+<LP-comment-card bind:onComment="handleComment" comment="{{comment}}" />
+<block wx:for="{{comment.children}}" wx:key="index">
+    <LP-comment-card bind:onComment="handleSecComment" comment="{{item}}" isChild="{{true}}" />
+</block>
+<view class="detail-operation">
+    <LP-comment-bar 
+    commentShow="{{commentShow}}"
+    placeholderTxt="{{placeholderTxt}}" 
+    defaultValue="{{defaultCommentValue}}" 
+    isReply="{{isReply}}" 
+    bind:handleReply="onReply" />
+</view>

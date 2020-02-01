@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "LP-comment-card": "/components/comment/comment-card/comment-card",
+    "LP-comment-bar": "/components/comment/comment-bar/comment-bar"
+  },
+  "navigationBarTitleText": "评论详情"
+}

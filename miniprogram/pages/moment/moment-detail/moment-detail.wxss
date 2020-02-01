@@ -33,13 +33,11 @@
 
 .comment-nickname {
   flex: 1;
-  /* font-size: 35rpx; */
   color: #666;
 }
 
 .comment-contentWrapper {
   margin-left: 88rpx;
-  /* border-bottom: 1rpx solid rgba(0, 0, 0, 0.1); */
 }
 
 .comment-click {

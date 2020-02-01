@@ -1,0 +1,5 @@
+/* 底部评论区位置 */
+.detail-operation {
+  position: fixed;
+  bottom: 0;
+}

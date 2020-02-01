@@ -72,6 +72,13 @@
 					"pathName": "pages/moment/moment-detail/moment-detail",
 					"query": "momentId=1dfdda755e0c306e00964ec42844fe28",
 					"scene": null
+				},
+				{
+					"id": 5,
+					"name": "评论详情",
+					"pathName": "pages/moment/comment-detail/comment-detail",
+					"query": "momentId=1dfdda755e0c306e00964ec42844fe28&commentId=da51bd8c5e344b50088b24fa6e1310b4",
+					"scene": null
 				}
 			]
 		}

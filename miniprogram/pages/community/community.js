@@ -127,7 +127,7 @@ Page({
   enterMomentDetail(event) {
     const {
       target: {
-        dataset: { moment, momentid }
+        dataset: { momentid }
       }
     } = event;
     wx.navigateTo({

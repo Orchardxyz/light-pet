@@ -6,22 +6,22 @@
         <text class="tab-item">评论 {{commentCount}}</text>
         <text class="tab-item">点赞 {{likeCount}}</text>
     </view>
-    <view class="detail-comment">
+    <view class="detail-comment" catch:tap="enterCommentDetail" data-commentid="{{firstComment._id}}" hover-class="comment-click">
         <view class="comment-title">
             <image class="comment-portrait" src="{{firstComment.avatarUrl}}"></image>
             <text class="comment-nickname">{{firstComment.nickName}}</text>
         </view>
-        <view class="comment-contentWrapper" data-commentid="{{firstComment._id}}" data-nickname="{{firstComment.nickName}}" bind:tap="handleComment" hover-class="comment-click">
+        <view class="comment-contentWrapper" data-commentid="{{firstComment._id}}" data-nickname="{{firstComment.nickName}}" catch:tap="handleComment" hover-class="comment-click">
             <view class="comment-content">{{firstComment.content}}</view>
             <view class="comment-time">{{firstComment.createTime}}</view>
         </view>
         <view class="comment-childrenWrapper" wx:if="{{firstComment.children.length > 0}}">
             <block wx:for="{{firstComment.children}}" wx:key="index">
-                <view wx:if="{{item.type === 1}}" data-comment="{{item}}" data-commentid="{{firstComment._id}}" bind:tap="handleSecComment">
+                <view wx:if="{{item.type === 1}}" data-comment="{{item}}" data-commentid="{{firstComment._id}}" catch:tap="handleSecComment">
                     <text style="color: #3399CC">{{item.nickName}}</text>
                     <text>：{{item.content}}</text>
                 </view>
-                <view wx:elif="{{item.type === 2}}" data-comment="{{item}}" data-commentid="{{firstComment._id}}" bind:tap="handleSecComment">
+                <view wx:elif="{{item.type === 2}}" data-comment="{{item}}" data-commentid="{{firstComment._id}}" catch:tap="handleSecComment">
                     <text style="color: #3399CC">{{item.nickName}}</text>
                     <text>回复</text>
                     <text style="color: #3399CC">@{{item.replyUser.nickName}}</text>

@@ -1,8 +1,10 @@
 import formatTime from "../../../utils/formatTime";
+import {
+  DEFAULT_PLACHOLDER,
+  DEFAULT_COMMENT
+} from "../../../utils/defaultValue";
 import { FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
 
-const DEFAULT_PLACHOLDER = "请在此输入评论";
-const DEFAULT_COMMENT = "";
 const app = getApp();
 
 Page({
@@ -10,16 +12,13 @@ Page({
    * 页面的初始数据
    */
   data: {
-    momentId: "",
-    moment: {},
-    currentCommentId: "",
-    likeCount: 0,
-    commentCount: 0,
-    firstComment: {},
-    commentShow: false, // 评论弹框是否显示
-    placeholderTxt: DEFAULT_PLACHOLDER, // 评论弹框中的默认文字
-    defaultCommentValue: DEFAULT_COMMENT, // 评论框默认值
+    comment: {},
     isReply: false,
+    currentCommentId: "",
+    momentId: "",
+    placeholderTxt: DEFAULT_PLACHOLDER,
+    commentShow: false,
+    defaultCommentValue: DEFAULT_COMMENT,
     commentLevel: 0,
     replyUser: {}
   },
@@ -28,72 +27,54 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    const { momentId = "" } = options;
-    this._getMomentDetail(momentId);
+    const { momentId, commentId } = options;
+    this._getCommentDetail(commentId);
+    this.setData({
+      currentCommentId: commentId,
+      momentId
+    });
   },
 
-  // 加载动态详情
-  _getMomentDetail(momentId) {
+  // 获取当前评论详情
+  _getCommentDetail(commentId) {
     wx.showLoading({
-      title: "拼命加载中",
+      title: "评论加载中",
       mask: true
     });
     wx.cloud
       .callFunction({
-        name: "community",
+        name: "comment",
         data: {
-          momentId,
-          $url: "detail"
+          $url: "detail",
+          commentId
         }
       })
       .then(res => {
         const {
-          result: {
-            detail: { data: moment } = {},
-            comment: { data: commentList } = []
-          }
+          result: { data: comment }
         } = res;
-        const { likes = [], commentCount } = moment;
-        const firstComment = commentList[0];
-        firstComment.createTime = formatTime(new Date(firstComment.createTime));
-        const { children = [] } = firstComment;
-
-        this.setData({
-          moment,
-          momentId,
-          commentCount,
-          firstComment,
-          likeCount: likes.length
-        });
-
+        const { createTime, children = [] } = comment;
+        comment.createTime = formatTime(new Date(createTime));
+        for (let i = 0; i < children.length; i++) {
+          const { createTime } = children[i];
+          children[i].createTime = formatTime(new Date(createTime));
+        }
+        this.setData({ comment });
         wx.hideLoading();
       });
   },
 
-  // 初始化数据
-  _initData() {
-    this.setData({
-      currentCommentId: "",
-      commentShow: false,
-      placeholderTxt: DEFAULT_PLACHOLDER,
-      defaultCommentValue: DEFAULT_COMMENT,
-      isReply: false
-    });
-  },
-
-  // 一级评论：对评论进行评论
+  // 一级评论
   handleComment(event) {
     const {
-      currentTarget: {
-        dataset: { commentid, nickname }
-      }
+      detail: { _id, nickName }
     } = event;
     this.setData({
       isReply: true,
-      currentCommentId: commentid,
-      placeholderTxt: `回复@${nickname}：`,
+      currentCommentId: _id,
+      placeholderTxt: `回复@${nickName}：`,
       commentShow: true,
-      defaultCommentValue: "",
+      defaultCommentValue: DEFAULT_COMMENT,
       commentLevel: FIRST_REPLY
     });
   },
@@ -101,11 +82,8 @@ Page({
   // 二级评论回复
   handleSecComment(event) {
     const {
-      currentTarget: {
-        dataset: { comment = {}, commentid }
-      }
+      detail: { _openid, avatarUrl, nickName }
     } = event;
-    const { _openid, avatarUrl, nickName } = comment;
     const replyUser = {
       _openid,
       avatarUrl,
@@ -114,10 +92,9 @@ Page({
     this.setData({
       replyUser,
       isReply: true,
-      currentCommentId: commentid,
       placeholderTxt: `回复@${nickName}：`,
       commentShow: true,
-      defaultCommentValue: "",
+      defaultCommentValue: DEFAULT_COMMENT,
       commentLevel: SECOND_REPLY
     });
   },
@@ -142,7 +119,7 @@ Page({
     };
     wx.cloud
       .callFunction({
-        name: "community",
+        name: "comment",
         data: {
           reply,
           $url: "reply"
@@ -150,21 +127,11 @@ Page({
       })
       .then(() => {
         wx.hideLoading();
-        this._getMomentDetail(momentId);
+        this._getCommentDetail(currentCommentId);
         wx.showToast({
           title: "回复成功!"
         });
       });
-  },
-
-  // 进入评论详情页
-  enterCommentDetail(event) {
-    const { momentId } = this.data
-    console.log(this.data)
-    const { currentTarget: {dataset: {commentid}}} = event
-    wx.navigateTo({
-      url: `../comment-detail/comment-detail?momentId=${momentId}&commentId=${commentid}`
-    });
   },
 
   /**

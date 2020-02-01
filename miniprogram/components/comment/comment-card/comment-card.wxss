@@ -1,0 +1,43 @@
+.container {
+  border-bottom: 1rpx solid #dfdfdf;
+  padding: 10rpx;
+}
+
+.comment-title {
+  display: flex;
+  align-items: center;
+}
+
+.comment-portrait {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.comment-nickname {
+  flex: 1;
+  color: #666;
+}
+
+.comment-contentWrapper {
+  margin-left: 88rpx;
+}
+
+.comment-click {
+  background-color: #f7f7f7;
+}
+
+.comment-content {
+  font-size: 32rpx;
+  line-height: 1.4;
+  font-weight: 400;
+  padding: 10rpx 0;
+}
+
+.comment-time {
+  font-size: 24rpx;
+  color: #939393;
+  padding-top: 15rpx;
+  margin-bottom: 20rpx;
+}
