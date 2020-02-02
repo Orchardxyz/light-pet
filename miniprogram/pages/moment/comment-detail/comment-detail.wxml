@@ -2,11 +2,7 @@
 <block wx:for="{{comment.children}}" wx:key="index">
     <LP-comment-card bind:onComment="handleSecComment" comment="{{item}}" isChild="{{true}}" />
 </block>
+<LP-bottom-line />
 <view class="detail-operation">
-    <LP-comment-bar 
-    commentShow="{{commentShow}}"
-    placeholderTxt="{{placeholderTxt}}" 
-    defaultValue="{{defaultCommentValue}}" 
-    isReply="{{isReply}}" 
-    bind:handleReply="onReply" />
+    <LP-comment-bar commentShow="{{commentShow}}" placeholderTxt="{{placeholderTxt}}" defaultValue="{{defaultCommentValue}}" isReply="{{isReply}}" bind:handleReply="onReply" bind:handleComment="onComment" />
 </view>

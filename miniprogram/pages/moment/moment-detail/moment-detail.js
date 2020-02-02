@@ -160,7 +160,6 @@ Page({
   // 进入评论详情页
   enterCommentDetail(event) {
     const { momentId } = this.data
-    console.log(this.data)
     const { currentTarget: {dataset: {commentid}}} = event
     wx.navigateTo({
       url: `../comment-detail/comment-detail?momentId=${momentId}&commentId=${commentid}`

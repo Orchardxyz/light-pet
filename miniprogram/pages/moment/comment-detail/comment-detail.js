@@ -64,6 +64,21 @@ Page({
       });
   },
 
+  // 数据初始化
+  _initData() {
+    this.setData({
+      comment: {},
+      isReply: false,
+      currentCommentId: "",
+      momentId: "",
+      placeholderTxt: DEFAULT_PLACHOLDER,
+      commentShow: false,
+      defaultCommentValue: DEFAULT_COMMENT,
+      commentLevel: 0,
+      replyUser: {}
+    });
+  },
+
   // 一级评论
   handleComment(event) {
     const {
@@ -99,6 +114,14 @@ Page({
     });
   },
 
+  // 直接输入评论
+  onComment(event) {
+    this.setData({
+      commentLevel: FIRST_REPLY,
+    })
+    this.onReply(event)
+  },
+
   // 回复
   onReply(event) {
     const { detail } = event;
@@ -128,6 +151,7 @@ Page({
       .then(() => {
         wx.hideLoading();
         this._getCommentDetail(currentCommentId);
+        this._initData()
         wx.showToast({
           title: "回复成功!"
         });

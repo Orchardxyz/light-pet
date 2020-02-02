@@ -1,6 +1,6 @@
 <view class="container" style="background-color: {{isChild ? '#F7F7F7' : '#FFF'}}">
   <view class="comment-title">
-    <image class="comment-portrait" src="{{comment.avatarUrl}}"></image>
+    <image class="comment-portrait" wx:if="{{comment.avatarUrl}}" src="{{comment.avatarUrl}}"></image>
     <text class="comment-nickname">{{comment.nickName}}</text>
   </view>
   <view class="comment-contentWrapper" catch:tap="handleComment" hover-class="comment-click">

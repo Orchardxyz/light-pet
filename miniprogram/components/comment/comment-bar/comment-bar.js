@@ -9,7 +9,7 @@ Component({
     placeholderTxt: String,
     defaultValue: String,
     commentShow: Boolean,
-    isReply: Boolean,
+    isReply: Boolean
   },
 
   /**
@@ -17,7 +17,7 @@ Component({
    */
   data: {
     barShow: true,
-    footerBottom: 0,
+    footerBottom: 0
   },
 
   options: {
@@ -54,9 +54,11 @@ Component({
 
     // 发送评论
     handleSubmit() {
-      const { isReply } = this.properties
+      const { isReply } = this.properties;
       if (isReply) {
         this.triggerEvent("handleReply", current_content);
+      } else {
+        this.triggerEvent("handleComment", current_content);
       }
     }
   }
