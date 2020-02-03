@@ -1,0 +1,16 @@
+<block wx:for="{{commentList}}" wx:key="index">
+    <LP-comment-overview 
+    comment="{{item}}" 
+    bind:onLinkMore="enterCommentDetail"
+    bind:onComment="handleReply" />
+</block>
+
+<view class="detail-operation">
+    <LP-comment-bar 
+    commentShow="{{commentShow}}" 
+    placeholderTxt="{{placeholderTxt}}" 
+    defaultValue="{{defaultCommentValue}}" 
+    isReply="{{isReply}}"
+    bind:handleComment="onComment"
+    bind:handleReply="onReply" />
+</view>

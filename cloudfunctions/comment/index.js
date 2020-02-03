@@ -1,7 +1,7 @@
 // 云函数入口文件
-const cloud = require('wx-server-sdk')
+const cloud = require("wx-server-sdk");
 
-cloud.init()
+cloud.init();
 
 const TcbRouter = require("tcb-router");
 
@@ -12,15 +12,27 @@ const commentCollection = db.collection("comment");
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext()
+  const wxContext = cloud.getWXContext();
   const app = new TcbRouter({ event });
-  
+
+  // 评论列表
+  app.router("list", async (ctx, next) => {
+    const { momentId = "", start = 0, count = 10 } = event;
+    const commentList = await commentCollection
+      .where({ momentId })
+      .skip(start)
+      .orderBy("createTime", "asc")
+      .limit(count)
+      .get();
+    ctx.body = commentList;
+  });
+
   // 评论详情
-  app.router('detail', async(ctx, next) => {
-    const { commentId } = event
-    const result = await commentCollection.doc(commentId).get()
-    ctx.body = result
-  })
+  app.router("detail", async (ctx, next) => {
+    const { commentId } = event;
+    const result = await commentCollection.doc(commentId).get();
+    ctx.body = result;
+  });
 
   // 添加回复
   app.router("reply", async (ctx, next) => {
@@ -59,5 +71,33 @@ exports.main = async (event, context) => {
     ctx.body = result;
   });
 
-  return app.serve()
-}
+  // 添加评论
+  app.router("add", async (ctx, next) => {
+    const { OPENID } = cloud.getWXContext();
+    const {
+      comment: { momentId, avatarUrl, nickName, content, type } = {}
+    } = event;
+    const result = await commentCollection.add({
+      data: {
+        momentId,
+        avatarUrl,
+        nickName,
+        content,
+        type,
+        _openid: OPENID,
+        children: [],
+        createTime: db.serverDate()
+      }
+    });
+    // 评论数增加1
+    await momentCollection.doc(momentId).update({
+      data: {
+        commentCount: command.inc(1)
+      }
+    });
+
+    ctx.body = result;
+  });
+
+  return app.serve();
+};

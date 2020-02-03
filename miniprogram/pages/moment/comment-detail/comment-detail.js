@@ -70,7 +70,6 @@ Page({
       comment: {},
       isReply: false,
       currentCommentId: "",
-      momentId: "",
       placeholderTxt: DEFAULT_PLACHOLDER,
       commentShow: false,
       defaultCommentValue: DEFAULT_COMMENT,

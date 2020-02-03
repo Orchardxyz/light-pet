@@ -30,7 +30,7 @@
             </block>
         </view>
     </view>
-    <button style="width: 90%; margin-bottom: 25rpx; background-color: #009A61; font-weight: normal; font-size: 38rpx; color: #FFF">
+    <button class="more-btn" style="width: 95%" bind:tap="enterCommentList">
         查看更多评论
     </button>
 </scroll-view>

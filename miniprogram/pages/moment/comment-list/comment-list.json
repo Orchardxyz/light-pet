@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "LP-comment-overview": "/components/comment/comment-overview/comment-overview",
+    "LP-comment-bar": "/components/comment/comment-bar/comment-bar",
+    "LP-bottom-line": "/components/bottom-line/bottom-line"
+  },
+  "navigationBarTitleText": "评论列表"
+}

@@ -1,6 +1,6 @@
 /* miniprogram/pages/moment/moment-detail/moment-detail.wxss */
 .moment-detail {
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .detail-tab {
@@ -41,7 +41,7 @@
 }
 
 .comment-click {
-  background-color: #F7F7F7;
+  background-color: #f7f7f7;
 }
 
 .comment-content {
@@ -60,7 +60,7 @@
 .comment-childrenWrapper {
   padding: 20rpx 15rpx;
   margin-left: 88rpx;
-  background-color: #F7F7F7;
+  background-color: #f7f7f7;
   font-size: 30rpx;
 }
 
@@ -68,4 +68,13 @@
 .detail-operation {
   position: fixed;
   bottom: 0;
+}
+
+/* 查看更多按钮 */
+.more-btn {
+  margin-bottom: 25rpx;
+  background-color: #009A61;
+  font-weight: normal;
+  font-size: 38rpx;
+  color: #fff;
 }

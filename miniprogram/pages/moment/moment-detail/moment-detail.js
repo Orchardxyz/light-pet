@@ -43,7 +43,7 @@ Page({
         name: "community",
         data: {
           momentId,
-          $url: "detail"
+          $url: "/moment/detail"
         }
       })
       .then(res => {
@@ -163,6 +163,14 @@ Page({
     const { currentTarget: {dataset: {commentid}}} = event
     wx.navigateTo({
       url: `../comment-detail/comment-detail?momentId=${momentId}&commentId=${commentid}`
+    });
+  },
+
+  // 进入评论列表页
+  enterCommentList() {
+    const { momentId } = this.data
+    wx.navigateTo({
+      url: `../comment-list/comment-list?momentId=${momentId}`
     });
   },
 

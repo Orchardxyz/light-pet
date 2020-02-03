@@ -6,7 +6,8 @@
     "pages/record/record",
     "pages/user/user",
     "pages/moment/moment-detail/moment-detail",
-    "pages/moment/comment-detail/comment-detail"
+    "pages/moment/comment-detail/comment-detail",
+    "pages/moment/comment-list/comment-list"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

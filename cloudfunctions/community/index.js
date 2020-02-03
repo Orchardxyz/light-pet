@@ -56,7 +56,7 @@ exports.main = async (event, context) => {
   });
 
   // 获取动态详情
-  app.router("detail", async (ctx, next) => {
+  app.router("/moment/detail", async (ctx, next) => {
     const { momentId = "" } = event;
     const detail = await momentCollection.doc(momentId).get();
     const comment = await commentCollection
