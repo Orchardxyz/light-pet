@@ -13,7 +13,7 @@
             <i class="iconfont icon-pet" />
         </view>
         <view class="content-wrapper">
-            <view class="content">收到的爪</view>
+            <view class="content">收到的赞</view>
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </view>
@@ -22,7 +22,7 @@
             <i class="iconfont icon-pinglun" />
         </view>
         <view class="content-wrapper">
-            <view class="content">宠友的评论</view>
+            <view class="content">宠友的评论和回复</view>
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </view>

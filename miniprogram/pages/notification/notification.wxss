@@ -6,7 +6,7 @@
 
 .notification-item {
     display: flex;
-    margin: 20rpx 15rpx;
+    margin: 30rpx 15rpx;
 }
 
 .iconfont-wrapper {
