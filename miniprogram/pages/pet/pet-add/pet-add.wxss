@@ -1,0 +1,89 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 头像样式 */
+.pet-avatar {
+  position: relative;
+  margin-top: 45rpx;
+}
+
+.pet-avatar image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+}
+
+.pet-avatar .iconfont {
+  display: block;
+  position: absolute;
+  bottom: 5rpx;
+  right: 5rpx;
+
+  width: 30rpx;
+  background-color: #fff;
+  border: 1rpx solid #ccc;
+  border-radius: 50%;
+  padding: 3rpx;
+
+  font-size: 30rpx;
+  color: #009a61;
+}
+
+/* 头像下的内容卡片 */
+.pet-content {
+  width: 100%;
+  margin: 50rpx 0;
+  background-color: #fff;
+}
+
+.pet-content .item {
+  display: flex;
+  border-top: 1rpx solid #f7f7f7;
+  padding: 20rpx 15rpx;
+}
+
+.item .item-right {
+  display: flex;
+  margin-left: auto;
+}
+
+.placeholderTxt {
+  font-weight: 300;
+  color: #ccc;
+}
+
+.icon-nan,
+.icon-nv,
+.icon-cat,
+.icon-dog {
+  margin: 0;
+  color: #ccc;
+  font-size: 45rpx;
+}
+
+.icon-xuanzeqixiayige_o {
+  margin: 0;
+  margin-left: 15rpx;
+  color: #ccc;
+  font-size: 45rpx;
+}
+
+.confirm-btn,
+.cancel-btn {
+  margin-bottom: 25rpx;
+  font-weight: normal;
+  font-size: 38rpx;
+  color: #fff;
+}
+
+.confirm-btn {
+  background-color: #009a61;
+}
+
+.cancel-btn {
+  background-color: #d92e2e;
+}

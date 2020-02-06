@@ -4,10 +4,22 @@
 	"setting": {
 		"urlCheck": true,
 		"es6": true,
+		"enhance": true,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
-		"enhance": true
+		"coverView": true,
+		"autoAudits": false,
+		"showShadowRootInWxmlPanel": true,
+		"scopeDataCheck": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
 	},
 	"appid": "wx0d9cdf72e9c63cde",
 	"projectname": "light-pet",
@@ -55,7 +67,7 @@
 				{
 					"id": 2,
 					"name": "3. 记录",
-					"pathName": "pages/record/record",
+					"pathName": "pages/pet/pet",
 					"query": "",
 					"scene": null
 				},
@@ -85,6 +97,13 @@
 					"name": "1.3 评论列表",
 					"pathName": "pages/moment/comment-list/comment-list",
 					"query": "momentId=1dfdda755e0c306e00964ec42844fe28",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "3.1 添加宠物",
+					"pathName": "pages/pet/pet-add/pet-add",
+					"query": "",
 					"scene": null
 				}
 			]

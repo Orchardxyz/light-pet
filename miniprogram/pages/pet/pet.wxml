@@ -1,0 +1,26 @@
+<view class="record">
+    <view class="record-title">
+        <view class="left">
+            <text>我的宠物</text>
+        </view>
+        <view wx:if="{{pets.length}}" class="right">
+            <i class="iconfont icon-plus-line" />
+            <text>新成员</text>
+        </view>
+    </view>
+    <view class="record-pets">
+        <view wx:if="{{!pets.length}}" class="record-blank">
+            <view class="blank-content" bind:tap="enterPetAdd">
+                <i class="iconfont icon-plus-line" style="font-size: 75rpx" />
+            </view>
+            <view class="blank-addPet" style="margin-top: 10rpx; font-size: 32rpx; color: #333">
+                <text>(ฅʕ•̫͡•ʔฅ快来添加你的第一只爱宠吧！)</text>
+            </view>
+        </view>
+        <swiper wx:else indicator-dots="{{true}}" circular="{{true}}">
+            <block wx:for="{{['宠物1', '宠物2', '宠物3']}}" wx:key="index">
+                <swiper-item>{{item}}</swiper-item>
+            </block>
+        </swiper>
+    </view>
+</view>

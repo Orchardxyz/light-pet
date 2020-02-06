@@ -3,11 +3,12 @@
     "pages/community/community",
     "pages/moment-edit-box/moment-edit-box",
     "pages/notification/notification",
-    "pages/record/record",
+    "pages/pet/pet",
     "pages/user/user",
     "pages/moment/moment-detail/moment-detail",
     "pages/moment/comment-detail/comment-detail",
-    "pages/moment/comment-list/comment-list"
+    "pages/moment/comment-list/comment-list",
+    "pages/pet/pet-add/pet-add"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -33,10 +34,10 @@
         "selectedIconPath": "images/notification-selected.png"
       },
       {
-        "pagePath": "pages/record/record",
-        "text": "记录",
-        "iconPath": "images/record.png",
-        "selectedIconPath": "images/record-selected.png"
+        "pagePath": "pages/pet/pet",
+        "text": "爱宠",
+        "iconPath": "images/pet.png",
+        "selectedIconPath": "images/pet-selected.png"
       },
       {
         "pagePath": "pages/user/user",
