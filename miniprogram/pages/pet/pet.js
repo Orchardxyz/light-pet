@@ -10,7 +10,33 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {},
+  onLoad: function(options) {
+    this._loadPetList();
+  },
+
+  // 加载宠物列表
+  _loadPetList() {
+    wx.showLoading({
+      title: "拼命加载中",
+      mask: true
+    });
+    wx.cloud
+      .callFunction({
+        name: "pet",
+        data: {
+          $url: "list"
+        }
+      })
+      .then(res => {
+        const {
+          result: { data }
+        } = res;
+        this.setData({
+          pets: data
+        });
+        wx.hideLoading();
+      });
+  },
 
   // 进入宠物添加页
   enterPetAdd() {

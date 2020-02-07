@@ -130,7 +130,7 @@ Page({
           name: "pet",
           data: {
             $url: "add",
-            avatar,
+            petAvatar: avatar,
             petName,
             sex,
             species: selectedSpecies,

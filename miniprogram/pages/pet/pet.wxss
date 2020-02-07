@@ -1,9 +1,4 @@
 /* pages/record/record.wxss */
-.container {
-  padding: 0;
-  margin: 0;
-}
-
 .record {
   background-color: rgb(226, 247, 226);
   border-radius: 5rpx;
@@ -26,19 +21,16 @@
   color: #1890ff;
 }
 
-/* 顶部中间内容样式 */
-.record-pets {
-  background-color: #fff;
-  margin: 15rpx 25rpx;
-}
-
-.record-pets .record-blank {
+/* 添加宠物框样式 */
+.record-blank {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 280rpx;
   border: 1rpx dotted #333;
+  background-color: #fff;
+  margin: 15rpx 25rpx;
 }
 
 .record-blank .blank-content {
@@ -49,4 +41,79 @@
 
 .icon-plus-line {
   font-weight: bold;
+}
+
+/* 顶部中间内容样式 */
+/* .record-pets {
+  margin: 15rpx 25rpx;
+} */
+
+/* 宠物卡片 */
+.pet-card {
+  min-height: 280rpx;
+  margin: 15rpx 25rpx;
+  padding: 20rpx;
+  border: 1rpx;
+  border-radius: 15rpx;
+  background-color: #FFF;
+  box-shadow: 0 0 10px #CCC;
+}
+
+.pet-card .card-item {
+  display: flex;
+  justify-content: baseline;
+  padding: 5rpx;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.card-item .pet-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+}
+
+.card-item .pet-nameplate {
+  display: flex;
+  font-size: 30rpx;
+  color: #F7F7F7;
+}
+
+.card-item .pet-nameplate :nth-child(1) {
+  padding: 3rpx;
+  border-top-left-radius: 10rpx;
+  border-bottom-left-radius: 10rpx;
+  border-right: 1rpx solid #F2F2F2;
+  background-color: #FF9900;
+}
+
+.card-item .pet-nameplate :nth-child(2) {
+  padding: 3rpx 10rpx;
+  border-top-right-radius: 10rpx;
+  border-bottom-right-radius: 10rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.card-item .item-right {
+  margin-left: auto;
+}
+
+.iconfont {
+  margin-right: 12rpx;
+}
+
+/* 健康管理提醒 样式 */
+.health-management {
+  display: flex;
+  justify-content: center;
+  margin-top: 15rpx; 
+  border-top: 1px solid #F7F7F7
+}
+
+.health-btn {
+  margin-top: 18rpx;
+  background-color: #009A61;
+  font-weight: normal;
+  color: #fff;
 }

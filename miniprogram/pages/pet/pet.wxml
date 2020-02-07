@@ -3,24 +3,70 @@
         <view class="left">
             <text>我的宠物</text>
         </view>
-        <view wx:if="{{pets.length}}" class="right">
+        <view wx:if="{{pets.length}}" class="right" bind:tap="enterPetAdd">
             <i class="iconfont icon-plus-line" />
             <text>新成员</text>
         </view>
     </view>
-    <view class="record-pets">
-        <view wx:if="{{!pets.length}}" class="record-blank">
+    <!-- <view wx:if="{{!pets.length}}" class="record-blank">
             <view class="blank-content" bind:tap="enterPetAdd">
                 <i class="iconfont icon-plus-line" style="font-size: 75rpx" />
             </view>
             <view class="blank-addPet" style="margin-top: 10rpx; font-size: 32rpx; color: #333">
                 <text>(ฅʕ•̫͡•ʔฅ快来添加你的第一只爱宠吧！)</text>
             </view>
-        </view>
-        <swiper wx:else indicator-dots="{{true}}" circular="{{true}}">
-            <block wx:for="{{['宠物1', '宠物2', '宠物3']}}" wx:key="index">
-                <swiper-item>{{item}}</swiper-item>
-            </block>
-        </swiper>
-    </view>
+        </view> -->
+    <scroll-view scroll-y="{{true}}">
+        <block wx:for="{{pets}}" wx:key="index">
+            <view class="pet-card">
+                <view class="card-item">
+                    <image src="{{item.petAvatar}}" class="pet-avatar" />
+                    <view style="margin-left: 20rpx">
+                        <view style="margin-bottom: 8rpx">{{item.petName}}</view>
+                        <view class="pet-nameplate">
+                            <view>{{item.variety}}</view>
+                            <view style="background-color: {{item.sex === 0 ? '#99CCFF' : 'pink'}}">
+                                {{item.sex === 0 ? '♂': '♀'}}
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view class="card-item">
+                    <i class="iconfont icon-clock" style="color: #CDCDCD" />
+                    陪伴时长
+                    <view class="item-right">
+                        已陪伴你
+                        <text style="font-size: 35rpx; font-weight: bold">78</text>
+                        天
+                    </view>
+                </view>
+                <view class="card-item">
+                    <i class="iconfont icon-home" style="color: #663333" />
+                    收养时间
+                    <view class="item-right">{{item.adoptTime}}</view>
+                </view>
+                <view class="card-item">
+                    <i class="iconfont icon-Cake" style="color: #FF33CC" />
+                    生日
+                    <view class="item-right">{{item.birthday}}</view>
+                </view>
+                <view class="card-item">
+                    <i class="iconfont icon-nianling" style="color: #009A61" />
+                    年龄
+                    <view class="item-right">一岁零六个月</view>
+                </view>
+                <view class="card-item">
+                    <i class="iconfont icon-timeline" style="color: #1890ff" />
+                    最近动态
+                    <view class="item-right"></view>
+                </view>
+                <view class="health-management">
+                    <button class="health-btn" size="mini" style="width: 95%">
+                        <i class="iconfont icon-tongzhi" style="color: #FF9900" />
+                        健康管理提醒
+                    </button>
+                </view>
+            </view>
+        </block>
+    </scroll-view>
 </view>
