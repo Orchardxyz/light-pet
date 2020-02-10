@@ -61,12 +61,29 @@
                     <view class="item-right"></view>
                 </view>
                 <view class="health-management">
-                    <button class="health-btn" size="mini" style="width: 95%">
-                        <i class="iconfont icon-tongzhi" style="color: #FF9900" />
+                    <button class="health-btn" size="mini" style="width: 95%" data-pet="{{item}}" bind:tap="openDrawer" loading="{{btnIsLoading}}">
+                        <i wx:if="{{!btnIsLoading}}" class="iconfont icon-tongzhi" style="color: #FF9900" />
                         健康管理提醒
                     </button>
                 </view>
             </view>
         </block>
     </scroll-view>
+
+    <!-- 遮罩层 -->
+    <view wx:if="{{drawerShow}}" class="drawer-mask" bind:tap="closeDrawer" />
+    <!-- 健康提醒项目 -->
+    <view wx:if="{{drawerShow}}" class="drawer" animation="{{animation}}">
+        <view class="drawer-title">设置【{{currentSpecies}}-{{currentPetName}}】的提醒事项</view>
+        <view class="drawer-content">
+            <block wx:for="{{currentHealthProjects}}" wx:key="index">
+                <view class="drawer-item">
+                    <i class="iconfont {{item.icon}}" style="background-color: {{item.color}}" />
+                    <text>{{item.project}}</text>
+                    <text wx:if="{{hasSet}}" style="font-size: 30rpx; color: #999">(已开启)</text>
+                </view>
+            </block>
+        </view>
+    </view>
+
 </view>

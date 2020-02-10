@@ -1,38 +1,42 @@
 /* pages/notification/notification.wxss */
+page {
+  background-color: #fff;
+}
+
 .notification {
-    margin-top: 20rpx;
-    padding: 0;
+  margin-top: 20rpx;
+  padding: 0;
 }
 
 .notification-item {
-    display: flex;
-    margin: 30rpx 15rpx;
+  display: flex;
+  margin: 30rpx 15rpx;
 }
 
 .iconfont-wrapper {
-    padding: 12rpx;
-    border-radius: 50%;
-    color: #FFF;
+  padding: 12rpx;
+  border-radius: 50%;
+  color: #fff;
 }
 
 .iconfont {
-    font-size: 45rpx;
+  font-size: 45rpx;
 }
 
 .content-wrapper {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    border-bottom:1rpx solid #CCC;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1rpx solid #ccc;
 }
 
 .content {
-    padding-left: 15rpx;
-    font-size: 38rpx;
+  padding-left: 15rpx;
+  font-size: 38rpx;
 }
 
 .icon-xuanzeqixiayige_o {
-    margin-left: auto;
-    font-size: 30rpx;
-    color: #CCC;
+  margin-left: auto;
+  font-size: 30rpx;
+  color: #ccc;
 }

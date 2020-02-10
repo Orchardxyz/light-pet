@@ -13,7 +13,7 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const app = new TcbRouter({ event });
 
-  // 获取宠物
+  // 获取所有宠物
   app.router("list", async (ctx, next) => {
     const { OPENID } = wxContext;
     const result = await petCollection
@@ -23,6 +23,13 @@ exports.main = async (event, context) => {
       .get();
     ctx.body = result;
   });
+
+  // 获取宠物信息
+  app.router('get', async (ctx, next) => {
+    const { petId } = event
+    const result = await petCollection.doc(petId).get()
+    ctx.body = result
+  })
 
   // 添加宠物
   app.router("add", async (ctx, next) => {
