@@ -107,10 +107,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "3.2 宠物健康管理",
+					"id": 8,
+					"name": "3.2 宠物健康管理（未开启）",
 					"pathName": "pages/pet/pet-health/pet-health",
-					"query": "petId=74b140b45e3c22140b4e4ff25dba83d5",
+					"query": "petId=74b140b45e3c22140b4e4ff25dba83d5&petName=菠萝&species=猫咪&projectId=b4273748-60bc-45e4-8997-d7504c5c5d9d",
 					"scene": null
 				}
 			]

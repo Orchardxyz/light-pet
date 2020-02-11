@@ -76,8 +76,9 @@
     <view wx:if="{{drawerShow}}" class="drawer" animation="{{animation}}">
         <view class="drawer-title">设置【{{currentSpecies}}-{{currentPetName}}】的提醒事项</view>
         <view class="drawer-content">
+            <no-data wx:if="{{!currentHealthProjects.length}}" />
             <block wx:for="{{currentHealthProjects}}" wx:key="index">
-                <view class="drawer-item">
+                <view class="drawer-item" data-project="{{item}}" catch:tap="enterDetailPage">
                     <i class="iconfont {{item.icon}}" style="background-color: {{item.color}}" />
                     <text>{{item.project}}</text>
                     <text wx:if="{{hasSet}}" style="font-size: 30rpx; color: #999">(已开启)</text>

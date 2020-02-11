@@ -1,0 +1,78 @@
+<view wx:if="{{init}}" class="init">
+    <no-data />
+</view>
+<!-- 已开启的健康提醒页面 -->
+<!-- <view wx:elif="{{hasSet === true}}" class="project-set"></view> -->
+<!-- 未开启的健康提醒页面 -->
+<view wx:else class="project-unset">
+    <view class="project-name" style="background-color: {{color}}">
+        <i class="iconfont {{icon}}" />
+    </view>
+    <scroll-view class="project-wrapper" scroll-y="{{true}}">
+        <view class="project-item">
+            <view class="title">基本情况</view>
+            <view class="content">
+                <text>{{introduction}}</text>
+            </view>
+        </view>
+        <view class="project-item">
+            <view class="title">温馨小建议</view>
+            <view class="content">
+                <text>{{advice}}</text>
+            </view>
+        </view>
+        <view class="project-item">
+            <view class="title">设置提醒时间</view>
+            <view class="content">
+                <view wx:if="{{lastTime}}" class="content-item">
+                    <text class="item-left">上次{{project}}提醒时间</text>
+                    <view class="item-right">
+                        <picker mode="date" start="2010-01-01" end="{{today}}" bindchange="">
+                            <input class="item-right" name="lastTime" value="{{lastTime}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
+                        </picker>
+                        <i class="iconfont icon-xuanzeqixiayige_o" />
+                    </view>
+                </view>
+                <view class="content-item">
+                    <text class="item-left">设置本次的{{project}}时间</text>
+                    <view class="item-right">
+                        <picker mode="date" start="2010-01-01" value="{{planTime}}" bindchange="planDateChange">
+                            <input class="item-right" value="{{planTime}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
+                        </picker>
+                        <i class="iconfont icon-xuanzeqixiayige_o" />
+                    </view>
+                </view>
+                 <view class="content-item">
+                    <text class="item-left">设置具体时间</text>
+                    <view class="item-right">
+                        <picker mode="time" bindchange="clockChange" value="{{clock}}">
+                            <input class="item-right" value="{{clock}}" placeholder="选填" placeholder-class="placeholderTxt" style="text-align: right" />
+                        </picker>
+                        <i class="iconfont icon-xuanzeqixiayige_o" />
+                    </view>
+                </view>
+                <view class="content-item">
+                    <text class="item-left">设置本次{{project}}的提醒时间</text>
+                    <view class="item-right">
+                        <picker mode="selector" range="{{advanceDay}}" bindchange="remindTimeChange">
+                            <input class="item-right" value="{{advanceDay.index === undefined ? advanceDay[0] : advanceDay.index}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
+                        </picker>
+                        <i class="iconfont icon-xuanzeqixiayige_o" />
+                    </view>
+                </view>
+            </view>
+            <!-- <text style="font-size: 30rpx">注：若无设置具体时间小程序将默认会在上午10:00提醒您哦</text> -->
+        </view>
+    </scroll-view>
+</view>
+<view wx:if="{{!init}}" class="btn-group">
+    <button 
+    class="open-btn" 
+    loading="{{openBtnLoading}}"
+    style="background-color: {{btnSet ? '#F7F7F7' : '#009A61'}}; width: 95%" 
+    disabled="{{btnSet}}">
+    {{openBtnTxt}}
+    </button>
+    <button hidden="{{!btnSet}}" class="cancel-btn" style="background-color: #FF4D4F; width: 95%">取消提醒</button>
+    <button hidden="{{!btnSet}}" class="return-btn" style="background-color: #009A61; width: 95%">返回</button>
+</view>

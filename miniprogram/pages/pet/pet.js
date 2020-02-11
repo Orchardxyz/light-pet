@@ -1,4 +1,6 @@
 // pages/record/record.js
+import formatSpecies from "../../utils/formatSpecies";
+
 Page({
   /**
    * 页面的初始数据
@@ -6,8 +8,9 @@ Page({
   data: {
     pets: [],
     drawerShow: false,
+    currentPetId: "",
     currentPetName: "",
-    currentSpecies: '',
+    currentSpecies: "",
     animation: {},
     btnIsLoading: false,
     currentHealthProjects: []
@@ -93,18 +96,6 @@ Page({
     }
   },
 
-  // 格式化品种名
-  _formatSpecies(species) {
-    switch(species) {
-      case 'cat': 
-        return '猫咪'
-      case 'dog':
-        return '狗狗'
-      default:
-        return ''
-    }
-  },
-
   openDrawer(event) {
     const {
       currentTarget: {
@@ -113,8 +104,9 @@ Page({
     } = event;
     const { _id: petId, petName, species } = pet;
     this.setData({
+      currentPetId: petId,
       currentPetName: petName,
-      currentSpecies: this._formatSpecies(species),
+      currentSpecies: formatSpecies(species),
       btnIsLoading: true
     });
     wx.cloud
@@ -151,15 +143,20 @@ Page({
   },
 
   // 进入宠物健康管理页
-  enterPetHealth(event) {
+  enterDetailPage(event) {
     const {
       currentTarget: {
-        dataset: { petid }
+        dataset: { project }
       }
     } = event;
-    wx.navigateTo({
-      url: `./pet-health/pet-health?petId=${petid}`
-    });
+    const { _id, hasSet } = project;
+    const { currentPetId, currentPetName, currentSpecies } = this.data;
+    if (hasSet) {
+    } else {
+      wx.navigateTo({
+        url: `./pet-health/pet-health?petId=${currentPetId}&petName=${currentPetName}&projectId=${_id}&species=${currentSpecies}`
+      });
+    }
   },
 
   /**
