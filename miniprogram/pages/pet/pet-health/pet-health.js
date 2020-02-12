@@ -132,15 +132,15 @@ Page({
     wx.requestSubscribeMessage({
       // 最多允许三条订阅消息
       tmplIds: [SUBSCRIBE_REMIND_TEMPID],
-      success: () => {
-        this.handleOpenRemind()
-      },
-      fail: (err) => {
-        console.log(err)
-        wx.showToast({
-          title: '请先允许订阅消息才能开启提醒功能',
-          icon: 'none',
-        });
+      success: res => {
+        if (res[SUBSCRIBE_REMIND_TEMPID] === "accept") {
+          this.handleOpenRemind();
+        } else if (res[SUBSCRIBE_REMIND_TEMPID] === "reject") {
+          wx.showToast({
+            title: "请先允许订阅消息才能开启提醒功能",
+            icon: "none"
+          });
+        }
       }
     });
   },
@@ -184,18 +184,31 @@ Page({
           name: "subscribe",
           data: {
             remindId: _id,
-            templateId: SUBSCRIBE_REMIND_TEMPID,
+            templateId: SUBSCRIBE_REMIND_TEMPID
           },
           success: () => {
             this.setData({
-              openBtnTxt: '已开启',
+              hasSet: true,
+              openBtnTxt: "已开启",
               btnShow: true,
-              openBtnLoading: false,
-            })
+              openBtnLoading: false
+            });
           }
         });
       }
     });
+  },
+
+  // 返回上一页并刷新
+  handleReturn() {
+    const currentPages = getCurrentPages();
+    if (currentPages.length > 1) {
+      const prevPage = currentPages[currentPages.length - 2]
+      prevPage._loadPetList()
+      wx.navigateBack({
+        delta: 1
+      });
+    }
   },
 
   /**

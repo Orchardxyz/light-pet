@@ -55,7 +55,7 @@ exports.main = async (event, context) => {
       .get();
     // 如果找到记录，说明有上次设置并且已完成的提醒时间
     if (petProjects.length > 0) {
-      result.lastTime = petProjects[0].remindTime;
+      result.lastTime = petProjects[0].remindTime.split(' ')[0];
     }
     // 明日日期
     const tomorrow = moment(Date.now() + DIFF)
@@ -88,7 +88,7 @@ exports.main = async (event, context) => {
         species,
         remindTime: `${moment(planTime)
           .subtract(remindDay, "days")
-          .format("YYYY年M月D日")} ${planClock}`,
+          .format("YYYY-MM-DD")} ${planClock}`,
         planTime: `${moment(planTime).format("YYYY年M月D日")} ${planClock}`,
         isReminded: false,
         _openid: OPENID,

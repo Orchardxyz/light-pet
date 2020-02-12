@@ -13,12 +13,15 @@ exports.main = async (event, context) => {
   const timestampToTime = timestamp => {
     const date = new Date(timestamp + DIFF);
     const year = date.getFullYear();
-    const month = date.getMonth() + 1;
+    const month =
+      date.getMonth() + 1 < 10
+        ? `0${date.getMonth() + 1}`
+        : date.getMonth() + 1;
     const day = date.getDate();
     const hour = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
     const min =
       date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-    return `${year}年${month}月${day}日 ${hour}:${min}`;
+    return `${year}-${month}-${day} ${hour}:${min}`;
   };
   const currentTime = timestampToTime(Date.now());
 

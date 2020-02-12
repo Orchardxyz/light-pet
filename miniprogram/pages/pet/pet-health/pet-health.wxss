@@ -11,10 +11,6 @@ page {
 }
 
 /* 未开启的健康提醒页面 */
-.project-wrapper {
-  padding: 20rpx;
-}
-
 .project-name {
   display: flex;
   align-items: center;
@@ -37,13 +33,14 @@ page {
 }
 
 .project-item .title {
-  padding: 10rpx 0;
+  padding: 10rpx 20rpx;
   font-size: 30rpx;
   font-weight: bold;
   background-color: #f7f7f7;
 }
 .project-item .content {
-  padding: 12rpx;
+  position: relative;
+  padding: 12rpx 22rpx;
   font-size: 32rpx;
 }
 .content-item {
@@ -71,9 +68,28 @@ page {
   width: 100%;
   bottom: 0;
 }
-.open-btn,.cancel-btn, .return-btn {
+.open-btn,
+.cancel-btn,
+.return-btn {
   margin: 10rpx 0;
   font-weight: normal;
   font-size: 38rpx;
   color: #fff;
+}
+
+/* 已设置 */
+.iconfont {
+  font-size: small;
+}
+.icon-book1 {
+  color: rgb(138, 38, 38);
+}
+.icon-advice1 {
+  color: rgb(250, 65, 96);
+}
+.icon-xitong {
+  color: rgb(129, 127, 127);
+}
+.icon-kaiqi {
+  color: #009a61;
 }

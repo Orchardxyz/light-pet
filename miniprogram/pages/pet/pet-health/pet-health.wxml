@@ -1,8 +1,6 @@
 <view wx:if="{{init}}" class="init">
     <no-data />
 </view>
-<!-- 已开启的健康提醒页面 -->
-<!-- <view wx:elif="{{hasSet === true}}" class="project-set"></view> -->
 <!-- 未开启的健康提醒页面 -->
 <view wx:else class="project-unset">
     <view class="project-name" style="background-color: {{color}}">
@@ -10,28 +8,44 @@
     </view>
     <scroll-view class="project-wrapper" scroll-y="{{true}}">
         <view class="project-item">
-            <view class="title">基本情况</view>
+            <view class="title">
+                <i class="iconfont icon-book1" />
+                基本情况
+            </view>
             <view class="content">
                 <text>{{introduction}}</text>
             </view>
         </view>
         <view class="project-item">
-            <view class="title">温馨小建议</view>
+            <view class="title">
+                <i class="iconfont icon-advice1" />
+                温馨小建议
+            </view>
             <view class="content">
                 <text>{{advice}}</text>
             </view>
         </view>
         <view class="project-item">
-            <view class="title">设置提醒时间</view>
-            <view class="content">
+            <view class="title">
+                <i class="iconfont {{hasSet ? 'icon-kaiqi' : 'icon-xitong'}}" />
+                {{hasSet ? '已设置提醒时间' : '设置提醒时间'}}
+            </view>
+            <!-- <view wx:if="{{hasSet}}" class="content">
+                <view class="hasSet">
+                    <i class="iconfont icon-tixing" />
+                </view>
+            </view> -->
+            <view hidden="{{hasSet}}" class="content">
                 <view wx:if="{{lastTime}}" class="content-item">
                     <text class="item-left">上次{{project}}提醒时间</text>
                     <view class="item-right">
-                        <picker mode="date" start="2010-01-01" end="{{today}}" bindchange="">
-                            <input class="item-right" name="lastTime" value="{{lastTime}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
-                        </picker>
-                        <i class="iconfont icon-xuanzeqixiayige_o" />
+                        <input class="item-right" 
+                        value="{{lastTime}}" 
+                        placeholder="请选择" 
+                        placeholder-class="placeholderTxt" 
+                        style="text-align: right" />
                     </view>
+                     <i style="color: #FFF" class="iconfont icon-xuanzeqixiayige_o" />
                 </view>
                 <view class="content-item">
                     <text class="item-left">设置本次的{{project}}时间</text>
@@ -75,6 +89,10 @@
                         <i class="iconfont icon-xuanzeqixiayige_o" />
                     </view>
                 </view>
+            
+            
+            
+            
             </view>
             <!-- <text style="font-size: 30rpx">注：若无设置具体时间小程序将默认会在上午10:00提醒您哦</text> -->
         </view>
@@ -89,6 +107,11 @@
     disabled="{{btnDisabled}}">
     {{openBtnTxt}}
     </button>
-    <button hidden="{{!btnShow}}" class="cancel-btn" style="background-color: #FF4D4F; width: 95%">取消提醒</button>
-    <button hidden="{{!btnShow}}" class="return-btn" style="background-color: #009A61; width: 95%">返回</button>
+    <!-- <button hidden="{{!btnShow}}" class="cancel-btn" style="background-color: #FF4D4F; width: 95%">取消提醒</button> -->
+    <button hidden="{{!btnShow}}" 
+    class="return-btn" 
+    style="background-color: #009A61; width: 95%"
+    bind:tap="handleReturn">
+    返回
+    </button>
 </view>
