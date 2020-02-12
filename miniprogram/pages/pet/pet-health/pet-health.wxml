@@ -36,17 +36,27 @@
                 <view class="content-item">
                     <text class="item-left">设置本次的{{project}}时间</text>
                     <view class="item-right">
-                        <picker mode="date" start="2010-01-01" value="{{planTime}}" bindchange="planDateChange">
-                            <input class="item-right" value="{{planTime}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
+                        <picker mode="date" start="{{tomorrow}}" value="{{planTime}}" bindchange="planDateChange">
+                            <input class="item-right" 
+                            value="{{planTime}}" 
+                            placeholder="请选择" 
+                            placeholder-class="placeholderTxt" 
+                            style="text-align: right" 
+                            disabled="{{true}}" />
                         </picker>
                         <i class="iconfont icon-xuanzeqixiayige_o" />
                     </view>
                 </view>
                  <view class="content-item">
-                    <text class="item-left">设置具体时间</text>
+                    <text class="item-left">设置{{project}}的具体时间</text>
                     <view class="item-right">
-                        <picker mode="time" bindchange="clockChange" value="{{clock}}">
-                            <input class="item-right" value="{{clock}}" placeholder="选填" placeholder-class="placeholderTxt" style="text-align: right" />
+                        <picker mode="time" bindchange="clockChange" value="{{planClock}}">
+                            <input class="item-right" 
+                            value="{{planClock}}" 
+                            placeholder="选填" 
+                            placeholder-class="placeholderTxt" 
+                            style="text-align: right" 
+                            disabled="{{true}}" />
                         </picker>
                         <i class="iconfont icon-xuanzeqixiayige_o" />
                     </view>
@@ -55,7 +65,12 @@
                     <text class="item-left">设置本次{{project}}的提醒时间</text>
                     <view class="item-right">
                         <picker mode="selector" range="{{advanceDay}}" bindchange="remindTimeChange">
-                            <input class="item-right" value="{{advanceDay.index === undefined ? advanceDay[0] : advanceDay.index}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
+                            <input class="item-right" 
+                            value="{{advanceDay[index]}}" 
+                            placeholder="请选择" 
+                            placeholder-class="placeholderTxt" 
+                            style="text-align: right"
+                            disabled="{{true}}" />
                         </picker>
                         <i class="iconfont icon-xuanzeqixiayige_o" />
                     </view>
@@ -69,10 +84,11 @@
     <button 
     class="open-btn" 
     loading="{{openBtnLoading}}"
+    bind:tap="subscribeRemind"
     style="background-color: {{btnSet ? '#F7F7F7' : '#009A61'}}; width: 95%" 
-    disabled="{{btnSet}}">
+    disabled="{{btnDisabled}}">
     {{openBtnTxt}}
     </button>
-    <button hidden="{{!btnSet}}" class="cancel-btn" style="background-color: #FF4D4F; width: 95%">取消提醒</button>
-    <button hidden="{{!btnSet}}" class="return-btn" style="background-color: #009A61; width: 95%">返回</button>
+    <button hidden="{{!btnShow}}" class="cancel-btn" style="background-color: #FF4D4F; width: 95%">取消提醒</button>
+    <button hidden="{{!btnShow}}" class="return-btn" style="background-color: #009A61; width: 95%">返回</button>
 </view>

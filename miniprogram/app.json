@@ -9,7 +9,8 @@
     "pages/moment/comment-detail/comment-detail",
     "pages/moment/comment-list/comment-list",
     "pages/pet/pet-add/pet-add",
-    "pages/pet/pet-health/pet-health"
+    "pages/pet/pet-health/pet-health",
+    "pages/pet/open-remind/open-remind"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
