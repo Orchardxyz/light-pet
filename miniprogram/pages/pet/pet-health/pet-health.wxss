@@ -53,6 +53,7 @@ page {
 }
 .content-item .item-right {
   display: flex;
+  align-items: center;
   margin-left: auto;
 }
 .icon-xuanzeqixiayige_o {
@@ -92,4 +93,8 @@ page {
 }
 .icon-kaiqi {
   color: #009a61;
+}
+ 
+.placeholderTxt {
+  color: #D3D3D3;
 }

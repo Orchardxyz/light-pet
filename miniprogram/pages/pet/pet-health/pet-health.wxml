@@ -36,13 +36,12 @@
                 </view>
             </view> -->
             <view hidden="{{hasSet}}" class="content">
-                <view wx:if="{{lastTime}}" class="content-item">
+                <view wx:if="{{lastTime}}" class="content-item" style="color: #D3D3D3">
                     <text class="item-left">上次{{project}}提醒时间</text>
                     <view class="item-right">
                         <input class="item-right" 
+                        disabled="{{true}}"
                         value="{{lastTime}}" 
-                        placeholder="请选择" 
-                        placeholder-class="placeholderTxt" 
                         style="text-align: right" />
                     </view>
                      <i style="color: #FFF" class="iconfont icon-xuanzeqixiayige_o" />
