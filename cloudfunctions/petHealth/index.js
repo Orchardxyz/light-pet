@@ -7,8 +7,10 @@ const TcbRouter = require("tcb-router");
 const moment = require("moment");
 
 const db = cloud.database();
+const petCollection = db.collection('pet')
 const petRemindCollection = db.collection("pet_remind");
 const healthProjectCollection = db.collection("health_project");
+const subMsgCollection = db.collection("SubscribeMessage")
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -22,18 +24,24 @@ exports.main = async (event, context) => {
     const { data: healthProjects = [] } = await healthProjectCollection
       .where({ species })
       .get();
-    const { data: petProjects = [] } = await petRemindCollection
-      .where({ petId })
+    const { data: remindProjects = [] } = await petRemindCollection
+      .where({ petId, isFinished: false })
       .get();
     // 获取其中的project Id集
-    const petProjectIds = [];
-    petProjects.map(({ projectId = "" }) => {
-      petProjectIds.push(projectId);
+    const remindProjectIds = [];
+    // remindId集
+    const remindIds = [];
+    remindProjects.map(({ _id, projectId = "" }) => {
+      remindProjectIds.push(projectId);
+      remindIds.push(_id);
     });
     healthProjects.map(project => {
-      if (petProjectIds.includes[project._id]) {
+      if (remindProjectIds.includes(project._id)) {
         // 用来给前端判断是否已经设置的字段
         project.hasSet = true;
+        project.remindId =
+          remindIds[remindProjectIds.findIndex(value => value === project._id)];
+        console.log(project)
       } else {
         project.hasSet = false;
       }
@@ -49,13 +57,13 @@ exports.main = async (event, context) => {
       .get();
     const result = healthProjects[0];
     const { data: petProjects = [] } = await petRemindCollection
-      .where({ petId, isReminded: true })
+      .where({ petId, projectId, isReminded: true })
       .limit(1)
       .orderBy("createTime", "desc")
       .get();
     // 如果找到记录，说明有上次设置并且已完成的提醒时间
     if (petProjects.length > 0) {
-      result.lastTime = petProjects[0].remindTime.split(' ')[0];
+      result.lastTime = petProjects[0].remindTime.split(" ")[0];
     }
     // 明日日期
     const tomorrow = moment(Date.now() + DIFF)
@@ -65,6 +73,30 @@ exports.main = async (event, context) => {
 
     ctx.body = result;
   });
+
+  // 获取提醒项
+  app.router("/remind/get", async (ctx, next) => {
+    const { remindId } = event
+    const { data: remind } = await petRemindCollection.doc(remindId).get()
+    const { petId, project, planTime, isReminded, remindTime } = remind
+    const { data: pet} = await petCollection.doc(petId).get()
+    const formatTime = time => {
+      const dateArr = time.split(' ')[0].split('-')
+      return {
+        year: dateArr[0],
+        month: dateArr[1],
+        day: dateArr[2]
+      }
+    }
+    const result = {
+      pet,
+      project,
+      isReminded,
+      planTime: formatTime(planTime),
+      remindTime: formatTime(remindTime)
+    }
+    ctx.body = result
+  })
 
   // 添加提醒项
   app.router("/remind/add", async (ctx, next) => {
@@ -89,14 +121,38 @@ exports.main = async (event, context) => {
         remindTime: `${moment(planTime)
           .subtract(remindDay, "days")
           .format("YYYY-MM-DD")} ${planClock}`,
-        planTime: `${moment(planTime).format("YYYY年M月D日")} ${planClock}`,
+        planTime: `${planTime} ${planClock}`,
         isReminded: false,
+        isFinished: false, // 是否已完成
+        finishTime: '', // 完成时间
         _openid: OPENID,
         createTime: db.serverDate()
       }
     });
     ctx.body = result;
   });
+
+  // 删除提醒项
+  app.router('/remind/delete', async (ctx, next) => {
+    const { remindId } = event
+    await petRemindCollection.doc(remindId).remove()
+    await subMsgCollection.where({remindId}).remove()
+  })
+
+  // 完成提醒项
+  app.router('/remind/finish', async (ctx, next) => {
+    const { remindId, isReminded } = event
+    // 未提醒已完成的情况（即提前完成）,需要解除订阅消息
+    if (!isReminded) {
+      await subMsgCollection.where({remindId}).remove()
+    }
+    const result = await petRemindCollection.where({remindId}).update({
+      data: {
+        isFinished: true,
+      }
+    })
+    ctx.body = result
+  })
 
   return app.serve();
 };

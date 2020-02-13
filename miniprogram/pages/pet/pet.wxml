@@ -81,7 +81,7 @@
                 <view class="drawer-item" data-project="{{item}}" catch:tap="enterDetailPage">
                     <i class="iconfont {{item.icon}}" style="background-color: {{item.color}}" />
                     <text>{{item.project}}</text>
-                    <text wx:if="{{hasSet}}" style="font-size: 30rpx; color: #999">(已开启)</text>
+                    <text wx:if="{{item.hasSet}}" style="font-size: 30rpx; color: #999">(已开启)</text>
                 </view>
             </block>
         </view>

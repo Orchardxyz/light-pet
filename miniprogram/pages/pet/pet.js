@@ -149,9 +149,12 @@ Page({
         dataset: { project }
       }
     } = event;
-    const { _id, hasSet } = project;
+    const { _id, hasSet, remindId = '' } = project;
     const { currentPetId, currentPetName, currentSpecies } = this.data;
     if (hasSet) {
+      wx.navigateTo({
+        url: `./open-remind/open-remind?remindId=${remindId}`
+      });
     } else {
       wx.navigateTo({
         url: `./pet-health/pet-health?petId=${currentPetId}&petName=${currentPetName}&projectId=${_id}&species=${currentSpecies}`

@@ -112,6 +112,13 @@
 					"pathName": "pages/pet/pet-health/pet-health",
 					"query": "petId=74b140b45e3c22140b4e4ff25dba83d5&petName=菠萝&species=猫咪&projectId=b4273748-60bc-45e4-8997-d7504c5c5d9d",
 					"scene": null
+				},
+				{
+					"id": 9,
+					"name": "3.3 宠物健康管理（已开启）",
+					"pathName": "pages/pet/open-remind/open-remind",
+					"query": "remindId=1acf1de95e44e30a0eedd7300b80d7b1",
+					"scene": null
 				}
 			]
 		}

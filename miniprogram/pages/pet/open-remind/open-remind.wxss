@@ -1,1 +1,51 @@
-/* miniprogram/pages/pet/open-remind/open-remind.wxss */
+page {
+    background-color: #FFF;
+}
+
+.container {
+    position: relative;
+}
+
+.pet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 35rpx;
+}
+
+.remind {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 55rpx;
+  background-color: #F8F8F8;
+
+  font-size: 30rpx;
+  color: #B1AFAF;
+}
+
+.remind .title {
+    margin: 25rpx;
+}
+
+.remind .content {
+    margin: 0 0 25rpx 0;
+}
+.content .time {
+    font-size: 50rpx;
+    font-weight: 500;
+    color: #333;
+}
+
+.iconfont {
+    font-size: 30rpx;
+}
+
+.operation {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}

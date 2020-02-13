@@ -1,0 +1,6 @@
+.button {
+  margin-bottom: 20rpx;
+  font-weight: normal;
+  font-size: 38rpx;
+  color: #fff;
+}

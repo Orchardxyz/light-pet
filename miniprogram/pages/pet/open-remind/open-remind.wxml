@@ -1,2 +1,38 @@
-<!--miniprogram/pages/pet/open-remind/open-remind.wxml-->
-<text>miniprogram/pages/pet/open-remind/open-remind.wxml</text>
+<view wx:if="{{init}}">
+    <no-data />
+</view>
+<view wx:else class="container">
+    <view class="pet">
+        <avatar width="{{150}}" height="{{150}}" source="{{pet.petAvatar}}" />
+        <text>{{pet.petName}}</text>
+    </view>
+    <view class="remind">
+        <view class="title">
+            <i class="iconfont icon-project" />
+            {{project}}时间
+        </view>
+        <view class="content">
+            <text class="time">{{planTime.year}}</text>
+            /
+            <text class="time">{{planTime.month}}</text>
+            /
+            <text class="time">{{planTime.day}}</text>
+        </view>
+        <view class="title">
+            <i class="iconfont icon-remind" />
+            提醒时间
+        </view>
+        <view class="content">
+            <text class="time">{{planTime.year}}</text>
+            /
+            <text class="time">{{planTime.month}}</text>
+            /
+            <text class="time">{{planTime.day}}</text>
+        </view>
+    </view>
+    <view class="operation">
+        <LP-button wx:if="{{isReminded}}" disabled="{{true}}" backgroundColor="#CCC" value="已提醒" />
+        <LP-button wx:else disabled="{{disabled}}" loading="{{closeLoading}}" backgroundColor="#FF4D4F" value="{{closeTxt}}" bind:tap="handleCloseRemind" />
+        <LP-button disabled="{{disabled}}" loading="{{finishLoading}}" backgroundColor="{{finishLoading ? '#CCC' : '#009A61'}}" value="{{finishTxt}}" bind:tap="handleFinish"></LP-button>
+    </view>
+</view>
