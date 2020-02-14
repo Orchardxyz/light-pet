@@ -149,6 +149,7 @@ exports.main = async (event, context) => {
     const result = await petRemindCollection.where({remindId}).update({
       data: {
         isFinished: true,
+        finishTime: db.serverDate(),
       }
     })
     ctx.body = result

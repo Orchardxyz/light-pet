@@ -54,9 +54,13 @@ Page({
           }
         } = res;
         const { likes = [], commentCount } = moment;
-        const firstComment = commentList[0];
-        firstComment.createTime = formatTime(new Date(firstComment.createTime));
-        const { children = [] } = firstComment;
+        let firstComment = {}
+        if (commentList.length > 0) {
+          firstComment = commentList[0];
+          firstComment.createTime = formatTime(
+            new Date(firstComment.createTime)
+          );
+        }
 
         this.setData({
           moment,
@@ -159,8 +163,12 @@ Page({
 
   // 进入评论详情页
   enterCommentDetail(event) {
-    const { momentId } = this.data
-    const { currentTarget: {dataset: {commentid}}} = event
+    const { momentId } = this.data;
+    const {
+      currentTarget: {
+        dataset: { commentid }
+      }
+    } = event;
     wx.navigateTo({
       url: `../comment-detail/comment-detail?momentId=${momentId}&commentId=${commentid}`
     });
@@ -168,7 +176,7 @@ Page({
 
   // 进入评论列表页
   enterCommentList() {
-    const { momentId } = this.data
+    const { momentId } = this.data;
     wx.navigateTo({
       url: `../comment-list/comment-list?momentId=${momentId}`
     });

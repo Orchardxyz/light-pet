@@ -1,7 +1,7 @@
 {
   "usingComponents": {
-    "no-data": "/components/common/no-data/no-data",
-    "avatar": "/components/common/avatar/avatar",
-    "LP-button": "/components/common/button/button"
+    "no-data": "/components/UI/no-data/no-data",
+    "avatar": "/components/UI/avatar/avatar",
+    "LP-button": "/components/UI/button/button"
   }
 }

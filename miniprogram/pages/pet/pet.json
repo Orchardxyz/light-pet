@@ -1,6 +1,6 @@
 {
   "usingComponents": {
-    "no-data": "/components/common/no-data/no-data"
+    "no-data": "/components/UI/no-data/no-data"
   },
   "navigationBarTitleText": "宠物中心"
 }
