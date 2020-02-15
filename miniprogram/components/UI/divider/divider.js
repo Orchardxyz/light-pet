@@ -5,6 +5,7 @@ Component({
     type: String,
     width: String,
     height: String,
+    color: String,
   },
   methods: {}
 })

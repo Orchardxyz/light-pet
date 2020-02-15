@@ -78,6 +78,7 @@ exports.main = async (event, context) => {
       data: {
         _openid: OPENID,
         ...moment,
+        commentCount: 0,
         createTime: db.serverDate()
       }
     });

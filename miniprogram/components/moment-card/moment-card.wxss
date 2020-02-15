@@ -13,14 +13,16 @@ page {
 }
 
 .moment-avatar {
-    width: 64rpx;
-    height: 64rpx;
-    border-radius: 50%;
-    margin-right: 20rpx;
+    margin-right: 10rpx;
 }
 
 .moment-box {
     flex: 1;
+    color: #333;
+}
+
+.moment-pet {
+    display: flex;
 }
 
 .moment-time {
@@ -54,4 +56,9 @@ page {
 
 .moment-nickName {
     font-size: 32rpx;
+}
+
+/* iconfont */
+.icon-star-copy {
+    font-size: 45rpx;
 }

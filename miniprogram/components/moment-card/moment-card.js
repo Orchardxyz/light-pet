@@ -7,6 +7,9 @@ Component({
   properties: {
     moment: Object,
   },
+  options: {
+    styleIsolation: "apply-shared"
+  },
   observers: {
     ['moment.createTime'](time) {
       if (time) {

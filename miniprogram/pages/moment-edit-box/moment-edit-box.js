@@ -16,12 +16,15 @@ Page({
   },
 
   onLoad(options) {
-    userInfo = options;
-    const { index } = options;
+    const { nickName, avatarUrl, index } = options;
     const app = getApp();
     const {
       globalData: { petList }
     } = app;
+    userInfo = {
+      nickName,
+      avatarUrl
+    };
     this.setData({
       pet: petList[index]
     });
