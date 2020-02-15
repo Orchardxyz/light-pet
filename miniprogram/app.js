@@ -15,15 +15,18 @@ App({
       })
     }
 
+    this.globalData = {
+      openid: -1,
+      userInfo: {},
+      petList: [],  // 宠物列表
+    }
+
     // 获取openId
     this.getOpenId()
     // 获取用户信息
     this.getUserInfo()
-
-    this.globalData = {
-      openid: -1,
-      userInfo: {},
-    }
+    // 获取宠物列表
+    this.getPetList()
   },
 
   getOpenId() {
@@ -51,6 +54,21 @@ App({
           });
         }
       },
+    })
+  },
+
+  getPetList() {
+    wx.cloud.callFunction({
+      name: 'pet',
+      data: {
+        $url: 'list'
+      }
+    })
+    .then(res => {
+      const {
+        result: { data }
+      } = res;
+      this.globalData.petList = data
     })
   }
 })

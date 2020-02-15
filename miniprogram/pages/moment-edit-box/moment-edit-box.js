@@ -1,161 +1,174 @@
 // pages/moment-edit-box/moment-edit-box
-const MAX_WORDS_NUM = 140
-const MAX_IMAGE_NUM = 9
-let content = ''
-let userInfo = {}
+const MAX_WORDS_NUM = 140;
+const MAX_IMAGE_NUM = 9;
+let content = "";
+let userInfo = {};
 
-const db = wx.cloud.database()
+const db = wx.cloud.database();
 
 Page({
-    data: {
-      inputWordsNum: 0,
-      footerBottom: 0,  // 底部键盘弹出时【发布】的按钮栏高度
-      images: [],
-      selectPhoto: true,
-    },
+  data: {
+    inputWordsNum: 0,
+    footerBottom: 0, // 底部键盘弹出时【发布】的按钮栏高度
+    images: [],
+    selectPhoto: true,
+    pet: {}
+  },
 
-    onLoad(options) {
-        userInfo = options
-    },
+  onLoad(options) {
+    userInfo = options;
+    const { index } = options;
+    const app = getApp();
+    const {
+      globalData: { petList }
+    } = app;
+    this.setData({
+      pet: petList[index]
+    });
+  },
 
-    // 监听输入的字数
-    handleInput(event) {
-        let inputWordsNum = event.detail.value.length;
-        if (inputWordsNum >= MAX_WORDS_NUM) {
-            inputWordsNum = `最大字数为${MAX_WORDS_NUM}`
-        }
-        this.setData({
-            inputWordsNum,
-        })
-        content = event.detail.value
-    },
-
-    /**
-     * 手机键盘弹起落下时的发布按钮部分样式变化
-     * @param {*} event 
-     */
-    handleFocus(event) {
-        this.setData({
-            footerBottom: event.detail.height,
-        })
-    },
-    handleBlur() {
-        this.setData({
-            footerBottom: 0,
-        })
-    },
-
-    // 选择图片
-    chooseImage() {
-        // 当前还可选择的最多图片数
-        let max = MAX_IMAGE_NUM - this.data.images.length
-        wx.chooseImage({
-            count: max,
-            sizeType: ['original','compressed'],
-            sourceType: ['album','camera'],
-            success: (result)=>{
-                this.setData({
-                    images: this.data.images.concat(result.tempFilePaths)
-                })
-                max = MAX_IMAGE_NUM - this.data.images.length
-                this.setData({
-                    selectPhoto: max <= 0 ? false : true,
-                })
-            },
-        });
-    },
-
-    // 删除图片
-    delImage(event) {
-        this.data.images.splice(event.target.dataset.index, 1)
-        this.setData({
-            images: this.data.images
-        })
-        if (this.data.images.length === MAX_IMAGE_NUM - 1) {
-            this.setData({
-                selectPhoto: true,
-            })
-        }
-    },
-
-    // 预览图片
-    previewImage(event) {
-        wx.previewImage({
-            current: event.target.data.imgsrc,
-            urls: this.data.images,
-        });
-    },
-
-    // 发布动态
-    handleSend() {
-        if (content.trim() === '') {
-            wx.showModal({
-                title: '内容不能为空！',
-                content: '',
-            });
-            return;
-        }
-
-        wx.showLoading({
-            title: '发布中',
-            mask: true,
-        });
-
-        let images = this.data.images
-        let allImagesPromise = []
-        let fileIDs = []
-        // 上传图片到云存储中
-        for (let i = 0, len = images.length; i < len; i++) {
-            let imagePromise = new Promise((resolve, reject) => {
-                let image = images[i]
-                let suffix = /\.\w+$/.exec(image)[0]    // 文件扩展名
-                wx.cloud.uploadFile({
-                    // 路径名称唯一
-                    cloudPath: `moments/${Date.now()}-${Math.random() * 1000000}${suffix}`,
-                    filePath: image,
-                    success: result => {
-                        fileIDs = fileIDs.concat(result.fileID)
-                        resolve()
-                    },
-                    fail: error => {
-                        reject()
-                    }
-                })
-            });
-            allImagesPromise.push(imagePromise)
-        }
-        // 存入云数据库
-        Promise.all(allImagesPromise).then(() => {
-            const moment = {
-                ...userInfo,
-                content,
-                img: fileIDs,
-                likes: [],  // 点赞列表
-            }
-            wx.cloud.callFunction({
-                name: 'community',
-                data: {
-                    moment,
-                    $url: 'addMoment',
-                }
-            })
-            .then(res => {
-                wx.hideLoading();
-                wx.showToast({
-                    title: '发布成功',
-                });
-                // 返回上一页并刷新
-                wx.navigateBack();
-                const pages = getCurrentPages();
-                const prevPage = pages[pages.length - 2];
-                prevPage.onPullDownRefresh();
-            })
-            .catch(err => {
-                wx.hideLoading();
-                wx.showToast({
-                    title: '发布失败'
-                })
-            })
-        })
+  // 监听输入的字数
+  handleInput(event) {
+    let inputWordsNum = event.detail.value.length;
+    if (inputWordsNum >= MAX_WORDS_NUM) {
+      inputWordsNum = `最大字数为${MAX_WORDS_NUM}`;
     }
-})
+    this.setData({
+      inputWordsNum
+    });
+    content = event.detail.value;
+  },
+
+  /**
+   * 手机键盘弹起落下时的发布按钮部分样式变化
+   * @param {*} event
+   */
+  handleFocus(event) {
+    this.setData({
+      footerBottom: event.detail.height
+    });
+  },
+  handleBlur() {
+    this.setData({
+      footerBottom: 0
+    });
+  },
+
+  // 选择图片
+  chooseImage() {
+    // 当前还可选择的最多图片数
+    let max = MAX_IMAGE_NUM - this.data.images.length;
+    wx.chooseImage({
+      count: max,
+      sizeType: ["original", "compressed"],
+      sourceType: ["album", "camera"],
+      success: result => {
+        this.setData({
+          images: this.data.images.concat(result.tempFilePaths)
+        });
+        max = MAX_IMAGE_NUM - this.data.images.length;
+        this.setData({
+          selectPhoto: max <= 0 ? false : true
+        });
+      }
+    });
+  },
+
+  // 删除图片
+  delImage(event) {
+    this.data.images.splice(event.target.dataset.index, 1);
+    this.setData({
+      images: this.data.images
+    });
+    if (this.data.images.length === MAX_IMAGE_NUM - 1) {
+      this.setData({
+        selectPhoto: true
+      });
+    }
+  },
+
+  // 预览图片
+  previewImage(event) {
+    wx.previewImage({
+      current: event.target.data.imgsrc,
+      urls: this.data.images
+    });
+  },
+
+  // 发布动态
+  handleSend() {
+    if (content.trim() === "") {
+      wx.showModal({
+        title: "内容不能为空！",
+        content: ""
+      });
+      return;
+    }
+
+    wx.showLoading({
+      title: "发布中",
+      mask: true
+    });
+
+    let images = this.data.images;
+    let allImagesPromise = [];
+    let fileIDs = [];
+    // 上传图片到云存储中
+    for (let i = 0, len = images.length; i < len; i++) {
+      let imagePromise = new Promise((resolve, reject) => {
+        let image = images[i];
+        let suffix = /\.\w+$/.exec(image)[0]; // 文件扩展名
+        wx.cloud.uploadFile({
+          // 路径名称唯一
+          cloudPath: `moments/${Date.now()}-${Math.random() *
+            1000000}${suffix}`,
+          filePath: image,
+          success: result => {
+            fileIDs = fileIDs.concat(result.fileID);
+            resolve();
+          },
+          fail: error => {
+            reject();
+          }
+        });
+      });
+      allImagesPromise.push(imagePromise);
+    }
+    // 存入云数据库
+    Promise.all(allImagesPromise).then(() => {
+      const { pet } = this.data;
+      const moment = {
+        ...userInfo,
+        content,
+        pet,
+        img: fileIDs,
+        likes: [] // 点赞列表
+      };
+      wx.cloud
+        .callFunction({
+          name: "community",
+          data: {
+            moment,
+            $url: "addMoment"
+          }
+        })
+        .then(res => {
+          wx.hideLoading();
+          wx.showToast({
+            title: "发布成功"
+          });
+          // 返回上一页并刷新
+          wx.navigateBack();
+          const pages = getCurrentPages();
+          const prevPage = pages[pages.length - 2];
+          prevPage.onPullDownRefresh();
+        })
+        .catch(err => {
+          wx.hideLoading();
+          wx.showToast({
+            title: "发布失败"
+          });
+        });
+    });
+  }
+});

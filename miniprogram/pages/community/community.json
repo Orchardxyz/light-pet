@@ -2,6 +2,8 @@
   "usingComponents": {
     "LP-login": "/components/login/login",
     "LP-moment-card": "/components/moment-card/moment-card",
-    "LP-moment-operation": "/components/moment-operation/moment-operation"
+    "LP-moment-operation": "/components/moment-operation/moment-operation",
+    "avatar": "/components/UI/avatar/avatar",
+    "divider": "/components/UI/divider/divider"
   }
 }

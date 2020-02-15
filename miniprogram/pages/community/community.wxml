@@ -1,6 +1,6 @@
 <view>
     <!-- tab顶部栏内容切换 -->
-    <view class="movie-container">
+    <!-- <view class="movie-container">
         <view class="navbar">
             <block wx:for="{{navbarTitle}}" wx:key="index">
             <view 
@@ -12,34 +12,46 @@
             </view>
             </block>
         </view>
-    </view>
-
+    </view> -->
     <!-- 动态列表 -->
     <view class="moment-list">
         <block wx:for="{{momentList}}" wx:key="_id">
             <view class="moment-panel">
-                <LP-moment-card 
-                    moment="{{item}}"
-                    data-moment="{{item}}"
-                    data-momentid="{{item._id}}"
-                    bind:tap="enterMomentDetail"
-                />
-                <LP-moment-operation 
-                    moment="{{item}}"
-                />
+                <LP-moment-card moment="{{item}}" data-moment="{{item}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
+                <LP-moment-operation moment="{{item}}" />
             </view>
         </block>
     </view>
-
     <!-- 发布动态的悬浮钮 -->
     <view class="publish" bind:tap="onPublish">
-        <i class="iconfont icon-biji"></i>
+        <i class="iconfont icon-pen"></i>
     </view>
-
-    <!-- 登录框 -->
-    <LP-login 
-    modalShow="{{modalShow}}"
-    bind:loginSuccess="{{onLoginSuccess}}"
-    bind:loginFail="{{onLoginFail}}"
-    />
 </view>
+<!-- 遮罩层 -->
+<view wx:if="{{isPetSelected}}" class="mask" />
+<!-- 选择宠物 -->
+<view wx:if="{{isPetSelected}}" class="select-pet" animation="{{animation}}">
+    <view class="modal-content">
+        <view class="title">请先选择爱宠</view>
+        <divider />
+        <scroll-view class="petWrapper" scroll-y="{{true}}">
+            <block wx:for="{{petList}}" wx:key="index">
+                <view class="pet {{currentIndex === index ? 'selected' : ''}}" data-index="{{index}}" bind:tap="handleClick">
+                    <view class="pet-intro">
+                        <avatar source="{{item.petAvatar}}" width="55" height="55" />
+                        <text>{{item.petName}}</text>
+                    </view>
+                    <i wx:if="{{currentIndex === index}}" class="iconfont icon-finger" style="color: red" />
+                </view>
+            </block>
+        </scroll-view>
+        <divider />
+        <view class="modal-operation">
+            <button size="mini" bind:tap="handleCancel">取消</button>
+             <divider type="vertical" height="70" />
+            <button size="mini" bind:tap="handlePublish">确定</button>
+        </view>
+    </view>
+</view>
+<!-- 登录框 -->
+<LP-login modalShow="{{modalShow}}" bind:loginSuccess="{{onLoginSuccess}}" bind:loginFail="{{onLoginFail}}" />
