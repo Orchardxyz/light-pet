@@ -1,10 +1,14 @@
 <scroll-view scroll-y="{{true}}" class="moment-detail">
     <view class="detail-card">
-        <LP-moment-card moment="{{moment}}" />
+        <LP-moment-card moment="{{moment}}" bind:handleStar="onStar" />
     </view>
     <view class="detail-tab">
         <text class="tab-item">评论 {{commentCount}}</text>
         <text class="tab-item">点赞 {{likeCount}}</text>
+        <view class="tab-isLike">
+            <i class="iconfont {{isLike ? 'icon-pets' : 'icon-pet'}}" style="color: {{isLike ? '#FF1F18' : undefined}}" catch:tap="handleLike" />
+            <text wx:if="{{isLike}}" style="margin-left: 5rpx">已点赞</text>
+        </view>
     </view>
     <view class="detail-comment" catch:tap="enterCommentDetail" data-commentid="{{firstComment._id}}" hover-class="comment-click">
         <view class="comment-title">
@@ -30,10 +34,11 @@
             </block>
         </view>
     </view>
-    <button class="more-btn" style="width: 95%" bind:tap="enterCommentList">
+    <no-data wx:if="{{commentCount === 0}}" />
+    <button wx:elif="{{commentCount > 1}}" class="more-btn" style="width: 95%" bind:tap="enterCommentList">
         查看更多评论
     </button>
 </scroll-view>
 <view class="detail-operation">
-    <LP-comment-bar commentShow="{{commentShow}}" placeholderTxt="{{placeholderTxt}}" defaultValue="{{defaultCommentValue}}" isReply="{{isReply}}" bind:handleReply="onReply" />
+    <LP-comment-bar commentShow="{{commentShow}}" placeholderTxt="{{placeholderTxt}}" defaultValue="{{defaultCommentValue}}" isReply="{{isReply}}" bind:handleReply="onReply" bind:handleComment="onComment" />
 </view>

@@ -1,4 +1,4 @@
 <view class="container">
-  <i class="iconfont icon-wu" style="font-size: 300rpx" />
+  <i class="iconfont icon-wu" style="font-size: {{size}}rpx" />
   <text>暂无数据~</text>
 </view>

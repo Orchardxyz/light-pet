@@ -9,6 +9,7 @@ const db = cloud.database();
 const command = db.command;
 const momentCollection = db.collection("moments");
 const commentCollection = db.collection("comment");
+const starCollection = db.collection('star')
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -39,12 +40,13 @@ exports.main = async (event, context) => {
         return res.data;
       });
     for (let i = 0; i < momentList.length; i += 1) {
-      const { likes = [] } = momentList[i];
+      const { likes = [], stars = [] } = momentList[i];
       const isLike = likes.includes(OPENID);
+      const isStar = stars.includes(OPENID)
       momentList[i] = {
         ...momentList[i],
         isLike,
-        likeCount: likes.length
+        isStar
       };
     }
     ctx.body = momentList;
@@ -57,16 +59,20 @@ exports.main = async (event, context) => {
 
   // 获取动态详情
   app.router("/moment/detail", async (ctx, next) => {
-    const { momentId = "" } = event;
-    const detail = await momentCollection.doc(momentId).get();
-    const comment = await commentCollection
+    const { momentId = "", start = 0, count = 10 } = event;
+    let {data: moment} = await momentCollection.doc(momentId).get();
+    const {data: commentList} = await commentCollection
       .where({ momentId })
+      .skip(start)
       .orderBy("createTime", "asc")
-      .limit(1)
+      .limit(count)
       .get();
+    const { likes = [] } = moment
+    const { OPENID } = cloud.getWXContext()
+    moment.isLike = likes.includes(OPENID)
     ctx.body = {
-      detail,
-      comment
+      moment,
+      commentList
     };
   });
 
@@ -79,6 +85,9 @@ exports.main = async (event, context) => {
         _openid: OPENID,
         ...moment,
         commentCount: 0,
+        likeCount: 0,
+        likes: [],
+        stars: [],
         createTime: db.serverDate()
       }
     });
@@ -100,6 +109,12 @@ exports.main = async (event, context) => {
     likes.push(OPENID);
     const result = await momentCollection.where(condition).update({
       data: { likes }
+    });
+    // 点赞数增加1
+    await momentCollection.doc(momentId).update({
+      data: {
+        likeCount: command.inc(1)
+      }
     });
 
     return result;
@@ -124,11 +139,77 @@ exports.main = async (event, context) => {
     const result = await momentCollection.where(condition).update({
       data: { likes }
     });
+    // 点赞数减1
+    await momentCollection.doc(momentId).update({
+      data: {
+        likeCount: command.inc(-1)
+      }
+    });
 
     return result;
   });
 
-  // 添加评论c
+  // 收藏
+  app.router('star', async (ctx, next) => {
+    const { OPENID } = cloud.getWXContext()
+    const { moment } = event
+    try {
+      const resStar = await starCollection.add({
+        data: {
+          _openid: OPENID,
+          moment,
+          createTime: db.serverDate(),
+        }
+      })
+      const { _id } = moment
+      const resMoment = await momentCollection.doc(_id).update({
+        data: {
+          stars: command.push(OPENID)
+        }
+      })
+      ctx.body = {
+        resStar,
+        resMoment
+      }
+    } catch(err) {
+      console.log(err)
+      ctx.body = err
+    }
+  })
+
+  // 取消收藏
+  app.router('unstar', async (ctx, next) => {
+    const { OPENID } = cloud.getWXContext()
+    const { momentId } = event
+    try {
+      const resStar = await starCollection.where({
+        _openid: OPENID,
+        moment: {
+          _id: momentId,
+        }
+      }).remove()
+      const {data } = await momentCollection.doc(momentId).get()
+      const {stars} = data
+      stars.splice(
+        stars.findIndex(item => item === OPENID),
+        1
+      );
+      const resMoment = await momentCollection.doc(momentId).update({
+        data: {
+          stars
+        }
+      })
+      ctx.body = {
+        resStar,
+        resMoment
+      }
+    } catch (err) {
+      console.log(err)
+      ctx.body = err
+    }
+  })
+
+  // 添加评论
   app.router("comment", async (ctx, next) => {
     const { OPENID } = cloud.getWXContext();
     const {

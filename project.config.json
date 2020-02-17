@@ -82,7 +82,7 @@
 					"id": 4,
 					"name": "1.1 动态详情",
 					"pathName": "pages/moment/moment-detail/moment-detail",
-					"query": "momentId=1dfdda755e0c306e00964ec42844fe28",
+					"query": "momentId=1acf1de95e4824c31048ad3236b7d452&isLike=true",
 					"scene": null
 				},
 				{

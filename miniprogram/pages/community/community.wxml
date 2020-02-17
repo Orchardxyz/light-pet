@@ -17,7 +17,7 @@
     <view class="moment-list">
         <block wx:for="{{momentList}}" wx:key="_id">
             <view class="moment-panel">
-                <LP-moment-card moment="{{item}}" data-moment="{{item}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
+                <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
                 <LP-moment-operation moment="{{item}}" />
             </view>
         </block>

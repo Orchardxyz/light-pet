@@ -1,5 +1,5 @@
 import formatTime from "../../../utils/formatTime";
-import { FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
+import { COMMENT, FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
 
 const DEFAULT_PLACHOLDER = "请在此输入评论";
 const DEFAULT_COMMENT = "";
@@ -12,15 +12,17 @@ Page({
   data: {
     momentId: "",
     moment: {},
+    isLike: false,
     currentCommentId: "",
     likeCount: 0,
     commentCount: 0,
     firstComment: {},
+    isExpand: false, // 查看更多的按钮是否展开
     commentShow: false, // 评论弹框是否显示
     placeholderTxt: DEFAULT_PLACHOLDER, // 评论弹框中的默认文字
     defaultCommentValue: DEFAULT_COMMENT, // 评论框默认值
     isReply: false,
-    commentLevel: 0,
+    commentLevel: COMMENT,
     replyUser: {}
   },
 
@@ -28,8 +30,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    const { momentId = "" } = options;
+    const { momentId = "", isLike } = options;
     this._getMomentDetail(momentId);
+    this.onShow(Boolean(isLike));
   },
 
   // 加载动态详情
@@ -43,31 +46,36 @@ Page({
         name: "community",
         data: {
           momentId,
+          // 增加效率, 只查询两条数据
+          start: 0,
+          count: 2,
           $url: "/moment/detail"
         }
       })
       .then(res => {
         const {
           result: {
-            detail: { data: moment } = {},
-            comment: { data: commentList } = []
+            moment,
+            commentList
           }
         } = res;
-        const { likes = [], commentCount } = moment;
-        let firstComment = {}
-        if (commentList.length > 0) {
+        const { likeCount, isLike, commentCount } = moment;
+        let firstComment = {};
+        if (commentCount > 0) {
           firstComment = commentList[0];
           firstComment.createTime = formatTime(
             new Date(firstComment.createTime)
           );
         }
-
+        const isExpand = commentList.length > 1;
         this.setData({
           moment,
           momentId,
           commentCount,
           firstComment,
-          likeCount: likes.length
+          isExpand,
+          isLike,
+          likeCount
         });
 
         wx.hideLoading();
@@ -126,6 +134,39 @@ Page({
     });
   },
 
+  // 直接评论
+  onComment(event) {
+    const { detail } = event;
+    const { momentId, commentLevel } = this.data;
+    wx.showLoading({
+      title: "发表中"
+    });
+    const {
+      globalData: { userInfo }
+    } = app;
+    const comment = {
+      ...userInfo,
+      momentId,
+      content: detail,
+      type: commentLevel
+    };
+    wx.cloud
+      .callFunction({
+        name: "community",
+        data: {
+          comment,
+          $url: "comment"
+        }
+      })
+      .then(() => {
+        wx.hideLoading();
+        this._getMomentDetail(momentId);
+        wx.showToast({
+          title: "评论成功!"
+        });
+      });
+  },
+
   // 回复
   onReply(event) {
     const { detail } = event;
@@ -180,6 +221,34 @@ Page({
     wx.navigateTo({
       url: `../comment-list/comment-list?momentId=${momentId}`
     });
+  },
+
+  // 点赞
+  handleLike() {
+    const { isLike, likeCount, moment } = this.data;
+    const { _id: momentId } = moment;
+    const url = isLike ? "cancelLike" : "giveLike";
+    wx.cloud
+      .callFunction({
+        name: "community",
+        data: {
+          momentId,
+          $url: url
+        }
+      })
+      .then(() => {
+        this.setData({
+          likeCount: isLike ? likeCount - 1 : likeCount + 1,
+          isLike: !isLike
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        wx.showToast({
+          title: "操作失败",
+          icon: "none"
+        });
+      });
   },
 
   /**

@@ -18,16 +18,15 @@ Component({
   options: {
     styleIsolation: "apply-shared"
   },
-  lifetimes: {
-    ready() {
-      const {
-        globalData: { openid }
-      } = app;
-      const { likes = [], commentCount } = this.properties.moment;
+  observers: {
+    ["moment.isLike"](isLike) {
       this.setData({
-        isLike: likes.includes(openid),
-        likeCount: likes.length,
-        commentCount
+        isLike
+      });
+    },
+    ["moment.likeCount"](likeCount) {
+      this.setData({
+        likeCount
       });
     }
   },

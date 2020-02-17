@@ -8,14 +8,16 @@
         <nameplate pet="{{moment.pet}}" />
       </view>
     </view>
-    <i class="iconfont icon-star-copy" />
+    <i class="iconfont {{isStar ? 'icon-star' : 'icon-star-copy'}} " 
+    style="color: {{isStar ? '#FF9900' : undefined}};"
+    catch:tap="handleStar" />
   </view>
   <!-- 文字内容 -->
   <view class="moment-content">{{moment.content}}</view>
   <!-- 图片 -->
   <view class="moment-img">
     <block wx:for="{{moment.img}}" wx:key="index">
-      <image class="img" src="{{item}}" mode="aspectFill" catch:tap="previewImage" data-imgsrc="{{item}}" data-images="{{moment.image}}" />
+      <image class="img" src="{{item}}" mode="aspectFill" catch:tap="previewImage" data-imgsrc="{{item}}" data-imgs="{{moment.img}}" />
     </block>
   </view>
   <!-- 时间 -->

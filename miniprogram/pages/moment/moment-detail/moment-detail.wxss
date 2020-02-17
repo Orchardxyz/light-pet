@@ -4,6 +4,8 @@
 }
 
 .detail-tab {
+  display: flex;
+  align-items: center;
   height: 50rpx;
   border-left: 6rpx solid #009a61;
   background-color: #fff;
@@ -12,6 +14,10 @@
 }
 .tab-item {
   padding: 5rpx 25rpx;
+}
+.tab-isLike {
+  margin-left: auto;
+  padding-right: 25rpx;
 }
 
 /* 评论区样式 */

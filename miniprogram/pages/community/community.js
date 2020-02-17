@@ -222,11 +222,11 @@ Page({
   enterMomentDetail(event) {
     const {
       target: {
-        dataset: { momentid }
+        dataset: { momentid, islike }
       }
     } = event;
     wx.navigateTo({
-      url: `../moment/moment-detail/moment-detail?momentId=${momentid}`
+      url: `../moment/moment-detail/moment-detail?momentId=${momentid}&isLike=${islike}`
     });
   },
 
