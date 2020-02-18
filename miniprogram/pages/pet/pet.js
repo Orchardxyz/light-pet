@@ -7,6 +7,7 @@ Page({
    */
   data: {
     pets: [],
+    init: true,
     drawerShow: false,
     currentPetId: "",
     currentPetName: "",
@@ -33,15 +34,16 @@ Page({
       .callFunction({
         name: "pet",
         data: {
-          $url: "list"
+          $url: "/list/detail"
         }
       })
       .then(res => {
         const {
-          result: { data }
+          result
         } = res;
         this.setData({
-          pets: data
+          pets: result,
+          init: false,
         });
         wx.hideLoading();
       });

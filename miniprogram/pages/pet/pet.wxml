@@ -8,14 +8,15 @@
             <text>新成员</text>
         </view>
     </view>
-    <!-- <view wx:if="{{!pets.length}}" class="record-blank">
-            <view class="blank-content" bind:tap="enterPetAdd">
-                <i class="iconfont icon-plus-line" style="font-size: 75rpx" />
-            </view>
-            <view class="blank-addPet" style="margin-top: 10rpx; font-size: 32rpx; color: #333">
-                <text>(ฅʕ•̫͡•ʔฅ快来添加你的第一只爱宠吧！)</text>
-            </view>
-        </view> -->
+    <no-data wx:if="{{!pets.length && init}}" />
+    <view wx:elif="{{!pets.length}}" class="record-blank">
+        <view class="blank-content" bind:tap="enterPetAdd">
+            <i class="iconfont icon-plus-line" style="font-size: 75rpx" />
+        </view>
+        <view class="blank-addPet" style="margin-top: 10rpx; font-size: 32rpx; color: #333">
+            <text>(ฅʕ•̫͡•ʔฅ快来添加你的第一只爱宠吧！)</text>
+        </view>
+    </view>
     <scroll-view scroll-y="{{true}}">
         <block wx:for="{{pets}}" wx:key="index">
             <view class="pet-card">
@@ -36,7 +37,7 @@
                     陪伴时长
                     <view class="item-right">
                         已陪伴你
-                        <text style="font-size: 35rpx; font-weight: bold">78</text>
+                        <text style="font-size: 35rpx; font-weight: bold">{{item.companyDays}}</text>
                         天
                     </view>
                 </view>
@@ -53,7 +54,7 @@
                 <view class="card-item">
                     <i class="iconfont icon-nianling" style="color: #009A61" />
                     年龄
-                    <view class="item-right">一岁零六个月</view>
+                    <view class="item-right">{{item.age}}</view>
                 </view>
                 <view class="card-item">
                     <i class="iconfont icon-timeline" style="color: #1890ff" />
@@ -69,7 +70,6 @@
             </view>
         </block>
     </scroll-view>
-
     <!-- 遮罩层 -->
     <view wx:if="{{drawerShow}}" class="drawer-mask" bind:tap="closeDrawer" />
     <!-- 健康提醒项目 -->
@@ -86,5 +86,4 @@
             </block>
         </view>
     </view>
-
 </view>

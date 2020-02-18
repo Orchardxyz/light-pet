@@ -3,4 +3,5 @@ module.exports = {
     GIVE_LIKE: 1,
     COMMENT: 2,
     REPLY: 3,
+    STAR_MOMENT: 4,
 }

@@ -34,8 +34,8 @@
 }
 
 .record-blank .blank-content {
-  border: 1rpx dotted #333;
-  border-radius: 50%;
+  /* border: 1rpx dotted #333; */
+  /* border-radius: 50%; */
   padding: 5rpx;
 }
 

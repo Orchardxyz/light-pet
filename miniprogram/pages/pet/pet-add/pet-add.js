@@ -141,9 +141,11 @@ Page({
         })
         .then(() => {
           wx.hideLoading();
-          wx.navigateBack({
-            delta: 1
-          });
+          wx.navigateBack();
+          const pages = getCurrentPages();
+          const prevPage = pages[pages.length - 2];
+          prevPage.onPullDownRefresh();
+          prevPage._loadPetList()
         });
     } else {
       wx.showToast({

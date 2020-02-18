@@ -166,10 +166,29 @@ Page({
     const {
       globalData: { petList = [] }
     } = app;
-    this.setData({
-      isPetSelected: true,
-      petList
-    });
+    if (petList.length === 0) {
+      wx.showModal({
+        title: "",
+        content: "您好像还没有添加宠物哦，请先添加宠物",
+        showCancel: true,
+        cancelText: "取消",
+        cancelColor: "#000000",
+        confirmText: "马上去",
+        confirmColor: "#3CC51F",
+        success: result => {
+          if (result.confirm) {
+            wx.switchTab({
+              url: "/pages/pet/pet"
+            });
+          }
+        }
+      });
+    } else {
+      this.setData({
+        isPetSelected: true,
+        petList
+      });
+    }
     // this._animate("open");
   },
   // 登录失败
