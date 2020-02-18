@@ -1,9 +1,14 @@
 import formatTime from "../../../utils/formatTime";
 import { COMMENT, FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
+import { LIKE } from "../../../utils/notify/notifyType";
+import { GIVE_LIKE } from "../../../utils/notify/notifyAction";
+import { IMG, TEXT } from "../../../utils/notify/contentType";
+import notify from "../../../utils/notify/notify";
 
 const DEFAULT_PLACHOLDER = "请在此输入评论";
 const DEFAULT_COMMENT = "";
 const app = getApp();
+const fileManager = wx.getFileSystemManager();
 
 Page({
   /**
@@ -54,10 +59,7 @@ Page({
       })
       .then(res => {
         const {
-          result: {
-            moment,
-            commentList
-          }
+          result: { moment, commentList }
         } = res;
         const { likeCount, isLike, commentCount } = moment;
         let firstComment = {};
@@ -226,7 +228,7 @@ Page({
   // 点赞
   handleLike() {
     const { isLike, likeCount, moment } = this.data;
-    const { _id: momentId } = moment;
+    const { _id: momentId, _openid: reciever_id, img = [], content } = moment;
     const url = isLike ? "cancelLike" : "giveLike";
     wx.cloud
       .callFunction({
@@ -241,6 +243,12 @@ Page({
           likeCount: isLike ? likeCount - 1 : likeCount + 1,
           isLike: !isLike
         });
+        // 发送通知
+        if (!isLike) {
+          const contentType = img.length > 0 ? IMG : TEXT;
+          const _content = img.length > 0 ? img[0] : content;
+          notify(reciever_id, LIKE, GIVE_LIKE, momentId, _content, contentType);
+        }
       })
       .catch(err => {
         console.log(err);

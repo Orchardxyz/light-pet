@@ -31,36 +31,24 @@ exports.main = async (event, context) => {
    */
   app.router("send", async (ctx, next) => {
     const { OPENID } = wxContext;
-    const { reciever_id, sender = {}, action } = event;
-    let type = "";
-    let content = {};
-    switch (action) {
-      case 0:
-        // TODO 系统通知
-        const { SYSTEM } = notify_type;
-        type = SYSTEM;
-        content = {};
-        break;
-      case 1:
-        const { LIKE } = notify_type;
-        const { moment = {} } = event;
-        type = LIKE;
-        content = { moment };
-        break;
-      case 2 || 3:
-        const { COMMENT_REPLY } = notify_type;
-        const { moment = {}, comment = {} } = event;
-        type = COMMENT_REPLY;
-        content = { moment, comment };
-        break;
-      default:
-        type = '';
-        content = {};
+    const {
+      reciever_id = "",
+      source_id = "",
+      sender = {},
+      action,
+      content,
+      content_type,
+      type
+    } = event;
+    if (reciever_id === OPENID) {
+      return;
     }
     await notifCollection.add({
       data: {
         reciever_id,
+        source_id,
         content,
+        content_type,
         type,
         action,
         sender: {

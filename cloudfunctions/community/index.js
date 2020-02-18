@@ -67,9 +67,10 @@ exports.main = async (event, context) => {
       .orderBy("createTime", "asc")
       .limit(count)
       .get();
-    const { likes = [] } = moment
+    const { likes = [], stars = [] } = moment
     const { OPENID } = cloud.getWXContext()
     moment.isLike = likes.includes(OPENID)
+    moment.isStar = stars.includes(OPENID)
     ctx.body = {
       moment,
       commentList
@@ -152,7 +153,7 @@ exports.main = async (event, context) => {
   // 收藏
   app.router('star', async (ctx, next) => {
     const { OPENID } = cloud.getWXContext()
-    const { moment } = event
+    const { moment = {} } = event
     try {
       const resStar = await starCollection.add({
         data: {

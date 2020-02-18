@@ -68,7 +68,7 @@ Component({
             name: "community",
             data: {
               $url: "star",
-              momentId
+              moment
             }
           })
           .then(() => {
