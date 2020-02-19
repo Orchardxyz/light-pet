@@ -62,8 +62,8 @@
                     <view class="item-right"></view>
                 </view>
                 <view class="health-management">
-                    <button class="health-btn" size="mini" style="width: 95%" data-pet="{{item}}" bind:tap="openDrawer" loading="{{btnIsLoading}}">
-                        <i wx:if="{{!btnIsLoading}}" class="iconfont icon-tongzhi" style="color: #FF9900" />
+                    <button class="health-btn" size="mini" style="width: 95%" data-pet="{{item}}" data-index="{{index}}" bind:tap="openDrawer" loading="{{btnIsLoading[index]}}">
+                        <i wx:if="{{!btnIsLoading[index]}}" class="iconfont icon-tongzhi" style="color: #FF9900" />
                         健康管理提醒
                     </button>
                 </view>

@@ -13,7 +13,8 @@ Page({
     currentPetName: "",
     currentSpecies: "",
     animation: {},
-    btnIsLoading: false,
+    btnIsLoading: [],
+    currentIndex: -1,
     currentHealthProjects: []
   },
 
@@ -39,12 +40,18 @@ Page({
       })
       .then(res => {
         const {
-          result
+          result: petList = []
         } = res;
         this.setData({
-          pets: result,
+          pets: petList,
           init: false,
         });
+        petList.map(() => {
+          const { btnIsLoading = []} = this.data
+          this.setData({
+            btnIsLoading: btnIsLoading.concat([false])
+          })
+        })
         wx.hideLoading();
       });
   },
@@ -91,9 +98,11 @@ Page({
 
     // 显示抽屉
     if (status == "open") {
+      const { currentIndex, btnIsLoading } = this.data
+      btnIsLoading[currentIndex] = false
       this.setData({
         drawerShow: true,
-        btnIsLoading: false
+        btnIsLoading
       });
     }
   },
@@ -101,15 +110,18 @@ Page({
   openDrawer(event) {
     const {
       currentTarget: {
-        dataset: { pet }
+        dataset: { pet, index }
       }
     } = event;
     const { _id: petId, petName, species } = pet;
+    const { btnIsLoading } = this.data
+    btnIsLoading[index] = true
     this.setData({
       currentPetId: petId,
       currentPetName: petName,
       currentSpecies: formatSpecies(species),
-      btnIsLoading: true
+      btnIsLoading,
+      currentIndex: index
     });
     wx.cloud
       .callFunction({
