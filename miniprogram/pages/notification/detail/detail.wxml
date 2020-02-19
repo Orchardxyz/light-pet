@@ -1,0 +1,8 @@
+<view wx:if="{{!notificationList.length}}" class="no-data">
+    <no-data />
+</view>
+<view wx:else>
+    <block wx:for="{{notificationList}}" wx:key="index">
+        <LP-notify-card notification="{{item}}" />
+    </block>
+</view>

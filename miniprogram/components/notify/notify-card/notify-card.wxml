@@ -1,0 +1,13 @@
+<view class="container">
+  <view class="left">
+    <avatar source="{{notification.sender.avatarUrl}}" width="90" height="90" />
+  </view>
+  <view class="right">
+    <view class="senderName">{{notification.sender.nickName}}</view>
+    <view class="notifyText">{{notify_text}}</view>
+    <view class="contentWrapper" data-sourceid="{{notification.source_id}}" bind:tap="enterDetail">
+      <image wx:if="{{notification.img}}" src="{{notification.img}}" />
+      <view class="content">{{notification.content}}</view>
+    </view>
+  </view>
+</view>

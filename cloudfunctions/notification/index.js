@@ -6,7 +6,7 @@ cloud.init();
 const TcbRouter = require("tcb-router");
 
 const db = cloud.database();
-const notifCollection = db.collection("notification");
+const notifyCollection = db.collection("notification");
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -21,12 +21,12 @@ exports.main = async (event, context) => {
   // 展示页
   // app.router('index', async (ctx, next) => {
   //   const { OPENID } = wxContext
-  //   const result = await notifCollection.where({reciever_id: OPENID})
+  //   const result = await notifyCollection.where({reciever_id: OPENID})
   // })
 
   /**
    * 发送通知
-   * type: 0-系统通知, 1-点赞, 2-评论/回复;
+   * type: 0-系统通知, 1-点赞, 2-评论/回复, 3-收藏;
    * action: 0-系统, 1-点赞, 2-评论, 3-回复...
    */
   app.router("send", async (ctx, next) => {
@@ -37,18 +37,18 @@ exports.main = async (event, context) => {
       sender = {},
       action,
       content,
-      content_type,
+      img = "",
       type
     } = event;
     if (reciever_id === OPENID) {
       return;
     }
-    await notifCollection.add({
+    await notifyCollection.add({
       data: {
         reciever_id,
         source_id,
         content,
-        content_type,
+        img,
         type,
         action,
         sender: {
@@ -59,6 +59,16 @@ exports.main = async (event, context) => {
         createTime: db.serverDate()
       }
     });
+  });
+
+  // 获取相应类型的通知
+  app.router("get", async (ctx, next) => {
+    const { type } = event;
+    const { OPENID } = wxContext;
+    const { data: notifyList = [] } = await notifyCollection
+      .where({ type, reciever_id: OPENID })
+      .get();
+    ctx.body = notifyList;
   });
 
   return app.serve();

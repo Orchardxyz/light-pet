@@ -2,7 +2,6 @@ import formatTime from "../../../utils/formatTime";
 import { COMMENT, FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
 import { LIKE } from "../../../utils/notify/notifyType";
 import { GIVE_LIKE } from "../../../utils/notify/notifyAction";
-import { IMG, TEXT } from "../../../utils/notify/contentType";
 import notify from "../../../utils/notify/notify";
 
 const DEFAULT_PLACHOLDER = "请在此输入评论";
@@ -245,9 +244,9 @@ Page({
         });
         // 发送通知
         if (!isLike) {
-          const contentType = img.length > 0 ? IMG : TEXT;
-          const _content = img.length > 0 ? img[0] : content;
-          notify(reciever_id, LIKE, GIVE_LIKE, momentId, _content, contentType);
+          // const contentType = img.length > 0 ? IMG : TEXT;
+          const _img = img.length > 0 ? img[0] : '';
+          notify(reciever_id, LIKE, GIVE_LIKE, momentId, content, _img);
         }
       })
       .catch(err => {

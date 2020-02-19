@@ -1,11 +1,4 @@
-module.exports = (
-  reciever_id,
-  type,
-  action,
-  source_id,
-  content,
-  content_type
-) => {
+module.exports = (reciever_id, type, action, source_id, content, img = "") => {
   const app = getApp();
   const {
     globalData: { userInfo }
@@ -20,7 +13,7 @@ module.exports = (
       action,
       source_id,
       content,
-      content_type
+      img
     }
   });
 };

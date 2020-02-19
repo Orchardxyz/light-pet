@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "LP-notify-card": "/components/notify/notify-card/notify-card",
+    "no-data": "/components/UI/no-data/no-data"
+  }
+}

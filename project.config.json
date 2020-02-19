@@ -119,6 +119,13 @@
 					"pathName": "pages/pet/open-remind/open-remind",
 					"query": "remindId=1acf1de95e44e30a0eedd7300b80d7b1",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "2.1 收到的收藏通知",
+					"pathName": "pages/notification/detail/detail",
+					"query": "type=STAR",
+					"scene": null
 				}
 			]
 		}

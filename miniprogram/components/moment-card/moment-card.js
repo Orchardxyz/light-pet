@@ -1,7 +1,6 @@
 import formatTime from "../../utils/formatTime";
 import { STAR } from "../../utils/notify/notifyType";
 import { STAR_MOMENT } from "../../utils/notify/notifyAction";
-import { IMG, TEXT } from "../../utils/notify/contentType";
 import notify from "../../utils/notify/notify";
 
 Component({
@@ -84,10 +83,10 @@ Component({
               title: "收藏成功",
               icon: "none"
             });
-            const { _openid, img = [] } = moment;
-            const contentType = img.length > 0 ? IMG : TEXT;
-            const _content = img.length > 0 ? img[0] : content;
-            notify(_openid, STAR, STAR_MOMENT, momentId, _content, contentType)
+            const { _openid, img = [], content } = moment;
+            // const contentType = img.length > 0 ? IMG : TEXT;
+            const _img = img.length > 0 ? img[0] : '';
+            notify(_openid, STAR, STAR_MOMENT, momentId, content, _img)
           });
       }
     }

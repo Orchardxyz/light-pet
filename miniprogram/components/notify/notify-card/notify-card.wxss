@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  color: #333;
+  background-color: #FFF;
+}
+
+.container .right {
+  width: 85%;
+  margin-top: 10rpx;
+  margin-left: 5rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #E1E1E1;
+}
+
+.right view {
+  margin-bottom: 10rpx;
+}
+
+.right .senderName {
+  font-size: 35rpx;
+  color: #7a7a7a;
+}
+
+.right .notifyText {
+  margin-bottom: 15rpx;
+  font-size: 38rpx;
+}
+
+.contentWrapper {
+  display: flex;
+  width: 90%;
+  padding: 20rpx;
+  border: 1rpx;
+  border-radius: 15rpx;
+  box-shadow: 0 0 5rpx #ccc;
+}
+
+.contentWrapper image {
+  width: 120rpx;
+  height: 120rpx;
+}
+
+.contentWrapper .content {
+    /* 多行文本省略 */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden; /*超出的部分隐藏起来。*/
+  text-overflow: ellipsis; 
+
+  margin: 0 20rpx;
+  font-size: small;
+  width: 500rpx;
+}

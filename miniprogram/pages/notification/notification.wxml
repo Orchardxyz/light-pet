@@ -1,5 +1,5 @@
 <view class="notification">
-    <view class="notification-item">
+    <view class="notification-item" data-type="{{notifyType.SYSTEM}}" bind:tap="enterDetail">
         <view class="iconfont-wrapper" style="background-color: #FF6666">
             <i class="iconfont icon-xitong" />
         </view>
@@ -8,16 +8,25 @@
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </view>
-    <view class="notification-item">
+    <view class="notification-item" data-type="{{notifyType.STAR}}" bind:tap="enterDetail">
+         <view class="iconfont-wrapper" style="background-color: #990033">
+            <i class="iconfont icon-star-copy" />
+        </view>
+        <view class="content-wrapper">
+            <view class="content">谁收藏了我的内容</view>
+            <i class="iconfont icon-xuanzeqixiayige_o" />
+        </view>
+    </view>
+    <view class="notification-item" data-type="{{notifyType.LIKE}}" bind:tap="enterDetail">
          <view class="iconfont-wrapper" style="background-color: #FFCC33">
             <i class="iconfont icon-pet" />
         </view>
         <view class="content-wrapper">
-            <view class="content">收到的赞</view>
+            <view class="content">谁赞了我</view>
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </view>
-    <view class="notification-item">
+    <view class="notification-item" data-type="{{notifyType.COMMENT_REPLY}}" bind:tap="enterDetail">
          <view class="iconfont-wrapper" style="background-color: #009A61">
             <i class="iconfont icon-pinglun" />
         </view>
