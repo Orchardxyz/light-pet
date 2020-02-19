@@ -15,13 +15,107 @@ Page({
       STAR,
       LIKE,
       COMMENT_REPLY
-    }
+    },
+    notifyCount: {}
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {},
+  onLoad: function(options) {
+    this._init();
+  },
+
+  _init() {
+    wx.showLoading({
+      title: "加载中",
+      mask: true
+    });
+    wx.cloud
+      .callFunction({
+        name: "notification",
+        data: {
+          $url: "index"
+        }
+      })
+      .then(res => {
+        const { result } = res;
+        this.setData({
+          notifyCount: result
+        });
+        wx.hideLoading();
+      });
+  },
+
+  _handleHasRead(type) {
+    const {
+      notifyCount: { total }
+    } = this.data;
+    let currentCount;
+    switch (type) {
+      case SYSTEM:
+        const {
+          notifyCount: { system }
+        } = this.data;
+        currentCount = system;
+        this.setData({
+          ["notifyCount.system"]: 0
+        });
+        break;
+      case LIKE:
+        const {
+          notifyCount: { like }
+        } = this.data;
+        currentCount = like;
+        this.setData({
+          ["notifyCount.like"]: 0
+        });
+        break;
+      case STAR:
+        const {
+          notifyCount: { star }
+        } = this.data;
+        currentCount = star;
+        this.setData({
+          ["notifyCount.star"]: 0
+        });
+        break;
+      case COMMENT_REPLY:
+        const {
+          notifyCount: { comment_reply }
+        } = this.data;
+        currentCount = comment_reply;
+        this.setData({
+          ["notifyCount.comment_reply"]: 0
+        });
+        break;
+      default:
+        currentCount = "";
+    }
+    if (total - currentCount > 0) {
+      wx.setTabBarBadge({
+        index: 1,
+        text: `${total - currentCount}`
+      });
+    } else {
+      wx.removeTabBarBadge({
+        index: 1
+      });
+    }
+    wx.cloud
+      .callFunction({
+        name: "notification",
+        data: {
+          $url: "read",
+          type
+        }
+      })
+      .then(() => {
+        wx.navigateTo({
+          url: `./detail/detail?type=${type}`
+        });
+      });
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -34,9 +128,7 @@ Page({
         dataset: { type }
       }
     } = event;
-    wx.navigateTo({
-      url: `./detail/detail?type=${type}`
-    });
+    this._handleHasRead(type);
   },
 
   /**
@@ -57,7 +149,9 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {},
+  onPullDownRefresh: function() {
+    this._init();
+  },
 
   /**
    * 页面上拉触底事件的处理函数

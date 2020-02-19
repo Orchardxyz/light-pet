@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "badge": "/components/UI/badge/badge"
+  },
   "navigationBarTitleText": "消息提醒"
 }

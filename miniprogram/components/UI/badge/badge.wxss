@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background-color: #f5222d;
+}
+
+.container text {
+  font-size: 30rpx;
+  color: #fff;
+}

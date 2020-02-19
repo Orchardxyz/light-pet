@@ -5,34 +5,46 @@
         </view>
         <view class="content-wrapper">
             <view class="content">系统通知</view>
-            <i class="iconfont icon-xuanzeqixiayige_o" />
+            <view class="content-right">
+                <badge wx:if="{{notifyCount.system}}" count="{{notifyCount.system}}" />
+                <i class="iconfont icon-xuanzeqixiayige_o" />
+            </view>
         </view>
     </view>
     <view class="notification-item" data-type="{{notifyType.STAR}}" bind:tap="enterDetail">
-         <view class="iconfont-wrapper" style="background-color: #990033">
+        <view class="iconfont-wrapper" style="background-color: #990033">
             <i class="iconfont icon-star-copy" />
         </view>
         <view class="content-wrapper">
             <view class="content">谁收藏了我的内容</view>
-            <i class="iconfont icon-xuanzeqixiayige_o" />
+            <view class="content-right">
+                <badge wx:if="{{notifyCount.star}}" count="{{notifyCount.star}}" />
+                <i class="iconfont icon-xuanzeqixiayige_o" />
+            </view>
         </view>
     </view>
     <view class="notification-item" data-type="{{notifyType.LIKE}}" bind:tap="enterDetail">
-         <view class="iconfont-wrapper" style="background-color: #FFCC33">
+        <view class="iconfont-wrapper" style="background-color: #FFCC33">
             <i class="iconfont icon-pet" />
         </view>
         <view class="content-wrapper">
             <view class="content">谁赞了我</view>
-            <i class="iconfont icon-xuanzeqixiayige_o" />
+            <view class="content-right">
+                <badge wx:if="{{notifyCount.like}}" count="{{notifyCount.like}}" />
+                <i class="iconfont icon-xuanzeqixiayige_o" />
+            </view>
         </view>
     </view>
     <view class="notification-item" data-type="{{notifyType.COMMENT_REPLY}}" bind:tap="enterDetail">
-         <view class="iconfont-wrapper" style="background-color: #009A61">
+        <view class="iconfont-wrapper" style="background-color: #009A61">
             <i class="iconfont icon-pinglun" />
         </view>
         <view class="content-wrapper">
-            <view class="content">宠友的评论和回复</view>
-            <i class="iconfont icon-xuanzeqixiayige_o" />
+            <view class="content">评论和回复</view>
+            <view class="content-right">
+                <badge wx:if="{{notifyCount.comment_reply}}" count="{{notifyCount.comment_reply}}" />
+                <i class="iconfont icon-xuanzeqixiayige_o" />
+            </view>
         </view>
     </view>
 </view>

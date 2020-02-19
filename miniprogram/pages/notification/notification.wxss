@@ -35,8 +35,13 @@ page {
   font-size: 38rpx;
 }
 
-.icon-xuanzeqixiayige_o {
+.content-right {
+  display: flex;
+  align-items: center;
   margin-left: auto;
+}
+
+.icon-xuanzeqixiayige_o {
   font-size: 30rpx;
   color: #ccc;
 }
