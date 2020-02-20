@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "LP-moment-card": "/components/moment-card/moment-card",
+    "LP-moment-operation": "/components/moment-operation/moment-operation"
+  }
+}

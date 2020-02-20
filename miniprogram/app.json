@@ -11,14 +11,16 @@
     "pages/pet/pet-add/pet-add",
     "pages/pet/pet-health/pet-health",
     "pages/pet/open-remind/open-remind",
-    "pages/notification/detail/detail"
+    "pages/notification/detail/detail",
+    "pages/user/star/star"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#009A61",
     "navigationBarTitleText": "轻宠社区",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "white",
+    "enablePullDownRefresh": true
   },
   "tabBar": {
     "color": "",

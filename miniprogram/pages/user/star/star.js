@@ -1,10 +1,10 @@
-// pages/user/user.js
+// miniprogram/pages/user/star/star.js
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    petNum: 0
+    starList: []
   },
 
   /**
@@ -16,51 +16,36 @@ Page({
 
   _init() {
     wx.showLoading({
-      title: "稍等",
+      title: "加载中",
       mask: true
     });
     wx.cloud
       .callFunction({
         name: "user",
         data: {
-          $url: "getPetNum"
+          $url: "getStarMoment"
         }
       })
       .then(res => {
-        const { result } = res;
+        const { result: starList } = res;
         this.setData({
-          petNum: result
+          starList
         });
+        console.log(starList);
         wx.hideLoading();
       });
   },
 
-  enterMyStar() {
+  // 进入动态详情页
+  enterMomentDetail(event) {
+    const {
+      target: {
+        dataset: { momentid, islike }
+      }
+    } = event;
     wx.navigateTo({
-      url: "./star/star"
+      url: `../../moment/moment-detail/moment-detail?momentId=${momentid}&isLike=${islike}`
     });
-  },
-
-  onShare() {
-    wx.showLoading({
-      title: "生成中",
-      mask: true
-    });
-    wx.cloud
-      .callFunction({
-        name: "user",
-        data: {
-          $url: "share"
-        }
-      })
-      .then(res => {
-        const { result: fileID } = res;
-        wx.previewImage({
-          current: fileID,
-          urls: [fileID]
-        });
-        wx.hideLoading()
-      });
   },
 
   /**

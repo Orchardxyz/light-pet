@@ -28,6 +28,11 @@ Component({
       this.setData({
         likeCount
       });
+    },
+    ["moment.commentCount"](commentCount) {
+      this.setData({
+        commentCount
+      });
     }
   },
   methods: {
