@@ -4,12 +4,14 @@ import {
   LIKE,
   COMMENT_REPLY
 } from "../../utils/notify/notifyType";
+import checkLogin from "../../utils/checkLogin";
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    loginShow: false,
     notifyType: {
       SYSTEM,
       STAR,
@@ -27,94 +29,106 @@ Page({
   },
 
   _init() {
-    wx.showLoading({
-      title: "加载中",
-      mask: true
-    });
-    wx.cloud
-      .callFunction({
-        name: "notification",
-        data: {
-          $url: "index"
-        }
-      })
-      .then(res => {
-        const { result } = res;
-        this.setData({
-          notifyCount: result
-        });
-        wx.hideLoading();
+    if (checkLogin()) {
+      wx.showLoading({
+        title: "加载中",
+        mask: true
       });
+      wx.cloud
+        .callFunction({
+          name: "notification",
+          data: {
+            $url: "index"
+          }
+        })
+        .then(res => {
+          const { result } = res;
+          this.setData({
+            notifyCount: result
+          });
+          wx.hideLoading();
+        });
+    } else {
+      this.setData({
+        loginShow: true
+      });
+    }
   },
 
   _handleHasRead(type) {
-    const {
-      notifyCount: { total }
-    } = this.data;
-    let currentCount;
-    switch (type) {
-      case SYSTEM:
-        const {
-          notifyCount: { system }
-        } = this.data;
-        currentCount = system;
-        this.setData({
-          ["notifyCount.system"]: 0
+    if (checkLogin()) {
+      const {
+        notifyCount: { total }
+      } = this.data;
+      let currentCount;
+      switch (type) {
+        case SYSTEM:
+          const {
+            notifyCount: { system }
+          } = this.data;
+          currentCount = system;
+          this.setData({
+            ["notifyCount.system"]: 0
+          });
+          break;
+        case LIKE:
+          const {
+            notifyCount: { like }
+          } = this.data;
+          currentCount = like;
+          this.setData({
+            ["notifyCount.like"]: 0
+          });
+          break;
+        case STAR:
+          const {
+            notifyCount: { star }
+          } = this.data;
+          currentCount = star;
+          this.setData({
+            ["notifyCount.star"]: 0
+          });
+          break;
+        case COMMENT_REPLY:
+          const {
+            notifyCount: { comment_reply }
+          } = this.data;
+          currentCount = comment_reply;
+          this.setData({
+            ["notifyCount.comment_reply"]: 0
+          });
+          break;
+        default:
+          currentCount = "";
+      }
+      if (total - currentCount > 0) {
+        wx.setTabBarBadge({
+          index: 1,
+          text: `${total - currentCount}`
         });
-        break;
-      case LIKE:
-        const {
-          notifyCount: { like }
-        } = this.data;
-        currentCount = like;
-        this.setData({
-          ["notifyCount.like"]: 0
+      } else {
+        wx.removeTabBarBadge({
+          index: 1
         });
-        break;
-      case STAR:
-        const {
-          notifyCount: { star }
-        } = this.data;
-        currentCount = star;
-        this.setData({
-          ["notifyCount.star"]: 0
+      }
+      wx.cloud
+        .callFunction({
+          name: "notification",
+          data: {
+            $url: "read",
+            type
+          }
+        })
+        .then(() => {
+          wx.navigateTo({
+            url: `./detail/detail?type=${type}`
+          });
         });
-        break;
-      case COMMENT_REPLY:
-        const {
-          notifyCount: { comment_reply }
-        } = this.data;
-        currentCount = comment_reply;
-        this.setData({
-          ["notifyCount.comment_reply"]: 0
-        });
-        break;
-      default:
-        currentCount = "";
-    }
-    if (total - currentCount > 0) {
-      wx.setTabBarBadge({
-        index: 1,
-        text: `${total - currentCount}`
-      });
     } else {
-      wx.removeTabBarBadge({
-        index: 1
+      this.setData({
+        loginShow: true
       });
     }
-    wx.cloud
-      .callFunction({
-        name: "notification",
-        data: {
-          $url: "read",
-          type
-        }
-      })
-      .then(() => {
-        wx.navigateTo({
-          url: `./detail/detail?type=${type}`
-        });
-      });
   },
 
   /**

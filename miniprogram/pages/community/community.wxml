@@ -54,4 +54,4 @@
     </view>
 </view>
 <!-- 登录框 -->
-<LP-login modalShow="{{modalShow}}" bind:loginSuccess="{{onLoginSuccess}}" bind:loginFail="{{onLoginFail}}" />
+<LP-login modalShow="{{loginShow}}" />

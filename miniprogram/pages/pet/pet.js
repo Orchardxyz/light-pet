@@ -1,11 +1,13 @@
 // pages/record/record.js
 import formatSpecies from "../../utils/formatSpecies";
+import checkLogin from "../../utils/checkLogin";
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    loginShow: false,
     pets: [],
     init: true,
     drawerShow: false,
@@ -27,33 +29,37 @@ Page({
 
   // 加载宠物列表
   _loadPetList() {
-    wx.showLoading({
-      title: "拼命加载中",
-      mask: true
-    });
-    wx.cloud
-      .callFunction({
-        name: "pet",
-        data: {
-          $url: "/list/detail"
-        }
-      })
-      .then(res => {
-        const {
-          result: petList = []
-        } = res;
-        this.setData({
-          pets: petList,
-          init: false,
-        });
-        petList.map(() => {
-          const { btnIsLoading = []} = this.data
-          this.setData({
-            btnIsLoading: btnIsLoading.concat([false])
-          })
-        })
-        wx.hideLoading();
+    if (checkLogin()) {
+      wx.showLoading({
+        title: "拼命加载中",
+        mask: true
       });
+      wx.cloud
+        .callFunction({
+          name: "pet",
+          data: {
+            $url: "/list/detail"
+          }
+        })
+        .then(res => {
+          const { result: petList = [] } = res;
+          this.setData({
+            pets: petList,
+            init: false
+          });
+          petList.map(() => {
+            const { btnIsLoading = [] } = this.data;
+            this.setData({
+              btnIsLoading: btnIsLoading.concat([false])
+            });
+          });
+          wx.hideLoading();
+        });
+    } else {
+      this.setData({
+        loginShow: true
+      });
+    }
   },
 
   // 抽屉动画
@@ -98,8 +104,8 @@ Page({
 
     // 显示抽屉
     if (status == "open") {
-      const { currentIndex, btnIsLoading } = this.data
-      btnIsLoading[currentIndex] = false
+      const { currentIndex, btnIsLoading } = this.data;
+      btnIsLoading[currentIndex] = false;
       this.setData({
         drawerShow: true,
         btnIsLoading
@@ -114,8 +120,8 @@ Page({
       }
     } = event;
     const { _id: petId, petName, species } = pet;
-    const { btnIsLoading } = this.data
-    btnIsLoading[index] = true
+    const { btnIsLoading } = this.data;
+    btnIsLoading[index] = true;
     this.setData({
       currentPetId: petId,
       currentPetName: petName,
@@ -163,7 +169,7 @@ Page({
         dataset: { project }
       }
     } = event;
-    const { _id, hasSet, remindId = '' } = project;
+    const { _id, hasSet, remindId = "" } = project;
     const { currentPetId, currentPetName, currentSpecies } = this.data;
     if (hasSet) {
       wx.navigateTo({

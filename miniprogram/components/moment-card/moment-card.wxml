@@ -1,7 +1,7 @@
 <view class="moment">
   <!-- 顶部（包括头像，昵称，发表时间） -->
   <view class="moment-title">
-    <avatar class="moment-avatar" source="{{moment.avatarUrl}}" width="70" height="70"></avatar>
+    <avatar class="moment-avatar" source="{{moment.avatarUrl}}" width="70" height="70" />
     <view class="moment-box">
       <view>{{moment.nickName}}</view>
       <view class="moment-pet">
@@ -23,3 +23,6 @@
   <!-- 时间 -->
   <view class="moment-time">{{createTime}}</view>
 </view>
+
+<!-- 登录 -->
+<LP-login modalShow="{{loginShow}}" />

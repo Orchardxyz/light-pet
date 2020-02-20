@@ -1,9 +1,11 @@
-// pages/user/user.js
+import checkLogin from "../../utils/checkLogin";
+
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    loginShow: false,
     petNum: 0
   },
 
@@ -14,31 +16,45 @@ Page({
     this._init();
   },
 
-  _init() {
-    wx.showLoading({
-      title: "稍等",
-      mask: true
+  _setLoginShow() {
+    this.setData({
+      loginShow: true
     });
-    wx.cloud
-      .callFunction({
-        name: "user",
-        data: {
-          $url: "getPetNum"
-        }
-      })
-      .then(res => {
-        const { result } = res;
-        this.setData({
-          petNum: result
-        });
-        wx.hideLoading();
+  },
+
+  _init() {
+    if (checkLogin()) {
+      wx.showLoading({
+        title: "稍等",
+        mask: true
       });
+      wx.cloud
+        .callFunction({
+          name: "user",
+          data: {
+            $url: "getPetNum"
+          }
+        })
+        .then(res => {
+          const { result } = res;
+          this.setData({
+            petNum: result
+          });
+          wx.hideLoading();
+        });
+    } else {
+      this._setLoginShow();
+    }
   },
 
   enterMyStar() {
-    wx.navigateTo({
-      url: "./star/star"
-    });
+    if (checkLogin()) {
+      wx.navigateTo({
+        url: "./star/star"
+      });
+    } else {
+      this._setLoginShow();
+    }
   },
 
   onShare() {
@@ -59,7 +75,7 @@ Page({
           current: fileID,
           urls: [fileID]
         });
-        wx.hideLoading()
+        wx.hideLoading();
       });
   },
 

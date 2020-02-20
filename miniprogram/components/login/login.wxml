@@ -1,4 +1,4 @@
-<LP-bottom-modal modalShow="{{modalShow}}">
+<LP-bottom-modal modalShow="{{loginShow}}">
   <view slot="modal-content">
     <view class="container">
       <text class="title">请先登录</text>

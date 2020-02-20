@@ -1,4 +1,5 @@
-// pages/community/community.js
+import checkLogin from "../../utils/checkLogin";
+
 // 每页获取的最大数据
 const MAX_COUNT = 10;
 const app = getApp();
@@ -8,7 +9,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    modalShow: false,
+    loginShow: false,
     navbarActiveIndex: 0,
     navbarTitle: ["社区", "关注"],
     momentList: [],
@@ -77,30 +78,6 @@ Page({
     wx.hideLoading();
   },
 
-  // 判断有无授权登录
-  _isAuthored() {
-    wx.getSetting({
-      success: result => {
-        if (result.authSetting["scope.userInfo"]) {
-          wx.getUserInfo({
-            withCredentials: "false",
-            lang: "zh_CN",
-            timeout: 10000,
-            success: result => {
-              this.onLoginSuccess({
-                detail: result.userInfo
-              });
-            }
-          });
-        } else {
-          this.setData({
-            modalShow: true
-          });
-        }
-      }
-    });
-  },
-
   // _animate(status) {
   //   // 第1步：创建动画实例
   //   const animation = wx.createAnimation({
@@ -145,6 +122,12 @@ Page({
   //   }
   // },
 
+  _setLoginShow() {
+    this.setData({
+      loginShow: true
+    })
+  },
+
   handleClick(event) {
     const {
       currentTarget: {
@@ -158,45 +141,36 @@ Page({
 
   // 发布动态
   onPublish() {
-    this._isAuthored();
-  },
-
-  // 登录成功
-  onLoginSuccess() {
-    const {
-      globalData: { petList = [] }
-    } = app;
-    if (petList.length === 0) {
-      wx.showModal({
-        title: "",
-        content: "您好像还没有添加宠物哦，请先添加宠物",
-        showCancel: true,
-        cancelText: "取消",
-        cancelColor: "#000000",
-        confirmText: "马上去",
-        confirmColor: "#3CC51F",
-        success: result => {
-          if (result.confirm) {
-            wx.switchTab({
-              url: "/pages/pet/pet"
-            });
+    if (checkLogin()) {
+      const {
+        globalData: { petList = [] }
+      } = app;
+      if (petList.length === 0) {
+        wx.showModal({
+          title: "",
+          content: "您好像还没有添加宠物哦，请先添加宠物",
+          showCancel: true,
+          cancelText: "取消",
+          cancelColor: "#000000",
+          confirmText: "马上去",
+          confirmColor: "#3CC51F",
+          success: result => {
+            if (result.confirm) {
+              wx.switchTab({
+                url: "/pages/pet/pet"
+              });
+            }
           }
-        }
-      });
+        });
+      } else {
+        this.setData({
+          isPetSelected: true,
+          petList
+        });
+      }
     } else {
-      this.setData({
-        isPetSelected: true,
-        petList
-      });
+      this._setLoginShow()
     }
-    // this._animate("open");
-  },
-  // 登录失败
-  onLoginFail() {
-    wx.showModal({
-      title: "只有已登录的用户才能够发布动态",
-      content: ""
-    });
   },
 
   handlePublish() {
@@ -239,14 +213,20 @@ Page({
 
   // 进入动态详情页
   enterMomentDetail(event) {
-    const {
-      target: {
-        dataset: { momentid, islike }
-      }
-    } = event;
-    wx.navigateTo({
-      url: `../moment/moment-detail/moment-detail?momentId=${momentid}&isLike=${islike}`
-    });
+    if (checkLogin()) {
+      const {
+        target: {
+          dataset: { momentid, islike }
+        }
+      } = event;
+      wx.navigateTo({
+        url: `../moment/moment-detail/moment-detail?momentId=${momentid}&isLike=${islike}`
+      });
+    } else {
+      this.setData({
+        loginShow: true
+      });
+    }
   },
 
   /**

@@ -16,7 +16,7 @@
   </view>
 </view>
 <!-- 登录 -->
-<LP-login modalShow="{{loginShow}}" bind:loginsuccess="{{handleLoginSuccess}}" bind:loginfail="{{handleLoginFail}}" />
+<LP-login modalShow="{{loginShow}}" />
 <!-- 评论弹出框 -->
 <LP-bottom-modal 
  modalShow="{{commentShow}}" 

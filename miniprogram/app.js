@@ -15,13 +15,14 @@ App({
     }
 
     this.globalData = {
-      openid: -1,
+      // openid: -1,
+      isLogin: false,
       userInfo: {},
-      petList: [], // 宠物列表
+      petList: [] // 宠物列表
     };
 
     // 获取openId
-    this.getOpenId();
+    // this.getOpenId();
     // 获取用户信息
     this.getUserInfo();
     // 获取宠物列表
@@ -53,12 +54,21 @@ App({
             timeout: 10000,
             success: result => {
               this.globalData.userInfo = result.userInfo;
+              this.globalData.isLogin = true;
             },
             fail: () => {}
           });
+        } else {
+          this.globalData.userInfo = {};
+          this.globalData.isLogin = false;
         }
       }
     });
+  },
+
+  setLoginData(isLogin, userInfo) {
+    this.globalData.userInfo = userInfo
+    this.globalData.isLogin = isLogin;
   },
 
   getPetList() {
@@ -86,10 +96,8 @@ App({
         }
       })
       .then(res => {
-        const {
-          result,
-        } = res;
-        const { total } = result
+        const { result } = res;
+        const { total } = result;
         if (total > 0 && total < 100) {
           wx.setTabBarBadge({
             index: 1,

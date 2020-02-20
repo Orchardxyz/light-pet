@@ -1,4 +1,7 @@
-<view class="record">
+<view wx:if="{{init}}" class="no-data">
+    <no-data />
+</view>
+<view wx:else class="record">
     <view class="record-title">
         <view class="left">
             <text>我的宠物</text>
@@ -8,8 +11,7 @@
             <text>新成员</text>
         </view>
     </view>
-    <no-data wx:if="{{!pets.length && init}}" />
-    <view wx:elif="{{!pets.length}}" class="record-blank">
+    <view wx:if="{{!pets.length}}" class="record-blank">
         <view class="blank-content" bind:tap="enterPetAdd">
             <i class="iconfont icon-plus-line" style="font-size: 75rpx" />
         </view>
@@ -17,7 +19,7 @@
             <text>(ฅʕ•̫͡•ʔฅ快来添加你的第一只爱宠吧！)</text>
         </view>
     </view>
-    <scroll-view scroll-y="{{true}}">
+    <scroll-view wx:else scroll-y="{{true}}">
         <block wx:for="{{pets}}" wx:key="index">
             <view class="pet-card">
                 <view class="card-item">
@@ -37,11 +39,13 @@
                     陪伴时长
                     <view class="item-right">
                         已陪伴你
-                        <text style="font-size: 35rpx; font-weight: bold">{{item.companyDays}}</text>
+                        <text style="font-size: 35rpx; font-weight: bold">
+                            {{item.companyDays}}
+                        </text>
                         天
                     </view>
                 </view>
-                <view class="card-item">
+                <view class="card-item" wx:if="{{item.adoptTime}}">
                     <i class="iconfont icon-home" style="color: #663333" />
                     收养时间
                     <view class="item-right">{{item.adoptTime}}</view>
@@ -87,3 +91,4 @@
         </view>
     </view>
 </view>
+<LP-login modalShow="{{loginShow}}" />

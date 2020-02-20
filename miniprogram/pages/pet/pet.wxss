@@ -1,4 +1,5 @@
-/* pages/record/record.wxss */
+@import '../../style/no-data.wxss';
+
 .record {
   background-color: rgb(226, 247, 226);
   border-radius: 5rpx;

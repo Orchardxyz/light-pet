@@ -1,10 +1,12 @@
 import formatTime from "../../utils/formatTime";
+import checkLogin from "../../utils/checkLogin";
 import { STAR } from "../../utils/notify/notifyType";
 import { STAR_MOMENT } from "../../utils/notify/notifyAction";
 import notify from "../../utils/notify/notify";
 
 Component({
   data: {
+    loginShow: false,
     createTime: "",
     isStar: false
   },
@@ -29,6 +31,12 @@ Component({
     }
   },
   methods: {
+    _setLoginShow() {
+      this.setData({
+        loginShow: true
+      });
+    },
+
     previewImage(event) {
       const dataset = event.target.dataset;
       wx.previewImage({
@@ -39,55 +47,58 @@ Component({
 
     // 收藏/取消收藏
     handleStar() {
-      const { isStar } = this.data;
-      const { moment = {} } = this.properties;
-      const { _id: momentId } = moment;
-      wx.showLoading({
-        title: "稍等",
-        mask: true
-      });
-      if (isStar) {
-        wx.cloud
-          .callFunction({
-            name: "community",
-            data: {
-              $url: "unstar",
-              momentId
-            }
-          })
-          .then(() => {
-            this.setData({
-              isStar: !isStar
+      if (checkLogin()) {
+        const { isStar } = this.data;
+        const { moment = {} } = this.properties;
+        const { _id: momentId } = moment;
+        wx.showLoading({
+          title: "稍等",
+          mask: true
+        });
+        if (isStar) {
+          wx.cloud
+            .callFunction({
+              name: "community",
+              data: {
+                $url: "unstar",
+                momentId
+              }
+            })
+            .then(() => {
+              this.setData({
+                isStar: !isStar
+              });
+              wx.hideLoading();
+              wx.showToast({
+                title: "取消收藏",
+                icon: "none"
+              });
             });
-            wx.hideLoading();
-            wx.showToast({
-              title: "取消收藏",
-              icon: "none"
+        } else {
+          wx.cloud
+            .callFunction({
+              name: "community",
+              data: {
+                $url: "star",
+                moment
+              }
+            })
+            .then(() => {
+              this.setData({
+                isStar: !isStar
+              });
+              wx.hideLoading();
+              wx.showToast({
+                title: "收藏成功",
+                icon: "none"
+              });
+              const { _openid, img = [], content } = moment;
+              const _img = img.length > 0 ? img[0] : "";
+              notify(_openid, STAR, STAR_MOMENT, momentId, content, _img);
             });
-          });
+        }
       } else {
-        wx.cloud
-          .callFunction({
-            name: "community",
-            data: {
-              $url: "star",
-              moment
-            }
-          })
-          .then(() => {
-            this.setData({
-              isStar: !isStar
-            });
-            wx.hideLoading();
-            wx.showToast({
-              title: "收藏成功",
-              icon: "none"
-            });
-            const { _openid, img = [], content } = moment;
-            // const contentType = img.length > 0 ? IMG : TEXT;
-            const _img = img.length > 0 ? img[0] : '';
-            notify(_openid, STAR, STAR_MOMENT, momentId, content, _img)
-          });
+        this._setLoginShow();
       }
     }
   }

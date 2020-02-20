@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "badge": "/components/UI/badge/badge"
+    "badge": "/components/UI/badge/badge",
+    "LP-login": "/components/login/login"
   },
   "navigationBarTitleText": "消息提醒"
 }
