@@ -32,6 +32,9 @@
                     <text>：{{item.content}}</text>
                 </view>
             </block>
+            <view wx:if="{{!firstComment.isAll}}"  class="more-link" catch:tap="enterCommentDetail" data-commentid="{{firstComment._id}}">
+                <text style="color: #3399CC">查看更多</text>
+            </view>
         </view>
     </view>
     <no-data wx:if="{{commentCount === 0}}" />

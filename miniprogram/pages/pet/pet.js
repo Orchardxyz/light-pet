@@ -1,6 +1,7 @@
 // pages/record/record.js
 import formatSpecies from "../../utils/formatSpecies";
-import checkLogin from "../../utils/checkLogin";
+
+const app = getApp()
 
 Page({
   /**
@@ -29,7 +30,7 @@ Page({
 
   // 加载宠物列表
   _loadPetList() {
-    if (checkLogin()) {
+    if (app.isLogin()) {
       wx.showLoading({
         title: "拼命加载中",
         mask: true
@@ -205,7 +206,9 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {},
+  onPullDownRefresh: function() {
+    this._loadPetList()
+  },
 
   /**
    * 页面上拉触底事件的处理函数

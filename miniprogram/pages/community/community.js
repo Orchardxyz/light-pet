@@ -1,4 +1,3 @@
-import checkLogin from "../../utils/checkLogin";
 
 // 每页获取的最大数据
 const MAX_COUNT = 10;
@@ -141,7 +140,7 @@ Page({
 
   // 发布动态
   onPublish() {
-    if (checkLogin()) {
+    if (app.isLogin()) {
       const {
         globalData: { petList = [] }
       } = app;
@@ -213,7 +212,7 @@ Page({
 
   // 进入动态详情页
   enterMomentDetail(event) {
-    if (checkLogin()) {
+    if (app.isLogin()) {
       const {
         target: {
           dataset: { momentid, islike }

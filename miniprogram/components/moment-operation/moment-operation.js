@@ -1,10 +1,9 @@
 import { COMMENT } from "../../utils/commentType";
-import checkLogin from "../../utils/checkLogin";
+import notify from "../../utils/notify/notify";
+import { COMMENT_REPLY } from "../../utils/notify/notifyType";
+import notifyAction from "../../utils/notify/notifyAction";
 
 const app = getApp();
-const {
-  globalData: { userInfo }
-} = app;
 
 Component({
   data: {
@@ -55,7 +54,7 @@ Component({
         footerBottom: event.detail.height
       });
     },
-    hanldeBlur() {
+    handleBlur() {
       this.setData({
         footerBottom: 0
       });
@@ -63,7 +62,7 @@ Component({
 
     // 点赞功能
     handleClickLike() {
-      if (checkLogin()) {
+      if (app.isLogin()) {
         const { isLike, likeCount } = this.data;
         const {
           moment: { _id: momentId }
@@ -97,7 +96,7 @@ Component({
 
     // 点击评论图标
     handleComment() {
-      if (checkLogin()) {
+      if (app.isLogin()) {
         this.setData({
           commentShow: true
         });
@@ -123,8 +122,9 @@ Component({
         title: "评论发表中"
       });
       const {
-        moment: { _id: momentId }
+        moment: { _id: momentId, _openid, img = [], content: _content }
       } = this.properties;
+      const userInfo = app.getUserInfo()
       const { avatarUrl, nickName } = userInfo;
       const comment = {
         momentId,
@@ -155,6 +155,15 @@ Component({
                   title: "发表成功",
                   icon: "success"
                 });
+                const _img = img.length > 0 ? img[0] : "";
+                notify(
+                  _openid,
+                  COMMENT_REPLY,
+                  notifyAction.COMMENT,
+                  momentId,
+                  _content,
+                  _img
+                );
               }
             }
           });

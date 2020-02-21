@@ -17,7 +17,7 @@ App({
     this.globalData = {
       // openid: -1,
       isLogin: false,
-      userInfo: {},
+      // userInfo: {},
       petList: [] // 宠物列表
     };
 
@@ -44,31 +44,17 @@ App({
       });
   },
 
+  isLogin() {
+    return wx.getStorageSync("isLogin")
+  },
+
   getUserInfo() {
-    wx.getSetting({
-      success: result => {
-        if (result.authSetting["scope.userInfo"]) {
-          wx.getUserInfo({
-            withCredentials: "false",
-            lang: "zh_CN",
-            timeout: 10000,
-            success: result => {
-              this.globalData.userInfo = result.userInfo;
-              this.globalData.isLogin = true;
-            },
-            fail: () => {}
-          });
-        } else {
-          this.globalData.userInfo = {};
-          this.globalData.isLogin = false;
-        }
-      }
-    });
+    return wx.getStorageSync("userInfo");
   },
 
   setLoginData(isLogin, userInfo) {
-    this.globalData.userInfo = userInfo
-    this.globalData.isLogin = isLogin;
+    wx.setStorageSync('isLogin', isLogin);
+    wx.setStorageSync('userInfo', userInfo)
   },
 
   getPetList() {

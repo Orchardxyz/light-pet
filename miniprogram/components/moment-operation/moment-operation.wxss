@@ -1,56 +1,56 @@
 .operation {
-    display: flex;
-    align-items: center;
-    background-color: #FFF;
-    height: 100%;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  height: 100%;
 }
 
 .operation-item {
-    flex: 1;
-    text-align: center;
-    font-size: 30rpx;
-    color: #686666;
+  flex: 1;
+  text-align: center;
+  font-size: 30rpx;
+  color: #686666;
 }
 
 .operation-item text {
-    font-size: 30rpx;
-    padding-left: 5rpx;
-    color: #888A88;
+  font-size: 30rpx;
+  padding-left: 5rpx;
+  color: #888a88;
 }
 
 .operation-share-btn {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    background-color: #FFF;
-    font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  font-weight: 500;
 }
 
 .operation-share-btn::after {
-    display: none;
-    border: 0;
+  display: none;
+  border: 0;
 }
 
 .comment-txta {
-    margin-top: 55rpx;
-    padding: 20rpx;
-    width: 550rpx;
-    font-size: 35rpx;
-    text-align: left;
-} 
+  margin-top: 55rpx;
+  padding: 20rpx;
+  width: 550rpx;
+  font-size: 35rpx;
+  text-align: left;
+}
 
 .comment-btn {
-    position: absolute;
-    right: 20rpx;
-    bottom: 20rpx;
+  position: absolute;
+  right: 20rpx;
+  bottom: 20rpx;
 
-    background-color: rgb(44, 235, 165);
-    font-weight: 500;
-    color: #333;
+  background-color: rgb(44, 235, 165);
+  font-weight: 500;
+  color: #333;
 }
 
 .icon-pets {
-    color: #FF1F18;
-    font-size: 45rpx;
+  color: #ff1f18;
+  font-size: 45rpx;
 }

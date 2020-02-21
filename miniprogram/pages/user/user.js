@@ -1,4 +1,5 @@
-import checkLogin from "../../utils/checkLogin";
+
+const app = getApp()
 
 Page({
   /**
@@ -23,7 +24,7 @@ Page({
   },
 
   _init() {
-    if (checkLogin()) {
+    if (app.isLogin()) {
       wx.showLoading({
         title: "稍等",
         mask: true
@@ -48,7 +49,7 @@ Page({
   },
 
   enterMyStar() {
-    if (checkLogin()) {
+    if (app.isLogin()) {
       wx.navigateTo({
         url: "./star/star"
       });

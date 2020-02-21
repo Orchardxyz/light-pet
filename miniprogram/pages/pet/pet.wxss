@@ -57,6 +57,7 @@
 
 .pet-card .card-item {
   display: flex;
+  align-items: center;
   justify-content: baseline;
   padding: 5rpx;
   font-size: 32rpx;
@@ -92,6 +93,7 @@
 }
 
 .card-item .item-right {
+  display: flex;
   margin-left: auto;
 }
 

@@ -1,7 +1,7 @@
 <block wx:for="{{commentList}}" wx:key="index">
     <LP-comment-overview 
-    comment="{{item}}" 
-    bind:onLinkMore="enterCommentDetail"
+    comment="{{item}}"
+    momentId="{{momentId}}" 
     bind:onComment="handleReply" />
 </block>
 

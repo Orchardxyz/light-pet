@@ -37,11 +37,10 @@ button[size="mini"] {
   background-color: #fff;
 }
 .comment-content {
-  width: 100%;
+  width: 92%;
   height: 150rpx;
   border-radius: 20rpx;
-  padding-left: 15rpx;
-  padding-top: 5rpx;
+  padding: 5rpx 15rpx;
   background-color: #f7f7f7;
 }
 

@@ -39,9 +39,7 @@
                     陪伴时长
                     <view class="item-right">
                         已陪伴你
-                        <text style="font-size: 35rpx; font-weight: bold">
-                            {{item.companyDays}}
-                        </text>
+                        <text style="font-size: 35rpx; font-weight: bold; padding: 0 10rpx;"> {{item.companyDays}} </text>
                         天
                     </view>
                 </view>

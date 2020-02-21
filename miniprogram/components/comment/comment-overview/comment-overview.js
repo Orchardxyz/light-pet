@@ -1,14 +1,18 @@
 Component({
   data: {},
   properties: {
-    comment: Object
+    comment: Object,
+    momentId: String
   },
   methods: {
     handleLinkMore() {
       const {
-        comment: { _id }
+        comment: { _id },
+        momentId
       } = this.properties;
-      this.triggerEvent("onLinkMore", _id);
+      wx.navigateTo({
+        url: `../comment-detail/comment-detail?momentId=${momentId}&commentId=${_id}`
+      });
     },
 
     // 一级评论

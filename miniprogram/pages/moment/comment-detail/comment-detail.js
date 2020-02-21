@@ -4,6 +4,9 @@ import {
   DEFAULT_COMMENT
 } from "../../../utils/defaultValue";
 import { FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
+import notify from "../../../utils/notify/notify";
+import notifyAction from "../../../utils/notify/notifyAction";
+import { COMMENT_REPLY } from "../../../utils/notify/notifyType";
 
 const app = getApp();
 
@@ -13,9 +16,10 @@ Page({
    */
   data: {
     comment: {},
+    moment: {},
+    momentId: "",
     isReply: false,
     currentCommentId: "",
-    momentId: "",
     placeholderTxt: DEFAULT_PLACHOLDER,
     commentShow: false,
     defaultCommentValue: DEFAULT_COMMENT,
@@ -28,11 +32,26 @@ Page({
    */
   onLoad: function(options) {
     const { momentId, commentId } = options;
+    this._getMoment(momentId);
     this._getCommentDetail(commentId);
-    this.setData({
-      currentCommentId: commentId,
-      momentId
-    });
+  },
+
+  _getMoment(momentId) {
+    wx.cloud
+      .callFunction({
+        name: "community",
+        data: {
+          $url: "/moment/get",
+          momentId
+        }
+      })
+      .then(res => {
+        const { result } = res;
+        this.setData({
+          momentId,
+          moment: result
+        });
+      });
   },
 
   // 获取当前评论详情
@@ -59,7 +78,7 @@ Page({
           const { createTime } = children[i];
           children[i].createTime = formatTime(new Date(createTime));
         }
-        this.setData({ comment });
+        this.setData({ comment, currentCommentId: commentId });
         wx.hideLoading();
       });
   },
@@ -116,9 +135,9 @@ Page({
   // 直接输入评论
   onComment(event) {
     this.setData({
-      commentLevel: FIRST_REPLY,
-    })
-    this.onReply(event)
+      commentLevel: FIRST_REPLY
+    });
+    this.onReply(event);
   },
 
   // 回复
@@ -128,9 +147,7 @@ Page({
     wx.showLoading({
       title: "发表中"
     });
-    const {
-      globalData: { userInfo }
-    } = app;
+    const userInfo = app.getUserInfo()
     const reply = {
       ...userInfo,
       replyUser,
@@ -150,10 +167,15 @@ Page({
       .then(() => {
         wx.hideLoading();
         this._getCommentDetail(currentCommentId);
-        this._initData()
+        this._initData();
         wx.showToast({
           title: "回复成功!"
         });
+        const {
+          moment: { _id, _openid, img = [], content }
+        } = this.data;
+        const _img = img.length > 0 ? img[0] : "";
+        notify(_openid, COMMENT_REPLY, notifyAction.REPLY, _id, content, _img);
       });
   },
 

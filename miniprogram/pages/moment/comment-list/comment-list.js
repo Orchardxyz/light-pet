@@ -4,6 +4,9 @@ import {
   DEFAULT_COMMENT
 } from "../../../utils/defaultValue";
 import { COMMENT, FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
+import notify from '../../../utils/notify/notify'
+import notifyAction from '../../../utils/notify/notifyAction'
+import { COMMENT_REPLY } from '../../../utils/notify/notifyType'
 
 const app = getApp();
 
@@ -13,6 +16,7 @@ Page({
    */
   data: {
     momentId: "",
+    moment: {},
     commentList: [],
     isReply: false,
     commentShow: false,
@@ -29,9 +33,23 @@ Page({
   onLoad: function(options) {
     const { momentId } = options;
     this._getCommentList(momentId);
-    this.setData({
-      momentId
-    });
+    this._getMoment(momentId)
+  },
+
+  _getMoment(momentId) {
+    wx.cloud.callFunction({
+      name: 'community',
+      data: {
+        $url: "/moment/get",
+        momentId
+      }
+    }).then(res => {
+      const { result } = res
+      this.setData({
+        momentId,
+        moment: result
+      });
+    })
   },
 
   // 加载评论列表
@@ -89,15 +107,6 @@ Page({
     });
   },
 
-  // 进入评论详情页
-  enterCommentDetail(event) {
-    const { detail } = event;
-    const { momentId } = this.data;
-    wx.navigateTo({
-      url: `../comment-detail/comment-detail?momentId=${momentId}&commentId=${detail}`
-    });
-  },
-
   handleReply(event) {
     const {
       detail: { commentId, comment }
@@ -129,9 +138,7 @@ Page({
     wx.showLoading({
       title: "发表中"
     });
-    const {
-      globalData: { userInfo }
-    } = app;
+    const userInfo = app.getUserInfo()
     const reply = {
       ...userInfo,
       replyUser,
@@ -155,6 +162,9 @@ Page({
         wx.showToast({
           title: "回复成功!"
         });
+        const { moment: {_openid, img = [], content}} = this.data
+        const _img = img.length > 0 ? img[0] : ''
+        notify(_openid, COMMENT_REPLY, notifyAction.REPLY, momentId, content, _img)
       });
   },
 
@@ -167,9 +177,7 @@ Page({
       });
       return;
     }
-    const {
-      globalData: { userInfo }
-    } = app;
+    const userInfo = app.getUserInfo()
     const { momentId } = this.data;
     const { avatarUrl, nickName } = userInfo;
     wx.showLoading({
@@ -197,6 +205,9 @@ Page({
         wx.showToast({
           title: "发表成功!"
         });
+        const { moment: {_openid, img = [], content}} = this.data
+        const _img = img.length > 0 ? img[0] : ''
+        notify(_openid, COMMENT_REPLY, notifyAction.COMMENT, momentId, content, _img)
       });
   },
 

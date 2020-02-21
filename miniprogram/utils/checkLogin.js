@@ -1,7 +1,4 @@
 module.exports = () => {
-  const app = getApp();
-  const {
-    globalData: { isLogin }
-  } = app;
+  const isLogin = wx.getStorageSync('isLogin');
   return isLogin;
 };

@@ -1,7 +1,7 @@
 import formatTime from "../../../utils/formatTime";
 import { COMMENT, FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
-import { LIKE } from "../../../utils/notify/notifyType";
-import { GIVE_LIKE } from "../../../utils/notify/notifyAction";
+import { LIKE, COMMENT_REPLY } from "../../../utils/notify/notifyType";
+import notifyAction from "../../../utils/notify/notifyAction";
 import notify from "../../../utils/notify/notify";
 
 const DEFAULT_PLACHOLDER = "请在此输入评论";
@@ -64,6 +64,13 @@ Page({
         let firstComment = {};
         if (commentCount > 0) {
           firstComment = commentList[0];
+          const { children = [] } = firstComment;
+          // 只展示两条以内的回复数据
+          const length = children.length <= 2 ? children.length : 2;
+          // 用来判断是否显示【查看更多】的字段
+          const isAll = children.length <= 2 ? true : false;
+          firstComment.isAll = isAll;
+          children.splice(length);
           firstComment.createTime = formatTime(
             new Date(firstComment.createTime)
           );
@@ -142,9 +149,7 @@ Page({
     wx.showLoading({
       title: "发表中"
     });
-    const {
-      globalData: { userInfo }
-    } = app;
+    const userInfo = app.getUserInfo()
     const comment = {
       ...userInfo,
       momentId,
@@ -160,10 +165,28 @@ Page({
         }
       })
       .then(() => {
-        wx.hideLoading();
-        this._getMomentDetail(momentId);
-        wx.showToast({
-          title: "评论成功!"
+        this._initData();
+        wx.hideLoading({
+          complete: res => {
+            if (res.errMsg === "hideLoading:ok") {
+              this._getMomentDetail(momentId);
+              wx.showToast({
+                title: "评论成功!"
+              });
+              const {
+                moment: { _openid, img = [], content }
+              } = this.data;
+              const _img = img.length > 0 ? img[0] : "";
+              notify(
+                _openid,
+                COMMENT_REPLY,
+                notifyAction.COMMENT,
+                momentId,
+                content,
+                _img
+              );
+            }
+          }
         });
       });
   },
@@ -175,9 +198,7 @@ Page({
     wx.showLoading({
       title: "发表中"
     });
-    const {
-      globalData: { userInfo }
-    } = app;
+    const userInfo = app.getUserInfo()
     const reply = {
       ...userInfo,
       replyUser,
@@ -195,10 +216,28 @@ Page({
         }
       })
       .then(() => {
-        wx.hideLoading();
-        this._getMomentDetail(momentId);
-        wx.showToast({
-          title: "回复成功!"
+        this._initData();
+        wx.hideLoading({
+          complete: res => {
+            if (res.errMsg === "hideLoading:ok") {
+              this._getMomentDetail(momentId);
+              wx.showToast({
+                title: "回复成功!"
+              });
+              const {
+                moment: { _openid, img = [], content }
+              } = this.data;
+              const _img = img.length > 0 ? img[0] : "";
+              notify(
+                _openid,
+                COMMENT_REPLY,
+                notifyAction.REPLY,
+                momentId,
+                content,
+                _img
+              );
+            }
+          }
         });
       });
   },
@@ -245,8 +284,15 @@ Page({
         // 发送通知
         if (!isLike) {
           // const contentType = img.length > 0 ? IMG : TEXT;
-          const _img = img.length > 0 ? img[0] : '';
-          notify(reciever_id, LIKE, GIVE_LIKE, momentId, content, _img);
+          const _img = img.length > 0 ? img[0] : "";
+          notify(
+            reciever_id,
+            LIKE,
+            notifyAction.GIVE_LIKE,
+            momentId,
+            content,
+            _img
+          );
         }
       })
       .catch(err => {

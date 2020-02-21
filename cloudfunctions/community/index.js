@@ -57,6 +57,13 @@ exports.main = async (event, context) => {
     // TODO
   });
 
+  // 获取某条动态
+  app.router("/moment/get", async (ctx, next) => {
+    const { momentId } = event
+    const { data: moment } = await momentCollection.doc(momentId).get()
+    ctx.body = moment
+  })
+
   // 获取动态详情
   app.router("/moment/detail", async (ctx, next) => {
     const { momentId = "", start = 0, count = 10 } = event;

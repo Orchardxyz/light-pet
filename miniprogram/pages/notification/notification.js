@@ -4,7 +4,8 @@ import {
   LIKE,
   COMMENT_REPLY
 } from "../../utils/notify/notifyType";
-import checkLogin from "../../utils/checkLogin";
+
+const app = getApp()
 
 Page({
   /**
@@ -29,7 +30,7 @@ Page({
   },
 
   _init() {
-    if (checkLogin()) {
+    if (app.isLogin()) {
       wx.showLoading({
         title: "加载中",
         mask: true
@@ -56,7 +57,7 @@ Page({
   },
 
   _handleHasRead(type) {
-    if (checkLogin()) {
+    if (app.isLogin()) {
       const {
         notifyCount: { total }
       } = this.data;

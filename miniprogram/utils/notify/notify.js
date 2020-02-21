@@ -1,8 +1,6 @@
 module.exports = (reciever_id, type, action, source_id, content, img = "") => {
   const app = getApp();
-  const {
-    globalData: { userInfo }
-  } = app;
+  const userInfo = app.getUserInfo()
   wx.cloud.callFunction({
     name: "notification",
     data: {

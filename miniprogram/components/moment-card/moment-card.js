@@ -1,8 +1,9 @@
 import formatTime from "../../utils/formatTime";
-import checkLogin from "../../utils/checkLogin";
 import { STAR } from "../../utils/notify/notifyType";
 import { STAR_MOMENT } from "../../utils/notify/notifyAction";
 import notify from "../../utils/notify/notify";
+
+const app = getApp()
 
 Component({
   data: {
@@ -47,7 +48,7 @@ Component({
 
     // 收藏/取消收藏
     handleStar() {
-      if (checkLogin()) {
+      if (app.isLogin()) {
         const { isStar } = this.data;
         const { moment = {} } = this.properties;
         const { _id: momentId } = moment;
