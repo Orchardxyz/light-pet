@@ -1,4 +1,4 @@
-<block wx:for="{{starList}}" wx:key="index">
+<block wx:for="{{momentList}}" wx:key="index">
     <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
     <LP-moment-operation moment="{{item}}" />
 </block>

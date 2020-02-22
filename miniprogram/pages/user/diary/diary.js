@@ -4,7 +4,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    starList: []
+    momentList: []
   },
 
   /**
@@ -23,13 +23,13 @@ Page({
       .callFunction({
         name: "user",
         data: {
-          $url: "getStarMoment"
+          $url: "diary"
         }
       })
       .then(res => {
         const { result } = res;
         this.setData({
-          starList: result
+          momentList: result,
         });
         wx.hideLoading();
       });

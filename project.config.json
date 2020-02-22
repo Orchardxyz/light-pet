@@ -23,7 +23,7 @@
 	},
 	"appid": "wx0d9cdf72e9c63cde",
 	"projectname": "light-pet",
-	"libVersion": "2.8.1",
+	"libVersion": "2.8.3",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",

@@ -57,7 +57,7 @@
                 收养时间
                 <view class="item-right">
                     <picker mode="date" start="2010-01-01" end="{{today}}" bindchange="handleAdoptChange">
-                        <input class="item-right" name="adoptTime" value="{{adoptTime}}" placeholder="选填" placeholder-class="placeholderTxt" style="text-align: right" />
+                        <input class="item-right" name="adoptTime" value="{{adoptTime}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
                     </picker>
                     <i class="iconfont icon-xuanzeqixiayige_o" />
                 </view>

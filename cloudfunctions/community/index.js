@@ -162,13 +162,6 @@ exports.main = async (event, context) => {
     const { OPENID } = cloud.getWXContext()
     const { moment = {} } = event
     try {
-      const resStar = await starCollection.add({
-        data: {
-          _openid: OPENID,
-          moment,
-          createTime: db.serverDate(),
-        }
-      })
       const { _id } = moment
       const resMoment = await momentCollection.doc(_id).update({
         data: {
@@ -176,7 +169,6 @@ exports.main = async (event, context) => {
         }
       })
       ctx.body = {
-        resStar,
         resMoment
       }
     } catch(err) {
@@ -190,12 +182,6 @@ exports.main = async (event, context) => {
     const { OPENID } = cloud.getWXContext()
     const { momentId } = event
     try {
-      const resStar = await starCollection.where({
-        _openid: OPENID,
-        moment: {
-          _id: momentId,
-        }
-      }).remove()
       const {data } = await momentCollection.doc(momentId).get()
       const {stars} = data
       stars.splice(
@@ -208,7 +194,6 @@ exports.main = async (event, context) => {
         }
       })
       ctx.body = {
-        resStar,
         resMoment
       }
     } catch (err) {

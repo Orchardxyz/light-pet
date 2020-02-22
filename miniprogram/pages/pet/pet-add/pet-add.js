@@ -119,7 +119,7 @@ Page({
       });
       return;
     }
-    if (petName && selectedSex && selectedSpecies && variety && birthday) {
+    if (petName && selectedSex && selectedSpecies && variety && birthday && adoptTime) {
       wx.showLoading({
         title: "保存中",
         mask: true

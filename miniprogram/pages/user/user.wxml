@@ -16,7 +16,7 @@
             <text class="small-font">只</text>
         </view>
     </view>
-    <view class="user-content-item">
+    <view class="user-content-item" bind:tap="enterDiary">
         <view class="item-left">
             <i class="iconfont icon-yonghuxiangce" style="color: #0099CC" />
             <text>养宠日记</text>
@@ -36,7 +36,16 @@
             <text class="small-font">人</text>
         </view>
     </view> -->
-    <view class="user-content-item" style="margin-top: 15rpx" bind:tap="enterMyStar">
+    <view class="user-content-item" style="margin-top: 15rpx"  bind:tap="enterMyLike">
+        <view class="item-left">
+            <i class="iconfont icon-like" style="color: #FF6600" />
+            <text>我赞过的</text>
+        </view>
+        <view class="item-right">
+            <i class="iconfont icon-xuanzeqixiayige_o" />
+        </view>
+    </view>
+    <view class="user-content-item" bind:tap="enterMyStar">
         <view class="item-left">
             <i class="iconfont icon-star1" style="font-size: 58rpx; color: #CC0033" />
             <text>我的收藏</text>

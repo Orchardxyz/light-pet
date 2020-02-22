@@ -3,5 +3,5 @@
     "LP-moment-card": "/components/moment-card/moment-card",
     "LP-moment-operation": "/components/moment-operation/moment-operation"
   },
-  "navigationBarTitleText": "我的收藏"
+  "navigationBarTitleText": "我赞过的"
 }

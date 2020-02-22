@@ -12,7 +12,9 @@
     "pages/pet/pet-health/pet-health",
     "pages/pet/open-remind/open-remind",
     "pages/notification/detail/detail",
-    "pages/user/star/star"
+    "pages/user/star/star",
+    "pages/user/like/like",
+    "pages/user/diary/diary"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

@@ -58,11 +58,11 @@
                     年龄
                     <view class="item-right">{{item.age}}</view>
                 </view>
-                <view class="card-item">
+                <!-- <view class="card-item">
                     <i class="iconfont icon-timeline" style="color: #1890ff" />
                     最近动态
                     <view class="item-right"></view>
-                </view>
+                </view> -->
                 <view class="health-management">
                     <button class="health-btn" size="mini" style="width: 95%" data-pet="{{item}}" data-index="{{index}}" bind:tap="openDrawer" loading="{{btnIsLoading[index]}}">
                         <i wx:if="{{!btnIsLoading[index]}}" class="iconfont icon-tongzhi" style="color: #FF9900" />

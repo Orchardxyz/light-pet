@@ -1,5 +1,4 @@
-
-const app = getApp()
+const app = getApp();
 
 Page({
   /**
@@ -43,6 +42,26 @@ Page({
           });
           wx.hideLoading();
         });
+    } else {
+      this._setLoginShow();
+    }
+  },
+
+  enterDiary() {
+    if (app.isLogin()) {
+      wx.navigateTo({
+        url: "./diary/diary"
+      });
+    } else {
+      this._setLoginShow();
+    }
+  },
+
+  enterMyLike() {
+    if (app.isLogin()) {
+      wx.navigateTo({
+        url: "./like/like"
+      });
     } else {
       this._setLoginShow();
     }
