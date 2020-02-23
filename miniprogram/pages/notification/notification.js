@@ -47,6 +47,7 @@ Page({
           this.setData({
             notifyCount: result
           });
+          wx.stopPullDownRefresh();
           wx.hideLoading();
         });
     } else {

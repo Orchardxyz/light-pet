@@ -4,7 +4,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    momentList: []
+    momentList: [],
+    isAll: false,
   },
 
   /**
@@ -14,7 +15,7 @@ Page({
     this._init();
   },
 
-  _init() {
+  _init(start = 0) {
     wx.showLoading({
       title: "加载中",
       mask: true
@@ -23,15 +24,23 @@ Page({
       .callFunction({
         name: "user",
         data: {
-          $url: "diary"
+          $url: "diary",
+          start
         }
       })
       .then(res => {
         const { result } = res;
+        const { momentList } = this.data
         this.setData({
-          momentList: result,
+          momentList: (start === 0 ? [] : momentList).concat(result),
         });
+        if (momentList.length === this.data.momentList.length && momentList.length !== 0) {
+          this.setData({
+            isAll: true,
+          })
+        }
         wx.hideLoading();
+        wx.stopPullDownRefresh();
       });
   },
 
@@ -77,7 +86,12 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {},
+  onReachBottom: function() {
+    const { isAll, momentList } = this.data
+    if (!isAll) {
+      this._init(momentList.length)
+    }
+  },
 
   /**
    * 用户点击右上角分享

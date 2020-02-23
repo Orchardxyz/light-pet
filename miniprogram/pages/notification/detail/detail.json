@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "LP-notify-card": "/components/notify/notify-card/notify-card",
+    "LP-bottom-line": "/components/bottom-line/bottom-line",
     "no-data": "/components/UI/no-data/no-data"
   }
 }

@@ -1,4 +1,5 @@
 @import "../../../style/comment-bar.wxss";
 page {
     background-color: #FFF;
+    margin-bottom: 90rpx;
 }

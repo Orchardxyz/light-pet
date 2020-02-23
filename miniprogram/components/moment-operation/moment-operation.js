@@ -1,6 +1,6 @@
 import { COMMENT } from "../../utils/commentType";
 import notify from "../../utils/notify/notify";
-import { COMMENT_REPLY } from "../../utils/notify/notifyType";
+import { LIKE, COMMENT_REPLY } from "../../utils/notify/notifyType";
 import notifyAction from "../../utils/notify/notifyAction";
 
 const app = getApp();
@@ -65,7 +65,7 @@ Component({
       if (app.isLogin()) {
         const { isLike, likeCount } = this.data;
         const {
-          moment: { _id: momentId }
+          moment: { _id: momentId, _openid, nickName, content, img = [] }
         } = this.properties;
         const url = isLike ? "cancelLike" : "giveLike";
         wx.cloud
@@ -81,6 +81,18 @@ Component({
               likeCount: isLike ? likeCount - 1 : likeCount + 1,
               isLike: !isLike
             });
+            if (!isLike) {
+              const _img = img.length > 0 ? img[0] : "";
+              notify(
+                _openid,
+                nickName,
+                LIKE,
+                notifyAction.GIVE_LIKE,
+                { momentId },
+                content,
+                _img,
+              );
+            }
           })
           .catch(err => {
             console.log(err);
@@ -122,9 +134,15 @@ Component({
         title: "评论发表中"
       });
       const {
-        moment: { _id: momentId, _openid, img = [], content: _content }
+        moment: {
+          _id: momentId,
+          _openid,
+          nickName: reciever_name,
+          img = [],
+          content: _content
+        }
       } = this.properties;
-      const userInfo = app.getUserInfo()
+      const userInfo = app.getUserInfo();
       const { avatarUrl, nickName } = userInfo;
       const comment = {
         momentId,
@@ -158,11 +176,13 @@ Component({
                 const _img = img.length > 0 ? img[0] : "";
                 notify(
                   _openid,
+                  reciever_name,
                   COMMENT_REPLY,
                   notifyAction.COMMENT,
-                  momentId,
+                  { momentId },
                   _content,
-                  _img
+                  _img,
+                  content
                 );
               }
             }

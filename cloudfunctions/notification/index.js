@@ -57,8 +57,10 @@ exports.main = async (event, context) => {
     const { OPENID } = wxContext;
     const {
       reciever_id = "",
-      source_id = "",
+      reciever_name = '',
+      source_params = {},
       sender = {},
+      notify_content = '',
       action,
       content,
       img = "",
@@ -70,7 +72,9 @@ exports.main = async (event, context) => {
     await notifyCollection.add({
       data: {
         reciever_id,
-        source_id,
+        reciever_name,
+        source_params,
+        notify_content,
         content,
         img,
         type,
@@ -87,10 +91,12 @@ exports.main = async (event, context) => {
 
   // 获取相应类型的通知
   app.router("get", async (ctx, next) => {
-    const { type } = event;
+    const { type, start = 0, count = 10 } = event;
     const { OPENID } = wxContext;
     const { data: notifyList = [] } = await notifyCollection
       .where({ type, reciever_id: OPENID })
+      .skip(start)
+      .limit(count)
       .get();
     ctx.body = notifyList;
   });

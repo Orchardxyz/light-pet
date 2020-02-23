@@ -5,6 +5,8 @@
     bind:onComment="handleReply" />
 </block>
 
+<LP-bottom-line wx:if="{{isAll}}" />
+
 <view class="detail-operation">
     <LP-comment-bar 
     commentShow="{{commentShow}}" 

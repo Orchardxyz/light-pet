@@ -2,7 +2,10 @@
     <no-data />
 </view>
 <view wx:else>
-    <block wx:for="{{notificationList}}" wx:key="index">
-        <LP-notify-card notification="{{item}}" />
-    </block>
+    <scroll-view scroll-y="{{true}}">
+        <block wx:for="{{notificationList}}" wx:key="index">
+            <LP-notify-card notification="{{item}}"/>
+        </block>
+    </scroll-view>
 </view>
+<LP-bottom-line wx:if="{{isAll}}" />

@@ -11,7 +11,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    notificationList: []
+    type: "",
+    notificationList: [],
+    isAll: false
   },
 
   /**
@@ -19,11 +21,11 @@ Page({
    */
   onLoad: function(options) {
     const { type } = options;
-    this._setPageTitle(type)
+    this._setPageTitle(type);
     this._init(type);
   },
 
-  _init(type) {
+  _init(type, start = 0) {
     wx.showLoading({
       title: "加载中",
       mask: true
@@ -33,15 +35,25 @@ Page({
         name: "notification",
         data: {
           $url: "get",
-          type
+          type,
+          start
         }
       })
       .then(res => {
         const { result } = res;
+        const { notificationList } = this.data;
         this.setData({
-          notificationList: result
+          type,
+          notificationList:
+            start === 0 ? [].concat(result) : notificationList.concat(result)
         });
+        if (this.data.notificationList.length === notificationList.length && notificationList.length !== 0) {
+          this.setData({
+            isAll: true
+          });
+        }
         wx.hideLoading();
+        wx.stopPullDownRefresh();
       });
   },
 
@@ -90,12 +102,20 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {},
+  onPullDownRefresh: function() {
+    const { type } = this.data;
+    this._init(type);
+  },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {},
+  onReachBottom: function() {
+    const { type, notificationList, isAll } = this.data;
+    if (!isAll) {
+      this._init(type, notificationList.length);
+    }
+  },
 
   /**
    * 用户点击右上角分享

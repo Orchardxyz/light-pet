@@ -17,7 +17,7 @@ exports.main = async (event, context) => {
 
   // 获取社区所有动态
   app.router("getAllMomentList", async (ctx, next) => {
-    const { keyword = "", start, count } = event;
+    const { keyword = "", start = 0, count = 10 } = event;
     // 会出现进入路由时OPENID还没有读到的情况，所以要在这里先执行一次
     const { OPENID } = cloud.getWXContext();
     let condition = {};

@@ -13,7 +13,7 @@
     catch:tap="handleStar" />
   </view>
   <!-- 文字内容 -->
-  <view class="moment-content">{{moment.content}}</view>
+  <view class="moment-content"><text>{{moment.content}}</text></view>
   <!-- 图片 -->
   <view class="moment-img">
     <block wx:for="{{moment.img}}" wx:key="index">

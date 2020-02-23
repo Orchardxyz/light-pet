@@ -1,4 +1,7 @@
-<block wx:for="{{likeList}}" wx:key="index">
-    <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
-    <LP-moment-operation moment="{{item}}" />
-</block>
+<scroll-view scroll-y="{{true}}">
+    <block wx:for="{{likeList}}" wx:key="index">
+        <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
+        <LP-moment-operation moment="{{item}}" />
+    </block>
+</scroll-view>
+<LP-bottom-line wx:if="{{isAll}}" />

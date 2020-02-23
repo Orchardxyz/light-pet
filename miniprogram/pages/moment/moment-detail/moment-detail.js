@@ -42,7 +42,7 @@ Page({
   // 加载动态详情
   _getMomentDetail(momentId) {
     wx.showLoading({
-      title: "拼命加载中",
+      title: "加载中",
       mask: true
     });
     wx.cloud
@@ -87,6 +87,7 @@ Page({
         });
 
         wx.hideLoading();
+        wx.stopPullDownRefresh();
       });
   },
 
@@ -149,7 +150,7 @@ Page({
     wx.showLoading({
       title: "发表中"
     });
-    const userInfo = app.getUserInfo()
+    const userInfo = app.getUserInfo();
     const comment = {
       ...userInfo,
       momentId,
@@ -174,16 +175,18 @@ Page({
                 title: "评论成功!"
               });
               const {
-                moment: { _openid, img = [], content }
+                moment: { _openid, nickName, img = [], content }
               } = this.data;
               const _img = img.length > 0 ? img[0] : "";
               notify(
                 _openid,
+                nickName,
                 COMMENT_REPLY,
                 notifyAction.COMMENT,
-                momentId,
+                { momentId },
                 content,
-                _img
+                _img,
+                detail
               );
             }
           }
@@ -198,7 +201,7 @@ Page({
     wx.showLoading({
       title: "发表中"
     });
-    const userInfo = app.getUserInfo()
+    const userInfo = app.getUserInfo();
     const reply = {
       ...userInfo,
       replyUser,
@@ -225,16 +228,24 @@ Page({
                 title: "回复成功!"
               });
               const {
-                moment: { _openid, img = [], content }
+                moment: { _id, img = [] }
               } = this.data;
+              const { firstComment } = this.data;
+              const { content } = firstComment;
               const _img = img.length > 0 ? img[0] : "";
               notify(
-                _openid,
+                commentLevel === FIRST_REPLY
+                  ? firstComment._openid
+                  : replyUser._openid,
+                commentLevel === FIRST_REPLY
+                  ? firstComment.nickName
+                  : replyUser.nickName,
                 COMMENT_REPLY,
                 notifyAction.REPLY,
-                momentId,
+                { momentId: _id, commentId: currentCommentId },
                 content,
-                _img
+                _img,
+                detail,
               );
             }
           }
@@ -266,7 +277,7 @@ Page({
   // 点赞
   handleLike() {
     const { isLike, likeCount, moment } = this.data;
-    const { _id: momentId, _openid: reciever_id, img = [], content } = moment;
+    const { _id: momentId, _openid: reciever_id, nickName, img = [], content } = moment;
     const url = isLike ? "cancelLike" : "giveLike";
     wx.cloud
       .callFunction({
@@ -283,13 +294,13 @@ Page({
         });
         // 发送通知
         if (!isLike) {
-          // const contentType = img.length > 0 ? IMG : TEXT;
           const _img = img.length > 0 ? img[0] : "";
           notify(
             reciever_id,
+            nickName,
             LIKE,
             notifyAction.GIVE_LIKE,
-            momentId,
+            { momentId },
             content,
             _img
           );
@@ -327,7 +338,10 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {},
+  onPullDownRefresh: function() {
+    const { momentId } = this.data;
+    this._getMomentDetail(momentId);
+  },
 
   /**
    * 页面上拉触底事件的处理函数

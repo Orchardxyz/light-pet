@@ -5,11 +5,10 @@ import {
   STAR_MOMENT
 } from "../../../utils/notify/notifyAction";
 
-let url = "";
-
 Component({
   data: {
-    notify_text: ""
+    notify_text: "",
+    url: ""
   },
   properties: {
     notification: Object
@@ -17,32 +16,35 @@ Component({
   observers: {
     notification(obj) {
       let notify_text = "";
-      const { action, source_id } = obj;
+      let url = "";
+      const { action, source_params, notify_content } = obj;
+      const { momentId, commentId } = source_params;
       switch (action) {
         case GIVE_LIKE:
           notify_text = "赞了你";
-          url = `/pages/moment/moment-detail/moment-detail?momentId=${source_id}`;
+          url = `/pages/moment/moment-detail/moment-detail?momentId=${momentId}`;
           break;
         case COMMENT:
-          notify_text = "评论了你";
-          url = `/pages/moment/moment-detail/moment-detail?momentId=${source_id}`;
+          notify_text = `评论了你：${notify_content}`;
+          url = `/pages/moment/moment-detail/moment-detail?momentId=${momentId}`;
           break;
         case REPLY:
-          notify_text = "回复了你";
-          url = `/pages/moment/comment-detail/comment-detail?commentId=${source_id}`;
+          notify_text = `回复了你：${notify_content}`;
+          url = `/pages/moment/comment-detail/comment-detail?momentId=${momentId}&commentId=${commentId}`;
           break;
         case STAR_MOMENT:
           notify_text = "收藏了你的内容";
-          url = `/pages/moment/moment-detail/moment-detail?momentId=${source_id}`;
+          url = `/pages/moment/moment-detail/moment-detail?momentId=${momentId}`;
           break;
         default:
           notify_text = "";
       }
-      this.setData({ notify_text });
+      this.setData({ notify_text, url });
     }
   },
   methods: {
     enterDetail() {
+      const { url } = this.data;
       wx.navigateTo({
         url
       });

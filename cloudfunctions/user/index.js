@@ -23,8 +23,12 @@ exports.main = async (event, context) => {
 
   app.router("diary", async (ctx, next) => {
     const { OPENID } = wxContext;
+    const { start = 0, count = 10 } = event
     const { data: momentList } = await momentCollection
       .where({ _openid: OPENID })
+      .skip(start)
+      .limit(count)
+      .orderBy("createTime", "desc")
       .get();
     momentList.map(moment => {
       const { likes, stars } = moment;
@@ -43,6 +47,7 @@ exports.main = async (event, context) => {
       })
       .skip(start)
       .limit(count)
+      .orderBy("createTime", "desc")
       .get();
     momentList.map(moment => {
       moment.isStar = true;
@@ -61,6 +66,7 @@ exports.main = async (event, context) => {
       })
       .skip(start)
       .limit(count)
+      .orderBy("createTime", "desc")
       .get();
     momentList.map(moment => {
       moment.isLike = true;

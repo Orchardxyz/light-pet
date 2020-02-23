@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "LP-moment-card": "/components/moment-card/moment-card",
-    "LP-moment-operation": "/components/moment-operation/moment-operation"
+    "LP-moment-operation": "/components/moment-operation/moment-operation",
+    "LP-bottom-line": "/components/bottom-line/bottom-line"
   },
   "navigationBarTitleText": "养宠日记"
 }

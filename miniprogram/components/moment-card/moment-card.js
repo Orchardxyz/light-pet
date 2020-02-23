@@ -3,7 +3,7 @@ import { STAR } from "../../utils/notify/notifyType";
 import { STAR_MOMENT } from "../../utils/notify/notifyAction";
 import notify from "../../utils/notify/notify";
 
-const app = getApp()
+const app = getApp();
 
 Component({
   data: {
@@ -93,9 +93,9 @@ Component({
                 title: "收藏成功",
                 icon: "none"
               });
-              const { _openid, img = [], content } = moment;
+              const { _openid, nickName, img = [], content } = moment;
               const _img = img.length > 0 ? img[0] : "";
-              notify(_openid, STAR, STAR_MOMENT, momentId, content, _img);
+              notify(_openid, nickName, STAR, STAR_MOMENT, { momentId }, content, _img);
             });
         }
       } else {

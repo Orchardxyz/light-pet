@@ -32,6 +32,7 @@ Page({
    */
   onLoad: function(options) {
     const { momentId, commentId } = options;
+    console.log(options)
     this._getMoment(momentId);
     this._getCommentDetail(commentId);
   },
@@ -147,7 +148,7 @@ Page({
     wx.showLoading({
       title: "发表中"
     });
-    const userInfo = app.getUserInfo()
+    const userInfo = app.getUserInfo();
     const reply = {
       ...userInfo,
       replyUser,
@@ -156,27 +157,47 @@ Page({
       content: detail,
       type: commentLevel
     };
-    wx.cloud
-      .callFunction({
-        name: "comment",
-        data: {
-          reply,
-          $url: "reply"
+    wx.cloud.callFunction({
+      name: "comment",
+      data: {
+        reply,
+        $url: "reply"
+      },
+      success: res => {
+        const { result } = res;
+        if (result.errMsg === "document.update:ok") {
+          const {
+            moment: { _id, img = [] }
+          } = this.data;
+          const { comment } = this.data;
+          const { content } = comment
+          const _img = img.length > 0 ? img[0] : "";
+          notify(
+            commentLevel === FIRST_REPLY ? comment._openid : replyUser._openid,
+            commentLevel === FIRST_REPLY ? comment.nickName : replyUser.nickName,
+            COMMENT_REPLY,
+            notifyAction.REPLY,
+            { momentId: _id, commentId: currentCommentId },
+            content,
+            _img,
+            detail,
+          );
+          this._initData();
+          this._getCommentDetail(currentCommentId);
+          wx.hideLoading();
+          wx.showToast({
+            title: "回复成功!",
+            icon: "success"
+          });
+        } else {
+          wx.hideLoading();
+          wx.showToast({
+            title: "操作失败!",
+            icon: "warn"
+          });
         }
-      })
-      .then(() => {
-        wx.hideLoading();
-        this._getCommentDetail(currentCommentId);
-        this._initData();
-        wx.showToast({
-          title: "回复成功!"
-        });
-        const {
-          moment: { _id, _openid, img = [], content }
-        } = this.data;
-        const _img = img.length > 0 ? img[0] : "";
-        notify(_openid, COMMENT_REPLY, notifyAction.REPLY, _id, content, _img);
-      });
+      }
+    });
   },
 
   /**

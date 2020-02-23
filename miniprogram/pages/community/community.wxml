@@ -26,6 +26,7 @@
     <view class="publish" bind:tap="onPublish">
         <i class="iconfont icon-pen"></i>
     </view>
+    <LP-bottom-line wx:if="{{isAll}}" />
 </view>
 <!-- 遮罩层 -->
 <view wx:if="{{isPetSelected}}" class="mask" />

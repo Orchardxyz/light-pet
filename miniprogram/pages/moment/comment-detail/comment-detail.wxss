@@ -1,1 +1,4 @@
 @import "../../../style/comment-bar.wxss";
+page {
+  margin-bottom: 90rpx;
+}
