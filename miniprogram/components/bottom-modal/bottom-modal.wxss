@@ -1,26 +1,26 @@
 .container {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.6);
-    text-align: center;
-    z-index: 999;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  text-align: center;
+  z-index: 999;
 }
 
 .panel {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    min-height: 300rpx;
-    box-sizing: border-box;
-    background-color: #FFF;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  min-height: 300rpx;
+  box-sizing: border-box;
+  background-color: #fff;
 }
 
 .icon-guanbi-01 {
-    position: absolute;
-    right: 10rpx;
-    padding: 20rpx;
+  position: absolute;
+  right: 10rpx;
+  padding: 20rpx;
 }

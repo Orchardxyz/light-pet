@@ -9,7 +9,8 @@ Component({
   data: {
     loginShow: false,
     createTime: "",
-    isStar: false
+    isStar: false,
+    menuShow: false,
   },
   properties: {
     moment: Object
@@ -101,6 +102,23 @@ Component({
       } else {
         this._setLoginShow();
       }
+    },
+
+    // 删除
+    handleDelete() {
+      wx.showModal({
+        content: '确认删除本条内容吗？',
+        showCancel: true,
+        cancelText: '取消',
+        cancelColor: '#000000',
+        confirmText: '确定',
+        confirmColor: '#3CC51F',
+        success: (result) => {
+          if(result.confirm){
+            
+          }
+        },
+      });
     }
   }
 });

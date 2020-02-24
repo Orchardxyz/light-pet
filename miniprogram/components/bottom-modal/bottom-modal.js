@@ -2,6 +2,10 @@ Component({
   data: {},
   properties: {
     modalShow: Boolean,
+    closeShow: {
+      type: Boolean,
+      value: true,
+    }
   },
   options: {
     styleIsolation: 'apply-shared',

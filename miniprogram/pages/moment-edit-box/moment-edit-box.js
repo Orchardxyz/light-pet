@@ -17,10 +17,7 @@ Page({
 
   onLoad(options) {
     const { nickName, avatarUrl, index } = options;
-    const app = getApp();
-    const {
-      globalData: { petList }
-    } = app;
+    const petList = wx.getStorageSync('petList');
     userInfo = {
       nickName,
       avatarUrl

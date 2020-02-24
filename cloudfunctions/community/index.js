@@ -9,7 +9,7 @@ const db = cloud.database();
 const command = db.command;
 const momentCollection = db.collection("moments");
 const commentCollection = db.collection("comment");
-const starCollection = db.collection('star')
+const notifyCollection = db.collection("notification");
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -40,44 +40,42 @@ exports.main = async (event, context) => {
         return res.data;
       });
     for (let i = 0; i < momentList.length; i += 1) {
-      const { likes = [], stars = [] } = momentList[i];
+      const { _openid, likes = [], stars = [] } = momentList[i];
       const isLike = likes.includes(OPENID);
-      const isStar = stars.includes(OPENID)
+      const isStar = stars.includes(OPENID);
+      const isOwner = _openid === OPENID;
       momentList[i] = {
         ...momentList[i],
         isLike,
-        isStar
+        isStar,
+        isOwner
       };
     }
     ctx.body = momentList;
   });
 
-  // 获取关注的好友动态（包括自己）
-  app.router("getFllowingMomentList", async (ctx, next) => {
-    // TODO
-  });
-
   // 获取某条动态
   app.router("/moment/get", async (ctx, next) => {
-    const { momentId } = event
-    const { data: moment } = await momentCollection.doc(momentId).get()
-    ctx.body = moment
-  })
+    const { momentId } = event;
+    const { data: moment } = await momentCollection.doc(momentId).get();
+    ctx.body = moment;
+  });
 
   // 获取动态详情
   app.router("/moment/detail", async (ctx, next) => {
     const { momentId = "", start = 0, count = 10 } = event;
-    let {data: moment} = await momentCollection.doc(momentId).get();
-    const {data: commentList} = await commentCollection
+    let { data: moment } = await momentCollection.doc(momentId).get();
+    const { data: commentList } = await commentCollection
       .where({ momentId })
       .skip(start)
       .orderBy("createTime", "asc")
       .limit(count)
       .get();
-    const { likes = [], stars = [] } = moment
-    const { OPENID } = cloud.getWXContext()
-    moment.isLike = likes.includes(OPENID)
-    moment.isStar = stars.includes(OPENID)
+    const { _openid, likes = [], stars = [] } = moment;
+    const { OPENID } = cloud.getWXContext();
+    moment.isLike = likes.includes(OPENID);
+    moment.isStar = stars.includes(OPENID);
+    moment.isOwner = _openid === OPENID;
     ctx.body = {
       moment,
       commentList
@@ -100,6 +98,23 @@ exports.main = async (event, context) => {
       }
     });
     return result;
+  });
+
+  // 删除动态
+  app.router("deleteMoment", async (ctx, nect) => {
+    const { momentId } = event;
+    try {
+      await momentCollection.doc(momentId).remove();
+      await commentCollection.where({ momentId }).remove();
+      await notifyCollection
+        .where({
+          source_params: { momentId }
+        })
+        .remove();
+    } catch (err) {
+      console.log(err);
+      ctx.body = err;
+    }
   });
 
   // 点赞
@@ -158,32 +173,32 @@ exports.main = async (event, context) => {
   });
 
   // 收藏
-  app.router('star', async (ctx, next) => {
-    const { OPENID } = cloud.getWXContext()
-    const { moment = {} } = event
+  app.router("star", async (ctx, next) => {
+    const { OPENID } = cloud.getWXContext();
+    const { moment = {} } = event;
     try {
-      const { _id } = moment
+      const { _id } = moment;
       const resMoment = await momentCollection.doc(_id).update({
         data: {
           stars: command.push(OPENID)
         }
-      })
+      });
       ctx.body = {
         resMoment
-      }
-    } catch(err) {
-      console.log(err)
-      ctx.body = err
+      };
+    } catch (err) {
+      console.log(err);
+      ctx.body = err;
     }
-  })
+  });
 
   // 取消收藏
-  app.router('unstar', async (ctx, next) => {
-    const { OPENID } = cloud.getWXContext()
-    const { momentId } = event
+  app.router("unstar", async (ctx, next) => {
+    const { OPENID } = cloud.getWXContext();
+    const { momentId } = event;
     try {
-      const {data } = await momentCollection.doc(momentId).get()
-      const {stars} = data
+      const { data } = await momentCollection.doc(momentId).get();
+      const { stars } = data;
       stars.splice(
         stars.findIndex(item => item === OPENID),
         1
@@ -192,15 +207,15 @@ exports.main = async (event, context) => {
         data: {
           stars
         }
-      })
+      });
       ctx.body = {
         resMoment
-      }
+      };
     } catch (err) {
-      console.log(err)
-      ctx.body = err
+      console.log(err);
+      ctx.body = err;
     }
-  })
+  });
 
   // 添加评论
   app.router("comment", async (ctx, next) => {

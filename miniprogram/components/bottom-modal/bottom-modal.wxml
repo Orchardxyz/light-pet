@@ -1,6 +1,6 @@
 <view class="container" hidden="{{!modalShow}}">
   <view class="panel">
-    <i class="iconfont icon-guanbi-01" bind:tap="onClose"></i>
+    <i class="iconfont icon-guanbi-01" wx:if="{{closeShow}}" catch:tap="onClose"></i>
     <slot name="modal-content"></slot>
   </view>
 </view>

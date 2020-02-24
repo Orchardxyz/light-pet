@@ -8,12 +8,13 @@
         <nameplate pet="{{moment.pet}}" />
       </view>
     </view>
-    <i class="iconfont {{isStar ? 'icon-star' : 'icon-star-copy'}} " 
-    style="color: {{isStar ? '#FF9900' : undefined}};"
-    catch:tap="handleStar" />
+    <i class="iconfont {{isStar ? 'icon-star' : 'icon-star-copy'}} " style="color: {{isStar ? '#FF9900' : undefined}};" catch:tap="handleStar" />
+    <!-- <i wx:if="{{moment.isOwner}}" class="iconfont icon-shanchu1" catch:tap="handleDelete" /> -->
   </view>
   <!-- 文字内容 -->
-  <view class="moment-content"><text>{{moment.content}}</text></view>
+  <view class="moment-content">
+    <text>{{moment.content}}</text>
+  </view>
   <!-- 图片 -->
   <view class="moment-img">
     <block wx:for="{{moment.img}}" wx:key="index">
@@ -23,6 +24,5 @@
   <!-- 时间 -->
   <view class="moment-time">{{createTime}}</view>
 </view>
-
 <!-- 登录 -->
 <LP-login modalShow="{{loginShow}}" />

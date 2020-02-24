@@ -48,6 +48,7 @@ Page({
             pets: petList,
             init: false
           });
+          wx.setStorageSync('petList', petList);
           petList.map(() => {
             const { btnIsLoading = [] } = this.data;
             this.setData({
