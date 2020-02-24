@@ -12,6 +12,7 @@ Page({
     navbarTitle: ["社区", "关注"],
     momentList: [],
     isPetSelected: false,
+    animation: {},
     currentIndex: -1,
     petList: [],
     animation: {},
@@ -84,49 +85,53 @@ Page({
     wx.hideLoading();
   },
 
-  // _animate(status) {
-  //   // 第1步：创建动画实例
-  //   const animation = wx.createAnimation({
-  //     duration: 200, //动画时长
-  //     timingFunction: "linear", //线性
-  //     delay: 0 //0则不延迟
-  //   });
+  // 抽屉动画
+  _animate(status) {
+    // 第1步：创建动画实例
+    const animation = wx.createAnimation({
+      duration: 200, //动画时长
+      timingFunction: "linear", //线性
+      delay: 0 //0则不延迟
+    });
 
-  //   // 第2步：这个动画实例赋给当前的动画实例
-  //   this.animation = animation;
+    // 第2步：这个动画实例赋给当前的动画实例
+    this.animation = animation;
 
-  //   // 第3步：执行第一组动画：Y轴偏移240px后(盒子高度是240px)，停
-  //   animation.translateY(360).step();
+    // 第3步：执行第一组动画：Y轴偏移240px后(盒子高度是240px)，停
+    animation.translateY(240).step();
 
-  //   // 第4步：导出动画对象赋给数据对象储存
-  //   this.setData({
-  //     animation: animation.export()
-  //   });
+    // 第4步：导出动画对象赋给数据对象储存
+    this.setData({
+      animation: animation.export()
+    });
 
-  //   setTimeout(
-  //     function() {
-  //       // 执行第二组动画：Y轴不偏移，停
-  //       animation.translateY(0).step();
-  //       // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象
-  //       this.setData({
-  //         animation
-  //       });
-  //       if (status == "close") {
-  //         this.setData({
-  //           isPetSelected: false
-  //         });
-  //       }
-  //     }.bind(this),
-  //     200
-  //   );
+    // 第5步：设置定时器到指定时候后，执行第二组动画
+    setTimeout(
+      function() {
+        // 执行第二组动画：Y轴不偏移，停
+        animation.translateY(0).step();
+        // 给数据对象储存的第一组动画，更替为执行完第二组动画的动画对象
+        this.setData({
+          animation
+        });
 
-  //   // 显示抽屉
-  //   if (status == "open") {
-  //     this.setData({
-  //       isPetSelected: true
-  //     });
-  //   }
-  // },
+        //关闭
+        if (status == "close") {
+          this.setData({
+            isPetSelected: false
+          });
+        }
+      }.bind(this),
+      200
+    );
+
+    // 显示
+    if (status == "open") {
+      this.setData({
+        isPetSelected: true,
+      });
+    }
+  },
 
   _setLoginShow() {
     this.setData({
@@ -148,9 +153,7 @@ Page({
   // 发布动态
   onPublish() {
     if (app.isLogin()) {
-      const {
-        globalData: { petList = [] }
-      } = app;
+      const petList = wx.getStorageSync('petList');
       if (petList.length === 0) {
         wx.showModal({
           title: "",
@@ -170,9 +173,10 @@ Page({
         });
       } else {
         this.setData({
-          isPetSelected: true,
+          // isPetSelected: true,
           petList
         });
+        this._animate('open')
       }
     } else {
       this._setLoginShow();

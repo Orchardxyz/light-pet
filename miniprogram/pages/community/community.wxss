@@ -85,8 +85,10 @@
 /* 选择宠物 样式 */
 .select-pet {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  /* top: 50%; */
+  /* left: 50%; */
+  top: 30%;
+  left: 15%;
   transform: translate(-50%, -50%);
   z-index: 101;
 
@@ -98,7 +100,7 @@
 }
 
 .petWrapper {
-  min-height: 250rpx;
+  height: 250rpx;
 }
 
 .pet {

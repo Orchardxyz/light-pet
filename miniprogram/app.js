@@ -14,12 +14,7 @@ App({
       });
     }
 
-    this.globalData = {
-      // openid: -1,
-      isLogin: false,
-      // userInfo: {},
-      petList: [] // 宠物列表
-    };
+    this.globalData = {};
 
     // 获取openId
     // this.getOpenId();
@@ -45,7 +40,7 @@ App({
   },
 
   isLogin() {
-    return wx.getStorageSync("isLogin")
+    return wx.getStorageSync("isLogin");
   },
 
   getUserInfo() {
@@ -53,8 +48,8 @@ App({
   },
 
   setLoginData(isLogin, userInfo) {
-    wx.setStorageSync('isLogin', isLogin);
-    wx.setStorageSync('userInfo', userInfo)
+    wx.setStorageSync("isLogin", isLogin);
+    wx.setStorageSync("userInfo", userInfo);
   },
 
   getPetList() {
@@ -69,7 +64,7 @@ App({
         const {
           result: { data }
         } = res;
-        this.globalData.petList = data;
+        wx.setStorageSync("petList", data);
       });
   },
 

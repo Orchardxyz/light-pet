@@ -2,8 +2,6 @@
 import DEFAULT_AVATAR from "../../../utils/default-pet";
 import { CATS, DOGS } from "../../../utils/petVariety";
 
-const fileManager = wx.getFileSystemManager();
-
 Page({
   /**
    * 页面的初始数据
@@ -15,7 +13,7 @@ Page({
     selectedSpecies: "",
     varieties: [],
     variety: "",
-    today: "2020-02-06",
+    today: "",
     birthday: "",
     adoptTime: ""
   },
@@ -23,7 +21,22 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {},
+  onLoad: function(options) {
+    this._init();
+  },
+
+  _init() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month =
+      date.getMonth() + 1 < 10
+        ? `0${date.getMonth() + 1}`
+        : date.getMonth() + 1;
+    const day = date.getDate();
+    this.setData({
+      today: `${year}-${month}-${day}`
+    });
+  },
 
   // 上传头像
   uploadAvatar() {
@@ -32,15 +45,22 @@ Page({
       sizeType: ["original", "compressed"],
       sourceType: ["album", "camera"],
       success: res => {
-        const avatar = fileManager.readFileSync(res.tempFilePaths[0], "base64");
-        this.setData({
-          avatar: `data:image/png;base64,${avatar}`
-        });
+        if (res.errMsg === "chooseImage:ok") {
+          const { tempFilePaths } = res;
+          this.setData({
+            avatar: tempFilePaths[0]
+          });
+        } else {
+          wx.showToast({
+            title: "操作失败",
+            icon: "warn"
+          });
+        }
       },
       fail: () => {
         wx.showToast({
-          title: "上传失败",
-          icon: "none"
+          title: "操作失败",
+          icon: "warn"
         });
       }
     });
@@ -119,34 +139,59 @@ Page({
       });
       return;
     }
-    if (petName && selectedSex && selectedSpecies && variety && birthday && adoptTime) {
+    if (
+      petName &&
+      selectedSex &&
+      selectedSpecies &&
+      variety &&
+      birthday &&
+      adoptTime
+    ) {
       wx.showLoading({
         title: "保存中",
         mask: true
       });
       const sex = selectedSex === "male" ? 0 : 1;
-      wx.cloud
-        .callFunction({
-          name: "pet",
-          data: {
-            $url: "add",
-            petAvatar: avatar,
-            petName,
-            sex,
-            species: selectedSpecies,
-            variety,
-            birthday,
-            adoptTime
+      const suffix = /\.\w+$/.exec(avatar)[0]; // 文件扩展名
+      wx.cloud.uploadFile({
+        // 路径名称唯一
+        cloudPath: `pet/${Date.now()}-${Math.random() * 1000000}${suffix}`,
+        filePath: avatar,
+        success: res => {
+          if (res.errMsg === "cloud.uploadFile:ok") {
+            const { fileID } = res;
+            wx.cloud
+              .callFunction({
+                name: "pet",
+                data: {
+                  $url: "add",
+                  petAvatar: fileID,
+                  petName,
+                  sex,
+                  species: selectedSpecies,
+                  variety,
+                  birthday,
+                  adoptTime
+                }
+              })
+              .then(res => {
+                const { result } = res;
+                const petList = wx.getStorageSync("petList");
+                wx.setStorageSync("petList", petList.concat(result));
+                wx.hideLoading();
+                wx.navigateBack();
+                const pages = getCurrentPages();
+                const prevPage = pages[pages.length - 2];
+                prevPage.onPullDownRefresh();
+              });
+          } else {
+            wx.showToast({
+              title: "操作失败",
+              icon: "warn"
+            });
           }
-        })
-        .then(() => {
-          wx.hideLoading();
-          wx.navigateBack();
-          const pages = getCurrentPages();
-          const prevPage = pages[pages.length - 2];
-          prevPage.onPullDownRefresh();
-          prevPage._loadPetList()
-        });
+        }
+      });
     } else {
       wx.showToast({
         title: "请将爱宠信息补充完整！",

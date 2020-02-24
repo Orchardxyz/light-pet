@@ -33,7 +33,7 @@
 <!-- 选择宠物 -->
 <view wx:if="{{isPetSelected}}" class="select-pet" animation="{{animation}}">
     <view class="modal-content">
-        <view class="title">请先选择爱宠</view>
+        <view class="title">请先选择一只宠物</view>
         <divider />
         <scroll-view class="petWrapper" scroll-y="{{true}}">
             <block wx:for="{{petList}}" wx:key="index">

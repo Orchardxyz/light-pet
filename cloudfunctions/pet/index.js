@@ -49,10 +49,7 @@ exports.main = async (event, context) => {
     }
     // 月
     if (months > 0 && months < 10) {
-      age +=
-        years > 0
-          ? `零${months === 2 ? '两' : ChineseBits[months]}个月`
-          : `${months === 2 ? '两' : ChineseBits[months]}个月`;
+      age += `${months === 2 ? '两' : ChineseBits[months]}个月`
     } else if (months >= 10) {
       age += `${ChineseTenHundred[months / 10 >> 0]}${ChineseBits[months % 10]}个月`;
     }
