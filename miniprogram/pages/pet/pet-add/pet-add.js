@@ -1,6 +1,8 @@
 // miniprogram/pages/pet/pet-add/pet-add.js
 import DEFAULT_AVATAR from "../../../utils/default-pet";
 import { CATS, DOGS } from "../../../utils/petVariety";
+import imgCheck from "../../../utils/security/imgCheck";
+import secWarn from "../../../utils/security/secWarn";
 
 Page({
   /**
@@ -151,47 +153,53 @@ Page({
         title: "保存中",
         mask: true
       });
-      const sex = selectedSex === "male" ? 0 : 1;
-      const suffix = /\.\w+$/.exec(avatar)[0]; // 文件扩展名
-      wx.cloud.uploadFile({
-        // 路径名称唯一
-        cloudPath: `pet/${Date.now()}-${Math.random() * 1000000}${suffix}`,
-        filePath: avatar,
-        success: res => {
-          if (res.errMsg === "cloud.uploadFile:ok") {
-            const { fileID } = res;
-            wx.cloud
-              .callFunction({
-                name: "pet",
-                data: {
-                  $url: "add",
-                  petAvatar: fileID,
-                  petName,
-                  sex,
-                  species: selectedSpecies,
-                  variety,
-                  birthday,
-                  adoptTime
-                }
-              })
-              .then(res => {
-                const { result } = res;
-                const petList = wx.getStorageSync("petList");
-                wx.setStorageSync("petList", petList.concat(result));
-                wx.hideLoading();
-                wx.navigateBack();
-                const pages = getCurrentPages();
-                const prevPage = pages[pages.length - 2];
-                prevPage.onPullDownRefresh();
+      if (imgCheck(avatar)) {
+        const sex = selectedSex === "male" ? 0 : 1;
+        const suffix = /\.\w+$/.exec(avatar)[0]; // 文件扩展名
+        wx.cloud.uploadFile({
+          // 路径名称唯一
+          cloudPath: `pet/${Date.now()}-${Math.random() * 1000000}${suffix}`,
+          filePath: avatar,
+          success: res => {
+            if (res.errMsg === "cloud.uploadFile:ok") {
+              const { fileID } = res;
+              wx.cloud
+                .callFunction({
+                  name: "pet",
+                  data: {
+                    $url: "add",
+                    petAvatar: fileID,
+                    petName,
+                    sex,
+                    species: selectedSpecies,
+                    variety,
+                    birthday,
+                    adoptTime
+                  }
+                })
+                .then(res => {
+                  const { result } = res;
+                  const petList = wx.getStorageSync("petList");
+                  wx.setStorageSync("petList", petList.concat(result));
+                  wx.hideLoading();
+                  wx.navigateBack();
+                  const pages = getCurrentPages();
+                  const prevPage = pages[pages.length - 2];
+                  prevPage.onPullDownRefresh();
+                });
+            } else {
+              wx.showToast({
+                title: "操作失败",
+                icon: "warn"
               });
-          } else {
-            wx.showToast({
-              title: "操作失败",
-              icon: "warn"
-            });
+            }
           }
-        }
-      });
+        });
+      } else {
+        wx.hideLoading();
+        secWarn("img");
+        return;
+      }
     } else {
       wx.showToast({
         title: "请将爱宠信息补充完整！",

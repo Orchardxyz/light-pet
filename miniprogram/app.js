@@ -62,7 +62,7 @@ App({
       })
       .then(res => {
         const {
-          result: { data }
+          result: { data = [] }
         } = res;
         wx.setStorageSync("petList", data);
       });

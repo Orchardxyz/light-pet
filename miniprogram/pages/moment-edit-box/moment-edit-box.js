@@ -1,4 +1,7 @@
-// pages/moment-edit-box/moment-edit-box
+import msgCheck from "../../utils/security/msgCheck";
+import imgCheck from "../../utils/security/imgCheck";
+import secWarn from "../../utils/security/secWarn";
+
 const MAX_WORDS_NUM = 140;
 const MAX_IMAGE_NUM = 9;
 let content = "";
@@ -17,7 +20,7 @@ Page({
 
   onLoad(options) {
     const { nickName, avatarUrl, index } = options;
-    const petList = wx.getStorageSync('petList');
+    const petList = wx.getStorageSync("petList");
     userInfo = {
       nickName,
       avatarUrl
@@ -110,65 +113,137 @@ Page({
       mask: true
     });
 
-    let images = this.data.images;
-    let allImagesPromise = [];
-    let fileIDs = [];
-    // 上传图片到云存储中
-    for (let i = 0, len = images.length; i < len; i++) {
-      let imagePromise = new Promise((resolve, reject) => {
-        let image = images[i];
-        let suffix = /\.\w+$/.exec(image)[0]; // 文件扩展名
-        wx.cloud.uploadFile({
-          // 路径名称唯一
-          cloudPath: `moments/${Date.now()}-${Math.random() *
-            1000000}${suffix}`,
-          filePath: image,
-          success: result => {
-            fileIDs = fileIDs.concat(result.fileID);
-            resolve();
-          },
-          fail: error => {
-            reject();
+    if (msgCheck(content)) {
+      let { images } = this.data;
+      let allImagesPromise = [];
+      let fileIDs = [];
+      for (let i = 0, len = images.length; i < len; i++) {
+        let imagePromise = new Promise((resolve, reject) => {
+          let image = images[i];
+          if (imgCheck(image)) {
+            let suffix = /\.\w+$/.exec(image)[0]; // 文件扩展名
+            wx.cloud.uploadFile({
+              // 路径名称唯一
+              cloudPath: `moments/${Date.now()}-${Math.random() *
+                1000000}${suffix}`,
+              filePath: image,
+              success: result => {
+                fileIDs = fileIDs.concat(result.fileID);
+                resolve();
+              },
+              fail: error => {
+                reject();
+              }
+            });
+          } else {
+            wx.hideLoading();
+            secWarn("img");
+            return;
           }
         });
-      });
-      allImagesPromise.push(imagePromise);
+        allImagesPromise.push(imagePromise);
+        // 存入云数据库
+        Promise.all(allImagesPromise).then(() => {
+          const { pet } = this.data;
+          const moment = {
+            ...userInfo,
+            content,
+            pet,
+            img: fileIDs,
+            likes: [] // 点赞列表
+          };
+          wx.cloud
+            .callFunction({
+              name: "community",
+              data: {
+                moment,
+                $url: "addMoment"
+              }
+            })
+            .then(res => {
+              wx.hideLoading();
+              wx.showToast({
+                title: "发布成功"
+              });
+              // 返回上一页并刷新
+              wx.navigateBack();
+              const pages = getCurrentPages();
+              const prevPage = pages[pages.length - 2];
+              prevPage.onPullDownRefresh();
+            })
+            .catch(err => {
+              wx.hideLoading();
+              wx.showToast({
+                title: "发布失败"
+              });
+            });
+        });
+      }
+    } else {
+      wx.hideLoading();
+      secWarn("msg");
+      return;
     }
-    // 存入云数据库
-    Promise.all(allImagesPromise).then(() => {
-      const { pet } = this.data;
-      const moment = {
-        ...userInfo,
-        content,
-        pet,
-        img: fileIDs,
-        likes: [] // 点赞列表
-      };
-      wx.cloud
-        .callFunction({
-          name: "community",
-          data: {
-            moment,
-            $url: "addMoment"
-          }
-        })
-        .then(res => {
-          wx.hideLoading();
-          wx.showToast({
-            title: "发布成功"
-          });
-          // 返回上一页并刷新
-          wx.navigateBack();
-          const pages = getCurrentPages();
-          const prevPage = pages[pages.length - 2];
-          prevPage.onPullDownRefresh();
-        })
-        .catch(err => {
-          wx.hideLoading();
-          wx.showToast({
-            title: "发布失败"
-          });
-        });
-    });
+
+    // let { images } = this.data;
+    // let allImagesPromise = [];
+    // let fileIDs = [];
+    // // 上传图片到云存储中
+    // for (let i = 0, len = images.length; i < len; i++) {
+    //   let imagePromise = new Promise((resolve, reject) => {
+    //     let image = images[i];
+    //     let suffix = /\.\w+$/.exec(image)[0]; // 文件扩展名
+    //     wx.cloud.uploadFile({
+    //       // 路径名称唯一
+    //       cloudPath: `moments/${Date.now()}-${Math.random() *
+    //         1000000}${suffix}`,
+    //       filePath: image,
+    //       success: result => {
+    //         fileIDs = fileIDs.concat(result.fileID);
+    //         resolve();
+    //       },
+    //       fail: error => {
+    //         reject();
+    //       }
+    //     });
+    //   });
+    //   allImagesPromise.push(imagePromise);
+    // }
+    // // 存入云数据库
+    // Promise.all(allImagesPromise).then(() => {
+    //   const { pet } = this.data;
+    //   const moment = {
+    //     ...userInfo,
+    //     content,
+    //     pet,
+    //     img: fileIDs,
+    //     likes: [] // 点赞列表
+    //   };
+    //   wx.cloud
+    //     .callFunction({
+    //       name: "community",
+    //       data: {
+    //         moment,
+    //         $url: "addMoment"
+    //       }
+    //     })
+    //     .then(res => {
+    //       wx.hideLoading();
+    //       wx.showToast({
+    //         title: "发布成功"
+    //       });
+    //       // 返回上一页并刷新
+    //       wx.navigateBack();
+    //       const pages = getCurrentPages();
+    //       const prevPage = pages[pages.length - 2];
+    //       prevPage.onPullDownRefresh();
+    //     })
+    //     .catch(err => {
+    //       wx.hideLoading();
+    //       wx.showToast({
+    //         title: "发布失败"
+    //       });
+    //     });
+    // });
   }
 });

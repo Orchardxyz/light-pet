@@ -7,6 +7,8 @@ import { FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
 import notify from "../../../utils/notify/notify";
 import notifyAction from "../../../utils/notify/notifyAction";
 import { COMMENT_REPLY } from "../../../utils/notify/notifyType";
+import msgCheck from "../../../utils/security/msgCheck";
+import secWarn from "../../../utils/security/secWarn";
 
 const app = getApp();
 
@@ -32,7 +34,7 @@ Page({
    */
   onLoad: function(options) {
     const { momentId, commentId } = options;
-    console.log(options)
+    console.log(options);
     this._getMoment(momentId);
     this._getCommentDetail(commentId);
   },
@@ -144,60 +146,76 @@ Page({
   // 回复
   onReply(event) {
     const { detail } = event;
+    if (detail.trim() === "") {
+      wx.showModal({
+        title: "回复内容不能为空!"
+      });
+      return;
+    }
     const { momentId, currentCommentId, commentLevel, replyUser } = this.data;
     wx.showLoading({
       title: "发表中"
     });
-    const userInfo = app.getUserInfo();
-    const reply = {
-      ...userInfo,
-      replyUser,
-      currentMomentId: momentId,
-      currentCommentId,
-      content: detail,
-      type: commentLevel
-    };
-    wx.cloud.callFunction({
-      name: "comment",
-      data: {
-        reply,
-        $url: "reply"
-      },
-      success: res => {
-        const { result } = res;
-        if (result.errMsg === "document.update:ok") {
-          const {
-            moment: { _id, img = [] }
-          } = this.data;
-          const { comment } = this.data;
-          const { content } = comment
-          const _img = img.length > 0 ? img[0] : "";
-          notify(
-            commentLevel === FIRST_REPLY ? comment._openid : replyUser._openid,
-            commentLevel === FIRST_REPLY ? comment.nickName : replyUser.nickName,
-            COMMENT_REPLY,
-            notifyAction.REPLY,
-            { momentId: _id, commentId: currentCommentId },
-            content,
-            _img,
-            detail,
-          );
-          this._initData();
-          this._getCommentDetail(currentCommentId);
-          wx.hideLoading();
-          wx.showToast({
-            title: "回复成功!",
-            icon: "success"
-          });
-        } else {
-          wx.hideLoading();
-          wx.showToast({
-            title: "操作失败!",
-            icon: "warn"
-          });
+    if (msgCheck(detail)) {
+      const userInfo = app.getUserInfo();
+      const reply = {
+        ...userInfo,
+        replyUser,
+        currentMomentId: momentId,
+        currentCommentId,
+        content: detail,
+        type: commentLevel
+      };
+      wx.cloud.callFunction({
+        name: "comment",
+        data: {
+          reply,
+          $url: "reply"
+        },
+        success: res => {
+          const { result } = res;
+          if (result.errMsg === "document.update:ok") {
+            const {
+              moment: { _id, img = [] }
+            } = this.data;
+            const { comment } = this.data;
+            const { content } = comment;
+            const _img = img.length > 0 ? img[0] : "";
+            notify(
+              commentLevel === FIRST_REPLY
+                ? comment._openid
+                : replyUser._openid,
+              commentLevel === FIRST_REPLY
+                ? comment.nickName
+                : replyUser.nickName,
+              COMMENT_REPLY,
+              notifyAction.REPLY,
+              { momentId: _id, commentId: currentCommentId },
+              content,
+              _img,
+              detail
+            );
+            this._initData();
+            this._getCommentDetail(currentCommentId);
+            wx.hideLoading();
+            wx.showToast({
+              title: "回复成功!",
+              icon: "success"
+            });
+          } else {
+            wx.hideLoading();
+            wx.showToast({
+              title: "操作失败!",
+              icon: "warn"
+            });
+          }
         }
-      }
-    });
+      });
+    } else {
+      wx.hideLoading();
+      secWarn("msg");
+      return;
+    }
   },
 
   /**

@@ -2,6 +2,8 @@ import { COMMENT } from "../../utils/commentType";
 import notify from "../../utils/notify/notify";
 import { LIKE, COMMENT_REPLY } from "../../utils/notify/notifyType";
 import notifyAction from "../../utils/notify/notifyAction";
+import msgCheck from "../../utils/security/msgCheck";
+import secWarn from "../../utils/security/secWarn";
 
 const app = getApp();
 
@@ -90,7 +92,7 @@ Component({
                 notifyAction.GIVE_LIKE,
                 { momentId },
                 content,
-                _img,
+                _img
               );
             }
           })
@@ -133,61 +135,67 @@ Component({
       wx.showLoading({
         title: "评论发表中"
       });
-      const {
-        moment: {
-          _id: momentId,
-          _openid,
-          nickName: reciever_name,
-          img = [],
-          content: _content
-        }
-      } = this.properties;
-      const userInfo = app.getUserInfo();
-      const { avatarUrl, nickName } = userInfo;
-      const comment = {
-        momentId,
-        avatarUrl,
-        nickName,
-        content,
-        type: COMMENT
-      };
-      wx.cloud
-        .callFunction({
-          name: "community",
-          data: {
-            $url: "comment",
-            comment
+      if (msgCheck(content)) {
+        const {
+          moment: {
+            _id: momentId,
+            _openid,
+            nickName: reciever_name,
+            img = [],
+            content: _content
           }
-        })
-        .then(() => {
-          const { commentCount } = this.data;
-          this.setData({
-            commentShow: false,
-            content: "",
-            commentCount: commentCount + 1
-          });
-          wx.hideLoading({
-            complete: res => {
-              if (res.errMsg == "hideLoading:ok") {
-                wx.showToast({
-                  title: "发表成功",
-                  icon: "success"
-                });
-                const _img = img.length > 0 ? img[0] : "";
-                notify(
-                  _openid,
-                  reciever_name,
-                  COMMENT_REPLY,
-                  notifyAction.COMMENT,
-                  { momentId },
-                  _content,
-                  _img,
-                  content
-                );
-              }
+        } = this.properties;
+        const userInfo = app.getUserInfo();
+        const { avatarUrl, nickName } = userInfo;
+        const comment = {
+          momentId,
+          avatarUrl,
+          nickName,
+          content,
+          type: COMMENT
+        };
+        wx.cloud
+          .callFunction({
+            name: "community",
+            data: {
+              $url: "comment",
+              comment
             }
+          })
+          .then(() => {
+            const { commentCount } = this.data;
+            this.setData({
+              commentShow: false,
+              content: "",
+              commentCount: commentCount + 1
+            });
+            wx.hideLoading({
+              complete: res => {
+                if (res.errMsg == "hideLoading:ok") {
+                  wx.showToast({
+                    title: "发表成功",
+                    icon: "success"
+                  });
+                  const _img = img.length > 0 ? img[0] : "";
+                  notify(
+                    _openid,
+                    reciever_name,
+                    COMMENT_REPLY,
+                    notifyAction.COMMENT,
+                    { momentId },
+                    _content,
+                    _img,
+                    content
+                  );
+                }
+              }
+            });
           });
-        });
+      } else {
+        wx.hideLoading();
+        secWarn("msg");
+        return;
+      }
     }
   }
 });

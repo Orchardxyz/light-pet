@@ -3,11 +3,12 @@ import { COMMENT, FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
 import { LIKE, COMMENT_REPLY } from "../../../utils/notify/notifyType";
 import notifyAction from "../../../utils/notify/notifyAction";
 import notify from "../../../utils/notify/notify";
+import msgCheck from "../../../utils/security/msgCheck";
+import secWarn from "../../../utils/security/secWarn";
 
 const DEFAULT_PLACHOLDER = "请在此输入评论";
 const DEFAULT_COMMENT = "";
 const app = getApp();
-const fileManager = wx.getFileSystemManager();
 
 Page({
   /**
@@ -147,110 +148,134 @@ Page({
   onComment(event) {
     const { detail } = event;
     const { momentId, commentLevel } = this.data;
+    if (detail.trim() === "") {
+      wx.showModal({
+        title: "评论内容不能为空!"
+      });
+      return;
+    }
     wx.showLoading({
       title: "发表中"
     });
-    const userInfo = app.getUserInfo();
-    const comment = {
-      ...userInfo,
-      momentId,
-      content: detail,
-      type: commentLevel
-    };
-    wx.cloud
-      .callFunction({
-        name: "community",
-        data: {
-          comment,
-          $url: "comment"
-        }
-      })
-      .then(() => {
-        this._initData();
-        wx.hideLoading({
-          complete: res => {
-            if (res.errMsg === "hideLoading:ok") {
-              this._getMomentDetail(momentId);
-              wx.showToast({
-                title: "评论成功!"
-              });
-              const {
-                moment: { _openid, nickName, img = [], content }
-              } = this.data;
-              const _img = img.length > 0 ? img[0] : "";
-              notify(
-                _openid,
-                nickName,
-                COMMENT_REPLY,
-                notifyAction.COMMENT,
-                { momentId },
-                content,
-                _img,
-                detail
-              );
-            }
+    if (msgCheck(detail)) {
+      const userInfo = app.getUserInfo();
+      const comment = {
+        ...userInfo,
+        momentId,
+        content: detail,
+        type: commentLevel
+      };
+      wx.cloud
+        .callFunction({
+          name: "community",
+          data: {
+            comment,
+            $url: "comment"
           }
+        })
+        .then(() => {
+          this._initData();
+          wx.hideLoading({
+            complete: res => {
+              if (res.errMsg === "hideLoading:ok") {
+                this._getMomentDetail(momentId);
+                wx.showToast({
+                  title: "评论成功!"
+                });
+                const {
+                  moment: { _openid, nickName, img = [], content }
+                } = this.data;
+                const _img = img.length > 0 ? img[0] : "";
+                notify(
+                  _openid,
+                  nickName,
+                  COMMENT_REPLY,
+                  notifyAction.COMMENT,
+                  { momentId },
+                  content,
+                  _img,
+                  detail
+                );
+              }
+            }
+          });
         });
-      });
+    } else {
+      secWarn("msg");
+      return;
+    }
   },
 
   // 回复
   onReply(event) {
     const { detail } = event;
     const { momentId, currentCommentId, commentLevel, replyUser } = this.data;
+    if (detail.trim() === "") {
+      wx.showModal({
+        title: "回复内容不能为空!"
+      });
+      return;
+    }
+
     wx.showLoading({
       title: "发表中"
     });
-    const userInfo = app.getUserInfo();
-    const reply = {
-      ...userInfo,
-      replyUser,
-      currentMomentId: momentId,
-      currentCommentId,
-      content: detail,
-      type: commentLevel
-    };
-    wx.cloud
-      .callFunction({
-        name: "community",
-        data: {
-          reply,
-          $url: "reply"
-        }
-      })
-      .then(() => {
-        this._initData();
-        wx.hideLoading({
-          complete: res => {
-            if (res.errMsg === "hideLoading:ok") {
-              this._getMomentDetail(momentId);
-              wx.showToast({
-                title: "回复成功!"
-              });
-              const {
-                moment: { _id, img = [] }
-              } = this.data;
-              const { firstComment } = this.data;
-              const { content } = firstComment;
-              const _img = img.length > 0 ? img[0] : "";
-              notify(
-                commentLevel === FIRST_REPLY
-                  ? firstComment._openid
-                  : replyUser._openid,
-                commentLevel === FIRST_REPLY
-                  ? firstComment.nickName
-                  : replyUser.nickName,
-                COMMENT_REPLY,
-                notifyAction.REPLY,
-                { momentId: _id, commentId: currentCommentId },
-                content,
-                _img,
-                detail,
-              );
-            }
+    if (msgCheck(detail)) {
+      const userInfo = app.getUserInfo();
+      const reply = {
+        ...userInfo,
+        replyUser,
+        currentMomentId: momentId,
+        currentCommentId,
+        content: detail,
+        type: commentLevel
+      };
+      wx.cloud
+        .callFunction({
+          name: "community",
+          data: {
+            reply,
+            $url: "reply"
           }
+        })
+        .then(() => {
+          this._initData();
+          wx.hideLoading({
+            complete: res => {
+              if (res.errMsg === "hideLoading:ok") {
+                this._getMomentDetail(momentId);
+                wx.showToast({
+                  title: "回复成功!"
+                });
+                const {
+                  moment: { _id, img = [] }
+                } = this.data;
+                const { firstComment } = this.data;
+                const { content } = firstComment;
+                const _img = img.length > 0 ? img[0] : "";
+                notify(
+                  commentLevel === FIRST_REPLY
+                    ? firstComment._openid
+                    : replyUser._openid,
+                  commentLevel === FIRST_REPLY
+                    ? firstComment.nickName
+                    : replyUser.nickName,
+                  COMMENT_REPLY,
+                  notifyAction.REPLY,
+                  { momentId: _id, commentId: currentCommentId },
+                  content,
+                  _img,
+                  detail
+                );
+              }
+            }
+          });
         });
-      });
+    } else {
+      wx.hideLoading();
+      secWarn("msg");
+      return;
+    }
   },
 
   // 进入评论详情页
@@ -277,7 +302,13 @@ Page({
   // 点赞
   handleLike() {
     const { isLike, likeCount, moment } = this.data;
-    const { _id: momentId, _openid: reciever_id, nickName, img = [], content } = moment;
+    const {
+      _id: momentId,
+      _openid: reciever_id,
+      nickName,
+      img = [],
+      content
+    } = moment;
     const url = isLike ? "cancelLike" : "giveLike";
     wx.cloud
       .callFunction({

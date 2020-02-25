@@ -1,1 +1,4 @@
 /* miniprogram/pages/user/diary/diary.wxss */
+.wrapper {
+  margin-bottom: 15rpx;
+}

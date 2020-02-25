@@ -25,17 +25,6 @@
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </view>
-    <!-- <view class="user-content-item" style="margin-top: 15rpx">
-        <view class="item-left">
-            <i class="iconfont icon-guanzhu" style="font-size: 58rpx; color: #333399" />
-            <text>关注</text>
-        </view>
-        <view class="item-right">
-            <text class="small-font">已关注</text>
-            <text class="strong-font">38</text>
-            <text class="small-font">人</text>
-        </view>
-    </view> -->
     <view class="user-content-item" style="margin-top: 15rpx"  bind:tap="enterMyLike">
         <view class="item-left">
             <i class="iconfont icon-like" style="color: #FF6600" />

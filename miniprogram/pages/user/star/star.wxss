@@ -1,1 +1,4 @@
 /* miniprogram/pages/user/star/star.wxss */
+.wrapper {
+  margin-bottom: 15rpx;
+}
