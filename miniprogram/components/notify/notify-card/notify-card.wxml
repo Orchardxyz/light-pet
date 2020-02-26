@@ -14,5 +14,6 @@
         <text>{{notification.content}}</text>
       </view>
     </view>
+    <view class="notifyTime">{{createTime}}</view>
   </view>
 </view>

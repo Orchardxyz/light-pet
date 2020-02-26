@@ -7,6 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    init: true,
     loginShow: false,
     navbarActiveIndex: 0,
     navbarTitle: ["社区", "关注"],
@@ -58,6 +59,7 @@ Page({
         const { momentList } = this.data;
         const { result } = res;
         this.setData({
+          init: false,
           momentList: momentList.concat(result)
         });
         if (this.data.momentList.length === momentList.length && momentList.length !== 0) {

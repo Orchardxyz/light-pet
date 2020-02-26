@@ -41,26 +41,32 @@ exports.main = async (event, context) => {
     let age = "";
     // 年
     if (years > 0 && years < 10) {
-      age += `${years === 2 ? '两' : ChineseBits[years]}岁`;
+      age += `${years === 2 ? "两" : ChineseBits[years]}岁`;
     } else if (years >= 10) {
-      age += `${ChineseTenHundred[years / 10 >> 0]}${ChineseBits[years % 10]}岁`;
+      age += `${ChineseBits[(years / 10) >> 0 === 1 ? 0 : (years / 10) >> 0]}${
+        ChineseTenHundred[years.toString().length - 1]
+      }${ChineseBits[years % 10]}岁`;
     } else {
-      age += '零岁'
+      age += "零岁";
     }
     // 月
     if (months > 0 && months < 10) {
-      age += `${months === 2 ? '两' : ChineseBits[months]}个月`
+      age += `${months === 2 ? "两" : ChineseBits[months]}个月`;
     } else if (months >= 10) {
-      age += `${ChineseTenHundred[months / 10 >> 0]}${ChineseBits[months % 10]}个月`;
+      age += `${ChineseBits[(months / 10) >> 0 === 1 ? 0 : (months / 10) >> 0]}${
+        ChineseTenHundred[months.toString().length - 1]
+      }${ChineseBits[months % 10]}个月`;
     }
     // 日
     if (day > 0 && day < 10) {
       age +=
         months > 0 || years > 0
-          ? `零${day === 2 ? '两' : ChineseBits[day]}天`
-          : `${day === 2 ? '两' : ChineseBits[day]}天`;
+          ? `零${day === 2 ? "两" : ChineseBits[day]}天`
+          : `${day === 2 ? "两" : ChineseBits[day]}天`;
     } else if (day >= 10) {
-      age += `${ChineseTenHundred[day / 10 >> 0]}${ChineseBits[day % 10]}天`;
+      age += `${ChineseBits[(day / 10) >> 0 === 1 ? 0 : (day / 10) >> 0]}${
+        ChineseTenHundred[day.toString().length - 1]
+      }${ChineseBits[day % 10]}天`;
     }
     return age;
   };
@@ -96,11 +102,11 @@ exports.main = async (event, context) => {
       })
       .get();
     petList.map(pet => {
-      const { adoptTime = "", birthday = '', createTime } = pet;
+      const { adoptTime = "", birthday = "", createTime } = pet;
       pet.companyDays = !adoptTime
         ? getCompanyDays(createTime)
         : getCompanyDays(adoptTime);
-      pet.age = getAge(birthday)
+      pet.age = getAge(birthday);
     });
     ctx.body = petList;
   });

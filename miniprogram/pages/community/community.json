@@ -5,6 +5,7 @@
     "LP-moment-operation": "/components/moment-operation/moment-operation",
     "LP-bottom-line": "/components/bottom-line/bottom-line",
     "avatar": "/components/UI/avatar/avatar",
-    "divider": "/components/UI/divider/divider"
+    "divider": "/components/UI/divider/divider",
+    "no-data": "/components/UI/no-data/no-data"
   }
 }

@@ -3,6 +3,8 @@ const cloud = require("wx-server-sdk");
 
 cloud.init();
 
+const moment = require('moment')
+
 const db = cloud.database();
 const subscribeMessageCollection = db.collection("SubscribeMessage");
 const petRemindCollection = db.collection("pet_remind");
@@ -32,7 +34,7 @@ exports.main = async (event, context) => {
             value: project
           },
           date3: {
-            value: moment(planTime).format('YYYY年M月D日 HH:MM')
+            value: moment(planTime).format('YYYY年M月D日 hh:mm')
           },
           thing5: {
             value: note
@@ -42,6 +44,7 @@ exports.main = async (event, context) => {
         done: false, // 消息发送状态
       }
     });
+    console.log(result)
     return result;
   } catch (err) {
     console.log(err);

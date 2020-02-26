@@ -1,4 +1,6 @@
 /* pages/community/community.wxss */
+@import "../../style/no-data.wxss";
+
 .publish {
   display: flex;
   align-items: center;

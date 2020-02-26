@@ -41,7 +41,6 @@ exports.main = async (event, context) => {
         project.hasSet = true;
         project.remindId =
           remindIds[remindProjectIds.findIndex(value => value === project._id)];
-        console.log(project)
       } else {
         project.hasSet = false;
       }
@@ -146,12 +145,13 @@ exports.main = async (event, context) => {
     if (!isReminded) {
       await subMsgCollection.where({remindId}).remove()
     }
-    const result = await petRemindCollection.where({remindId}).update({
+    const result = await petRemindCollection.doc(remindId).update({
       data: {
         isFinished: true,
         finishTime: db.serverDate(),
       }
     })
+    console.log(result)
     ctx.body = result
   })
 

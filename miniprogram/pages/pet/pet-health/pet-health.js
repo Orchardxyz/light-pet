@@ -180,35 +180,34 @@ Page({
         const {
           result: { _id }
         } = res;
-        wx.cloud.callFunction({
-          name: "subscribe",
-          data: {
-            remindId: _id,
-            templateId: SUBSCRIBE_REMIND_TEMPID
-          },
-          success: () => {
+        wx.cloud
+          .callFunction({
+            name: "subscribe",
+            data: {
+              remindId: _id,
+              templateId: SUBSCRIBE_REMIND_TEMPID
+            }
+          })
+          .then(res => {
+            console.log(res);
             this.setData({
               hasSet: true,
               openBtnTxt: "已开启",
               btnShow: true,
               openBtnLoading: false
             });
-          }
-        });
+          });
       }
     });
   },
 
   // 返回上一页并刷新
   handleReturn() {
-    const currentPages = getCurrentPages();
-    if (currentPages.length > 1) {
-      const prevPage = currentPages[currentPages.length - 2]
-      prevPage._loadPetList()
-      wx.navigateBack({
-        delta: 1
-      });
-    }
+    // 返回上一页并刷新
+    wx.navigateBack();
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 2];
+    prevPage.onPullDownRefresh();
   },
 
   /**

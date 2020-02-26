@@ -34,7 +34,6 @@ Page({
    */
   onLoad: function(options) {
     const { momentId, commentId } = options;
-    console.log(options);
     this._getMoment(momentId);
     this._getCommentDetail(commentId);
   },

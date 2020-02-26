@@ -106,7 +106,6 @@
     disabled="{{btnDisabled}}">
     {{openBtnTxt}}
     </button>
-    <!-- <button hidden="{{!btnShow}}" class="cancel-btn" style="background-color: #FF4D4F; width: 95%">取消提醒</button> -->
     <button hidden="{{!btnShow}}" 
     class="return-btn" 
     style="background-color: #009A61; width: 95%"

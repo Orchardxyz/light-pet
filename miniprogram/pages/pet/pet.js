@@ -32,7 +32,7 @@ Page({
   _loadPetList() {
     if (app.isLogin()) {
       wx.showLoading({
-        title: "拼命加载中",
+        title: "加载中",
         mask: true
       });
       wx.cloud
@@ -56,6 +56,7 @@ Page({
             });
           });
           wx.hideLoading();
+          wx.stopPullDownRefresh();
         });
     } else {
       this.setData({
@@ -208,6 +209,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
+    this.closeDrawer()
     this._loadPetList()
   },
 

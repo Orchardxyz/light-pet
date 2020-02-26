@@ -53,3 +53,8 @@
   font-size: small;
   width: 500rpx;
 }
+
+.notifyTime {
+  color: #939393;
+  font-size: 24rpx;
+}

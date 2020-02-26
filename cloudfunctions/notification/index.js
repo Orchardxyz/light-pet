@@ -57,10 +57,10 @@ exports.main = async (event, context) => {
     const { OPENID } = wxContext;
     const {
       reciever_id = "",
-      reciever_name = '',
+      reciever_name = "",
       source_params = {},
       sender = {},
-      notify_content = '',
+      notify_content = "",
       action,
       content,
       img = "",
@@ -97,6 +97,7 @@ exports.main = async (event, context) => {
       .where({ type, reciever_id: OPENID })
       .skip(start)
       .limit(count)
+      .orderBy("createTime", "desc")
       .get();
     ctx.body = notifyList;
   });
@@ -112,7 +113,7 @@ exports.main = async (event, context) => {
           isRead: true
         }
       });
-    ctx.body = result
+    ctx.body = result;
   });
 
   return app.serve();

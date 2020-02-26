@@ -5,7 +5,7 @@ import {
   COMMENT_REPLY
 } from "../../utils/notify/notifyType";
 
-const app = getApp()
+const app = getApp();
 
 Page({
   /**
@@ -44,6 +44,7 @@ Page({
         })
         .then(res => {
           const { result } = res;
+          app.getUnreadMsg()
           this.setData({
             notifyCount: result
           });

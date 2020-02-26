@@ -4,11 +4,13 @@ import {
   REPLY,
   STAR_MOMENT
 } from "../../../utils/notify/notifyAction";
+import formatTime from "../../../utils/formatTime";
 
 Component({
   data: {
     notify_text: "",
-    url: ""
+    url: "",
+    createTime: ""
   },
   properties: {
     notification: Object
@@ -17,7 +19,7 @@ Component({
     notification(obj) {
       let notify_text = "";
       let url = "";
-      const { action, source_params, notify_content } = obj;
+      const { action, source_params, notify_content, createTime } = obj;
       const { momentId, commentId } = source_params;
       switch (action) {
         case GIVE_LIKE:
@@ -39,7 +41,7 @@ Component({
         default:
           notify_text = "";
       }
-      this.setData({ notify_text, url });
+      this.setData({ notify_text, url, createTime: formatTime(new Date(createTime)) });
     }
   },
   methods: {

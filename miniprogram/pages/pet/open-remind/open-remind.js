@@ -15,7 +15,8 @@ Page({
     finishLoading: false,
     closeTxt: "关闭提醒",
     finishTxt: "",
-    disabled: false
+    disabled: false,
+    returnBtnShow: false,  // 返回按钮
   },
 
   /**
@@ -82,20 +83,17 @@ Page({
       })
       .then(() => {
         this.setData({
-          closeLoading: false,
+          closeLoading: false
         });
         wx.showToast({
-          title: '已关闭',
-          icon: 'success',
+          title: "已关闭",
+          icon: "success"
         });
-        const currentPages = getCurrentPages();
-        if (currentPages.length > 1) {
-          const prevPage = currentPages[currentPages.length - 2];
-          prevPage._loadPetList();
-          wx.navigateBack({
-            delta: 1
-          });
-        }
+        // 返回上一页并刷新
+        wx.navigateBack();
+        const pages = getCurrentPages();
+        const prevPage = pages[pages.length - 2];
+        prevPage.onPullDownRefresh();
       });
   },
 
@@ -135,9 +133,18 @@ Page({
       .then(() => {
         this.setData({
           finishLoading: false,
-          finishTxt: "已完成"
+          finishTxt: "已完成",
+          returnBtnShow: true
         });
       });
+  },
+
+  handleReturn() {
+    // 返回上一页并刷新
+    wx.navigateBack();
+    const pages = getCurrentPages();
+    const prevPage = pages[pages.length - 2];
+    prevPage.onPullDownRefresh();
   },
 
   /**
