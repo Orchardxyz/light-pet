@@ -3,6 +3,10 @@ import formatSpecies from "../../utils/formatSpecies";
 
 const app = getApp()
 
+// 无须与页面绑定的数据
+let currentPetId = ''
+let currentIndex = -1
+
 Page({
   /**
    * 页面的初始数据
@@ -12,12 +16,10 @@ Page({
     pets: [],
     init: true,
     drawerShow: false,
-    currentPetId: "",
     currentPetName: "",
     currentSpecies: "",
     animation: {},
     btnIsLoading: [],
-    currentIndex: -1,
     currentHealthProjects: []
   },
 
@@ -107,7 +109,7 @@ Page({
 
     // 显示抽屉
     if (status == "open") {
-      const { currentIndex, btnIsLoading } = this.data;
+      const { btnIsLoading } = this.data;
       btnIsLoading[currentIndex] = false;
       this.setData({
         drawerShow: true,
@@ -125,12 +127,12 @@ Page({
     const { _id: petId, petName, species } = pet;
     const { btnIsLoading } = this.data;
     btnIsLoading[index] = true;
+    currentPetId = petId
+    currentIndex = index
     this.setData({
-      currentPetId: petId,
       currentPetName: petName,
       currentSpecies: formatSpecies(species),
       btnIsLoading,
-      currentIndex: index
     });
     wx.cloud
       .callFunction({
@@ -173,7 +175,7 @@ Page({
       }
     } = event;
     const { _id, hasSet, remindId = "" } = project;
-    const { currentPetId, currentPetName, currentSpecies } = this.data;
+    const { currentPetName, currentSpecies } = this.data;
     if (hasSet) {
       wx.navigateTo({
         url: `./open-remind/open-remind?remindId=${remindId}`

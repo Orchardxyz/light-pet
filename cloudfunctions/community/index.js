@@ -85,7 +85,7 @@ exports.main = async (event, context) => {
   // 添加动态到数据库中
   app.router("addMoment", async (ctx, next) => {
     const { OPENID } = cloud.getWXContext();
-    const moment = event.moment;
+    const { moment } = event;
     const result = await momentCollection.add({
       data: {
         _openid: OPENID,

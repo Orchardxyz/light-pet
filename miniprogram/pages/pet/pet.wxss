@@ -19,6 +19,7 @@
 
 .record-title .right {
   margin-left: auto;
+  padding: 5rpx 0;
   color: #1890ff;
 }
 
@@ -81,7 +82,7 @@
   border-top-left-radius: 10rpx;
   border-bottom-left-radius: 10rpx;
   border-right: 1rpx solid #F2F2F2;
-  background-color: #FF9900;
+  background-color: #FF6600;
 }
 
 .card-item .pet-nameplate :nth-child(2) {
@@ -156,6 +157,7 @@
   justify-content: center;
   flex-wrap: wrap;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   height: 420rpx;
 }
 

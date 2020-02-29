@@ -12,6 +12,8 @@ import secWarn from "../../../utils/security/secWarn";
 
 const app = getApp();
 
+let MAX_COUNT = 10;
+
 Page({
   /**
    * 页面的初始数据
@@ -94,18 +96,15 @@ Page({
           }
         }
         const { commentList } = this.data;
-        this.setData({
-          commentList: start === 0 ? data : commentList.concat(data)
-        });
-        if (
-          this.data.commentList.length === commentList.length &&
-          commentList.length !== 0
-        ) {
+        if (data.length > 0) {
+          this.setData({
+            [`commentList[${commentList.length}]`]: data
+          });
+        } else {
           this.setData({
             isAll: true
           });
         }
-
         wx.hideLoading();
         wx.stopPullDownRefresh();
       });
@@ -315,7 +314,7 @@ Page({
   onReachBottom: function() {
     const { commentList, momentId, isAll } = this.data;
     if (!isAll) {
-      this._getCommentList(momentId, commentList.length);
+      this._getCommentList(momentId, commentList.length * MAX_COUNT);
     }
   },
 

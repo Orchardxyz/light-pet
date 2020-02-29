@@ -7,8 +7,6 @@ const MAX_IMAGE_NUM = 9;
 let content = "";
 let userInfo = {};
 
-const db = wx.cloud.database();
-
 Page({
   data: {
     inputWordsNum: 0,
@@ -142,43 +140,44 @@ Page({
           }
         });
         allImagesPromise.push(imagePromise);
-        // 存入云数据库
-        Promise.all(allImagesPromise).then(() => {
-          const { pet } = this.data;
-          const moment = {
-            ...userInfo,
-            content,
-            pet,
-            img: fileIDs,
-            likes: [] // 点赞列表
-          };
-          wx.cloud
-            .callFunction({
-              name: "community",
-              data: {
-                moment,
-                $url: "addMoment"
-              }
-            })
-            .then(res => {
-              wx.hideLoading();
-              wx.showToast({
-                title: "发布成功"
-              });
-              // 返回上一页并刷新
-              wx.navigateBack();
-              const pages = getCurrentPages();
-              const prevPage = pages[pages.length - 2];
-              prevPage.onPullDownRefresh();
-            })
-            .catch(err => {
-              wx.hideLoading();
-              wx.showToast({
-                title: "发布失败"
-              });
-            });
-        });
       }
+      // 存入云数据库
+      Promise.all(allImagesPromise).then(() => {
+        const { pet } = this.data;
+        const moment = {
+          ...userInfo,
+          content,
+          pet,
+          img: fileIDs,
+          likes: [] // 点赞列表
+        };
+        wx.cloud
+          .callFunction({
+            name: "community",
+            data: {
+              moment,
+              $url: "addMoment"
+            }
+          })
+          .then(() => {
+            wx.hideLoading();
+            wx.showToast({
+              title: "发布成功"
+            });
+            // 返回上一页并刷新
+            wx.navigateBack();
+            const pages = getCurrentPages();
+            const prevPage = pages[pages.length - 2];
+            prevPage.onPullDownRefresh();
+          })
+          .catch(err => {
+            console.log(err)
+            wx.hideLoading();
+            wx.showToast({
+              title: "发布失败"
+            });
+          });
+      });
     } else {
       wx.hideLoading();
       secWarn("msg");

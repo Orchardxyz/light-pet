@@ -61,10 +61,8 @@ App({
         }
       })
       .then(res => {
-        const {
-          result: { data = [] }
-        } = res;
-        wx.setStorageSync("petList", data);
+        const { result = [] } = res;
+        wx.setStorageSync("petList", result);
       });
   },
 

@@ -1,10 +1,13 @@
 // miniprogram/pages/user/star/star.js
+
+let MAX_COUNT = 4
+
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    momentList: [],
+    momentList: [[]],
     isAll: false,
   },
 
@@ -25,18 +28,20 @@ Page({
         name: "user",
         data: {
           $url: "diary",
-          start
+          start,
+          count: MAX_COUNT,
         }
       })
       .then(res => {
         const { result } = res;
         const { momentList } = this.data
-        this.setData({
-          momentList: (start === 0 ? [] : momentList).concat(result),
-        });
-        if (momentList.length === this.data.momentList.length && momentList.length !== 0) {
+        if (result.length > 0) {
           this.setData({
-            isAll: true,
+            [`momentList[${momentList.length}]`]: result
+          })
+        } else {
+          this.setData({
+            isAll: true
           })
         }
         wx.hideLoading();
@@ -89,7 +94,7 @@ Page({
   onReachBottom: function() {
     const { isAll, momentList } = this.data
     if (!isAll) {
-      this._init(momentList.length)
+      this._init(momentList.length * MAX_COUNT)
     }
   },
 

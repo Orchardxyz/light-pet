@@ -1,4 +1,6 @@
 // miniprogram/pages/user/star/star.js
+let MAX_COUNT = 4
+
 Page({
   /**
    * 页面的初始数据
@@ -25,18 +27,20 @@ Page({
         name: "user",
         data: {
           $url: "getLikeMoment",
-          start
+          start,
+          count: MAX_COUNT
         }
       })
       .then(res => {
         const { result } = res;
         const { likeList } = this.data
-        this.setData({
-          likeList: (start === 0 ? [] : likeList).concat(result),
-        });
-        if (likeList.length === this.data.likeList.length && likeList.length !== 0) {
+        if (result.length > 0) {
           this.setData({
-            isAll: true,
+            [`likeList[${likeList.length}]`]: result
+          })
+        } else {
+          this.setData({
+            isAll: true
           })
         }
         wx.hideLoading();
@@ -89,7 +93,7 @@ Page({
   onReachBottom: function() {
     const { likeList, isAll } = this.data
     if (!isAll) {
-      this._init(likeList.length)
+      this._init(likeList.length * MAX_COUNT)
     }
   },
 

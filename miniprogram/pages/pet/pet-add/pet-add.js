@@ -179,8 +179,18 @@ Page({
                 })
                 .then(res => {
                   const { result } = res;
+                  const pet = [result].map(
+                    ({ _id, petAvatar, petName, sex, species, variety }) => ({
+                      _id,
+                      petAvatar,
+                      petName,
+                      sex,
+                      species,
+                      variety
+                    })
+                  );
                   const petList = wx.getStorageSync("petList");
-                  wx.setStorageSync("petList", petList.concat(result));
+                  wx.setStorageSync("petList", petList.concat(pet));
                   wx.hideLoading();
                   wx.navigateBack();
                   const pages = getCurrentPages();

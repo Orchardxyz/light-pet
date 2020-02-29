@@ -44,6 +44,7 @@
 
 .comment-contentWrapper {
   margin-left: 88rpx;
+  padding: 5rpx 5rpx 0 0;
 }
 
 .comment-click {
@@ -70,6 +71,10 @@
   font-size: 30rpx;
 }
 
+.more-link {
+  margin: 5rpx 0 2rpx 0;
+}
+
 /* 评论条 */
 .detail-operation {
   position: fixed;
@@ -83,4 +88,9 @@
   font-weight: normal;
   font-size: 38rpx;
   color: #fff;
+}
+
+/* iconfont样式 */
+.icon-pet, .icon-pets {
+  padding: 5rpx 4rpx;
 }

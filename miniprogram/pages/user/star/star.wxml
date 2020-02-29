@@ -1,6 +1,6 @@
 <scroll-view scroll-y="{{true}}">
-    <block wx:for="{{starList}}" wx:key="index">
-        <view class="wrapper">
+    <block wx:for="{{starList}}" wx:for-item="starItem" wx:key="index">
+        <view class="wrapper" wx:for="{{starItem}}" wx:key="index">
             <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
             <LP-moment-operation moment="{{item}}" />
         </view>

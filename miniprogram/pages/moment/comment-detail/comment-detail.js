@@ -12,6 +12,8 @@ import secWarn from "../../../utils/security/secWarn";
 
 const app = getApp();
 
+let currentCommentId = ''
+
 Page({
   /**
    * 页面的初始数据
@@ -21,7 +23,6 @@ Page({
     moment: {},
     momentId: "",
     isReply: false,
-    currentCommentId: "",
     placeholderTxt: DEFAULT_PLACHOLDER,
     commentShow: false,
     defaultCommentValue: DEFAULT_COMMENT,
@@ -80,7 +81,8 @@ Page({
           const { createTime } = children[i];
           children[i].createTime = formatTime(new Date(createTime));
         }
-        this.setData({ comment, currentCommentId: commentId });
+        currentCommentId = commentId
+        this.setData({ comment });
         wx.hideLoading();
       });
   },
@@ -90,7 +92,6 @@ Page({
     this.setData({
       comment: {},
       isReply: false,
-      currentCommentId: "",
       placeholderTxt: DEFAULT_PLACHOLDER,
       commentShow: false,
       defaultCommentValue: DEFAULT_COMMENT,
@@ -104,9 +105,9 @@ Page({
     const {
       detail: { _id, nickName }
     } = event;
+    currentCommentId = _id
     this.setData({
       isReply: true,
-      currentCommentId: _id,
       placeholderTxt: `回复@${nickName}：`,
       commentShow: true,
       defaultCommentValue: DEFAULT_COMMENT,
@@ -151,7 +152,7 @@ Page({
       });
       return;
     }
-    const { momentId, currentCommentId, commentLevel, replyUser } = this.data;
+    const { momentId, commentLevel, replyUser } = this.data;
     wx.showLoading({
       title: "发表中"
     });

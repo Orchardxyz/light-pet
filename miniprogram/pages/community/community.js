@@ -1,5 +1,5 @@
 // 每页获取的最大数据
-const MAX_COUNT = 10;
+const MAX_COUNT = 4;
 const app = getApp();
 
 Page({
@@ -11,7 +11,7 @@ Page({
     loginShow: false,
     navbarActiveIndex: 0,
     navbarTitle: ["社区", "关注"],
-    momentList: [],
+    momentList: [[]],
     isPetSelected: false,
     animation: {},
     currentIndex: -1,
@@ -58,14 +58,16 @@ Page({
       .then(res => {
         const { momentList } = this.data;
         const { result } = res;
-        this.setData({
-          init: false,
-          momentList: momentList.concat(result)
-        });
-        if (this.data.momentList.length === momentList.length && momentList.length !== 0) {
+        if (result.length > 0) {
           this.setData({
-            isAll: true
+            init: false,
+            [`momentList[${momentList.length}]`]: result,
           });
+        } else {
+          this.setData({
+            init: false,
+            isAll: true
+          })
         }
         wx.hideLoading();
         wx.stopPullDownRefresh();
@@ -189,7 +191,7 @@ Page({
     const { currentIndex } = this.data;
     if (currentIndex > -1) {
       const { nickName, avatarUrl } = app.getUserInfo();
-      wx.navigateTo({
+      wx.redirectTo({
         url: `../moment-edit-box/moment-edit-box?nickName=${nickName}&avatarUrl=${avatarUrl}&index=${currentIndex}`
       });
       this._initMomentsList();
@@ -262,9 +264,9 @@ Page({
    */
   onPullDownRefresh: function() {
     this._initMomentsList();
-    this.data.navbarActiveIndex === 0
-      ? this._loadCommunityMoments()
-      : this._loadCommunityFollowingList();
+    // this.data.navbarActiveIndex === 0
+    //   ? this._loadCommunityMoments()
+    //   : this._loadCommunityFollowingList();
   },
 
   /**
@@ -273,7 +275,7 @@ Page({
   onReachBottom: function() {
     const { momentList, isAll } = this.data;
     if (!isAll) {
-      this._loadCommunityMoments(momentList.length);
+      this._loadCommunityMoments(momentList.length * MAX_COUNT);
     }
   },
 

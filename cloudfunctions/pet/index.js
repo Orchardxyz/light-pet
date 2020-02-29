@@ -53,9 +53,11 @@ exports.main = async (event, context) => {
     if (months > 0 && months < 10) {
       age += `${months === 2 ? "两" : ChineseBits[months]}个月`;
     } else if (months >= 10) {
-      age += `${ChineseBits[(months / 10) >> 0 === 1 ? 0 : (months / 10) >> 0]}${
-        ChineseTenHundred[months.toString().length - 1]
-      }${ChineseBits[months % 10]}个月`;
+      age += `${
+        ChineseBits[(months / 10) >> 0 === 1 ? 0 : (months / 10) >> 0]
+      }${ChineseTenHundred[months.toString().length - 1]}${
+        ChineseBits[months % 10]
+      }个月`;
     }
     // 日
     if (day > 0 && day < 10) {
@@ -85,21 +87,34 @@ exports.main = async (event, context) => {
   // 获取所有宠物
   app.router("list", async (ctx, next) => {
     const { OPENID } = wxContext;
-    const result = await petCollection
+    const { data } = await petCollection
       .where({
         owner_id: OPENID
       })
       .get();
-    ctx.body = result;
+    const petList = data.map(
+      ({ _id, petAvatar, petName, sex, species, variety }) => ({
+        _id,
+        petAvatar,
+        petName,
+        sex,
+        species,
+        variety
+      })
+    );
+    ctx.body = petList;
   });
 
   // 获取所有宠物（包括年龄等细节）
   app.router("/list/detail", async (ctx, next) => {
     const { OPENID } = wxContext;
+    const { start = 0, count = 3 } = event;
     const { data: petList = [] } = await petCollection
       .where({
         owner_id: OPENID
       })
+      // .skip(start)
+      // .limit(count)
       .get();
     petList.map(pet => {
       const { adoptTime = "", birthday = "", createTime } = pet;

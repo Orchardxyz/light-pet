@@ -7,6 +7,7 @@ cloud.init()
 exports.main = async (event, context) => {
   try {
     const { content } = event
+    console.log(content)
     const result = await cloud.openapi.security.msgSecCheck({
       content
     })

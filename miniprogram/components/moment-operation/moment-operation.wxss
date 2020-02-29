@@ -10,6 +10,7 @@
   text-align: center;
   font-size: 30rpx;
   color: #686666;
+  padding: 8rpx 0;
 }
 
 .operation-item text {

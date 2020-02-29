@@ -1,11 +1,13 @@
 // miniprogram/pages/user/star/star.js
+let MAX_COUNT = 4
+
 Page({
   /**
    * 页面的初始数据
    */
   data: {
     starList: [],
-    isAll: false,
+    isAll: false
   },
 
   /**
@@ -26,21 +28,23 @@ Page({
         data: {
           $url: "getStarMoment",
           start,
+          count: MAX_COUNT
         }
       })
       .then(res => {
         const { result } = res;
-        const { starList } = this.data
-        this.setData({
-          starList: start === 0 ? [].concat(result) : starList.concat(result)
-        });
-        if (this.data.starList.length === starList.length && starList.length !== 0) {
+        const { starList } = this.data;
+        if (result.length > 0) {
+          this.setData({
+            [`starList[${starList.length}]`]: result
+          });
+        } else {
           this.setData({
             isAll: true
-          })
+          });
         }
         wx.hideLoading();
-        wx.stopPullDownRefresh()
+        wx.stopPullDownRefresh();
       });
   },
 
@@ -87,9 +91,9 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function() {
-    const { isAll, starList } = this.data
+    const { isAll, starList } = this.data;
     if (!isAll) {
-      this._init(starList.length)
+      this._init(starList.length * MAX_COUNT);
     }
   },
 

@@ -38,7 +38,7 @@
         </view>
     </view>
     <no-data wx:if="{{commentCount === 0}}" />
-    <button wx:elif="{{commentCount > 1}}" class="more-btn" style="width: 95%" bind:tap="enterCommentList">
+    <button wx:elif="{{isExpand}}" class="more-btn" style="width: 95%" bind:tap="enterCommentList">
         查看更多评论
     </button>
 </scroll-view>

@@ -59,12 +59,14 @@ page {
 }
 
 /* iconfont */
-.icon-star-copy {
+.icon-star-copy,
+.icon-star {
   font-size: 45rpx;
+  padding: 15rpx;
 }
 
 .icon-shanchu1 {
   padding-left: 15rpx;
-  color: #CC3333;
+  color: #cc3333;
   font-weight: bold;
 }

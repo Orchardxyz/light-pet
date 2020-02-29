@@ -49,5 +49,5 @@
 
 /* 查看更多 */
 .more-link {
-  cursor: pointer;
+  margin: 5rpx 0 2rpx 0;
 }

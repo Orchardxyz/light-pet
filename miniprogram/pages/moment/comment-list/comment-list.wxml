@@ -1,18 +1,9 @@
-<block wx:for="{{commentList}}" wx:key="index">
-    <LP-comment-overview 
-    comment="{{item}}"
-    momentId="{{momentId}}" 
-    bind:onComment="handleReply" />
+<block wx:for="{{commentList}}" wx:for-item="commentItem" wx:key="index">
+    <view class="wrapper" wx:for="{{commentItem}}" wx:key="index">
+        <LP-comment-overview comment="{{item}}" momentId="{{momentId}}" bind:onComment="handleReply" />
+    </view>
 </block>
-
 <LP-bottom-line wx:if="{{isAll}}" />
-
 <view class="detail-operation">
-    <LP-comment-bar 
-    commentShow="{{commentShow}}" 
-    placeholderTxt="{{placeholderTxt}}" 
-    defaultValue="{{defaultCommentValue}}" 
-    isReply="{{isReply}}"
-    bind:handleComment="onComment"
-    bind:handleReply="onReply" />
+    <LP-comment-bar commentShow="{{commentShow}}" placeholderTxt="{{placeholderTxt}}" defaultValue="{{defaultCommentValue}}" isReply="{{isReply}}" bind:handleComment="onComment" bind:handleReply="onReply" />
 </view>
