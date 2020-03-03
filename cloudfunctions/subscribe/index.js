@@ -44,7 +44,6 @@ exports.main = async (event, context) => {
         done: false, // 消息发送状态
       }
     });
-    console.log(result)
     return result;
   } catch (err) {
     console.log(err);

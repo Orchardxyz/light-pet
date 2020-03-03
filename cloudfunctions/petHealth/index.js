@@ -151,7 +151,6 @@ exports.main = async (event, context) => {
         finishTime: db.serverDate(),
       }
     })
-    console.log(result)
     ctx.body = result
   })
 

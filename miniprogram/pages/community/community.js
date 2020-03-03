@@ -191,10 +191,10 @@ Page({
     const { currentIndex } = this.data;
     if (currentIndex > -1) {
       const { nickName, avatarUrl } = app.getUserInfo();
-      wx.redirectTo({
+      wx.navigateTo({
         url: `../moment-edit-box/moment-edit-box?nickName=${nickName}&avatarUrl=${avatarUrl}&index=${currentIndex}`
       });
-      this._initMomentsList();
+      this._animate('close')
     } else {
       return;
     }

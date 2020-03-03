@@ -13,9 +13,9 @@
             </block>
         </view>
     </view> -->
-    <view class="no-data">
+    <!-- <view class="no-data">
         <no-data wx:if="{{init || momentList.length === 0}}" />
-    </view>
+    </view> -->
     <!-- 动态列表 -->
     <block wx:for="{{momentList}}" wx:for-item="momentItem" wx:key="index">
         <view class="moment-list" wx:for="{{momentItem}}" wx:key="index">
