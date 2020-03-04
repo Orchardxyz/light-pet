@@ -10,7 +10,7 @@ Page({
     init: true,
     loginShow: false,
     navbarActiveIndex: 0,
-    navbarTitle: ["社区", "关注"],
+    navbarTitle: ["热门动态", "爱宠话题", "最新动态"],
     momentList: [[]],
     isPetSelected: false,
     animation: {},

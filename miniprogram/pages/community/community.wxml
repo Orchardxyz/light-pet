@@ -1,4 +1,7 @@
 <view>
+    <view class="no-data">
+        <no-data wx:if="{{init || momentList.length === 0}}" />
+    </view>
     <!-- tab顶部栏内容切换 -->
     <view class="movie-container">
         <view class="navbar">
@@ -13,9 +16,7 @@
             </block>
         </view>
     </view>
-    <view class="no-data">
-        <no-data wx:if="{{init || momentList.length === 0}}" />
-    </view>
+
     <!-- 动态列表 -->
     <block wx:for="{{momentList}}" wx:for-item="momentItem" wx:key="index">
         <view class="moment-list" wx:for="{{momentItem}}" wx:key="index">
