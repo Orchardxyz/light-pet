@@ -61,13 +61,13 @@ Page({
         if (result.length > 0) {
           this.setData({
             init: false,
-            [`momentList[${momentList.length}]`]: result,
+            [`momentList[${momentList.length}]`]: result
           });
         } else {
           this.setData({
             init: false,
             isAll: true
-          })
+          });
         }
         wx.hideLoading();
         wx.stopPullDownRefresh();
@@ -132,7 +132,7 @@ Page({
     // 显示
     if (status == "open") {
       this.setData({
-        isPetSelected: true,
+        isPetSelected: true
       });
     }
   },
@@ -157,7 +157,7 @@ Page({
   // 发布动态
   onPublish() {
     if (app.isLogin()) {
-      const petList = wx.getStorageSync('petList');
+      const petList = wx.getStorageSync("petList");
       if (petList.length === 0) {
         wx.showModal({
           title: "",
@@ -180,7 +180,7 @@ Page({
           // isPetSelected: true,
           petList
         });
-        this._animate('open')
+        this._animate("open");
       }
     } else {
       this._setLoginShow();
@@ -194,7 +194,7 @@ Page({
       wx.navigateTo({
         url: `../moment-edit-box/moment-edit-box?nickName=${nickName}&avatarUrl=${avatarUrl}&index=${currentIndex}`
       });
-      this._animate('close')
+      this._animate("close");
     } else {
       return;
     }

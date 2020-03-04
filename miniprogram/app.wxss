@@ -1,7 +1,8 @@
 /**app.wxss**/
 @import "iconfont.wxss";
+@import "style/weui/weui.wxss";
 
 page {
-    background-color: #F7F7F7;
-    color: #333;
+  background-color: #f7f7f7;
+  color: #333;
 }
