@@ -17,7 +17,7 @@ exports.main = async (event, context) => {
     isFinished: false,
     isReminded: true,
     planTime: db.command.lt(today)
-  });
+  }).get()
   const promise = remindList.map(async ({ _id: remindId, remindTime, species }) => {
     try {
       const remindClock = remindTime.split(' ')[1]

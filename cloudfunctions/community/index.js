@@ -13,7 +13,17 @@ const notifyCollection = db.collection("notification");
 
 // 云函数入口函数
 exports.main = async (event, context) => {
+  const wxContext = cloud.getWXContext();
   const app = new TcbRouter({ event });
+
+  // 按照对象属性进行排序
+  const sortBy = (props = "", type = "desc") => (a, b) => {
+    if (type === "desc") {
+      return b[props] - a[props];
+    } else {
+      return a[props] - b[props];
+    }
+  };
 
   // 获取社区所有动态
   app.router("getAllMomentList", async (ctx, next) => {
@@ -39,18 +49,16 @@ exports.main = async (event, context) => {
       .then(res => {
         return res.data;
       });
-    for (let i = 0; i < momentList.length; i += 1) {
-      const { _openid, likes = [], stars = [] } = momentList[i];
-      const isLike = likes.includes(OPENID);
-      const isStar = stars.includes(OPENID);
-      const isOwner = _openid === OPENID;
-      momentList[i] = {
-        ...momentList[i],
-        isLike,
-        isStar,
-        isOwner
-      };
-    }
+    momentList.map(moment => {
+      const { _openid, likes = [], likeCount, commentCount, stars = [] } = moment;
+      moment.isLike = likes.includes(OPENID);
+      moment.isStar = stars.includes(OPENID);
+      moment.isOwner = _openid === OPENID;
+      // 分配权重
+      moment.weight = commentCount * 0.4 + likeCount * 0.6
+    });
+    momentList.sort(sortBy('weight', 'desc'));
+    console.log(momentList)
     ctx.body = momentList;
   });
 
