@@ -1,0 +1,102 @@
+/*外部容器*/
+.container {
+  margin: 10rpx 10rpx;
+}
+
+/*行样式*/
+.timeline {
+  display: flex;
+}
+
+/*时间轴*/
+.timeline .dotline {
+  width: 60rpx;
+  position: relative;
+}
+
+/*竖线*/
+.timeline .dotline .line {
+  width: 1px;
+  height: 100%;
+  background: #ccc;
+  position: absolute;
+  top: 0;
+  left: 15px;
+}
+
+/*圆点*/
+.timeline .dotline .dot {
+  width: 20rpx;
+  height: 20rpx;
+  background: #009a61;
+  position: absolute;
+  top: 21rpx;
+  left: 28rpx;
+  border-radius: 50%;
+}
+
+/*时间戳*/
+.timeline .dotline .time {
+  width: 100%;
+  position: absolute;
+  margin-top: 30rpx;
+  z-index: 99;
+  font-size: 12rpx;
+  color: #777;
+  text-align: center;
+}
+
+/*右侧主体内容*/
+.timeline .content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1rpx solid #ddd;
+  margin: 3rpx 0;
+}
+
+.timeline .content .detail {
+  font-size: 30rpx;
+  line-height: 68rpx;
+  color: #444;
+  white-space: normal;
+  padding-right: 20rpx;
+  word-wrap: normal;
+}
+
+.timeline .content .date {
+  font-size: 28rpx;
+  line-height: 56rpx;
+  color: #999;
+}
+ 
+.timeline .content .detail-wrapper {
+  display: inline-block;
+  vertical-align: bottom;
+}
+
+.timeline .content .detail-wrapper .pet-avatar {
+  display: inline-block;
+  vertical-align: bottom;
+}
+.timeline .content .detail-wrapper image{
+  border-radius: 50%;
+  width: 45rpx;
+  height: 45rpx;
+}
+
+.timeline .content .detail-wrapper text {
+  font-size: 32rpx;
+}
+
+.timeline .content .time {
+  font-size: 28rpx;
+  line-height: 20rpx;
+  margin-bottom: 30rpx;
+  color: #999;
+}
+
+.iconfont {
+  margin: 0 3rpx;
+  font-size: 35rpx;
+}

@@ -1,0 +1,12 @@
+<view class='bg-container' style='background: url({{background}}) no-repeat  top/cover'></view>
+<view class='bg-mask'></view>
+<view class="pet">
+    <avatar source="{{pet.petAvatar}}" width="110" height="110" />
+    <text style="color: #FFF">{{pet.petName}}</text>
+</view>
+<view wx:if="{{timeline.length > 0}}" class="timeline-wrapper">
+    <block wx:for="{{timeline}}" wx:key="index">
+        <LP-timeline month="{{item.month}}" year="{{item.year}}" timeline="{{item.children}}" />
+    </block>
+</view>
+<no-data wx:else />

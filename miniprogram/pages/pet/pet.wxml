@@ -38,9 +38,9 @@
                     <i class="iconfont icon-clock" style="color: #CDCDCD" />
                     陪伴时长
                     <view class="item-right">
-                        已陪伴你
-                        <text style="font-size: 35rpx; font-weight: bold; padding: 0 10rpx;"> {{item.companyDays}} </text>
-                        天
+                        <text>已陪伴你</text>
+                        <text style="font-size: 35rpx; font-weight: bold; padding: 0 10rpx;">{{item.companyDays}}</text>
+                        <text>天</text>
                     </view>
                 </view>
                 <view class="card-item" wx:if="{{item.adoptTime}}">
@@ -58,11 +58,13 @@
                     年龄
                     <view class="item-right">{{item.age}}</view>
                 </view>
-                <!-- <view class="card-item">
+                <navigator class="card-item" url="./history/history?petId={{item._id}}">
                     <i class="iconfont icon-timeline" style="color: #1890ff" />
-                    最近动态
-                    <view class="item-right"></view>
-                </view> -->
+                    历史记录
+                    <view class="item-right">
+                        <text style="color: #1890ff">详情 >></text>
+                    </view>
+                </navigator>
                 <view class="health-management">
                     <button class="health-btn" size="mini" style="width: 95%" data-pet="{{item}}" data-index="{{index}}" bind:tap="openDrawer" loading="{{btnIsLoading[index]}}">
                         <i wx:if="{{!btnIsLoading[index]}}" class="iconfont icon-tongzhi" style="color: #FF9900" />

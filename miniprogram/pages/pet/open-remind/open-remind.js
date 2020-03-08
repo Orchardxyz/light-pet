@@ -16,7 +16,7 @@ Page({
     closeTxt: "关闭提醒",
     finishTxt: "",
     disabled: false,
-    returnBtnShow: false,  // 返回按钮
+    returnBtnShow: false // 返回按钮
   },
 
   /**
@@ -25,9 +25,6 @@ Page({
   onLoad: function(options) {
     const { remindId } = options;
     this._loadRemindDetail(remindId);
-    this.setData({
-      remindId
-    });
   },
 
   _loadRemindDetail(remindId) {
@@ -54,6 +51,7 @@ Page({
           }
         } = res;
         this.setData({
+          remindId,
           pet,
           project,
           planTime,
@@ -97,6 +95,26 @@ Page({
       });
   },
 
+  // 加入时间轴记录
+  _addTimeline() {
+    const { remindId, pet } = this.data;
+    const petArr = [pet].map(({ _id, owner_id, petAvatar, petName, sex }) => ({
+      _id,
+      owner_id,
+      petAvatar,
+      petName,
+      sex
+    }));
+    wx.cloud.callFunction({
+      name: "petHealth",
+      data: {
+        $url: "/timeline/add",
+        remindId,
+        pet: petArr[0]
+      }
+    });
+  },
+
   handleCloseRemind() {
     wx.showModal({
       title: "",
@@ -127,10 +145,12 @@ Page({
         data: {
           $url: "/remind/finish",
           remindId,
-          isReminded
+          isReminded,
+          finishTime: Date.now()
         }
       })
       .then(() => {
+        this._addTimeline();
         this.setData({
           finishLoading: false,
           finishTxt: "已完成",

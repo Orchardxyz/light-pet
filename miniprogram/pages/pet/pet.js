@@ -178,7 +178,7 @@ Page({
     const { currentPetName, currentSpecies } = this.data;
     if (hasSet) {
       wx.navigateTo({
-        url: `./open-remind/open-remind?remindId=${remindId}`
+        url: `./open-remind/open-remind?remindId=${remindId}&projectId=${_id}`
       });
     } else {
       wx.navigateTo({
@@ -186,6 +186,11 @@ Page({
       });
     }
   },
+
+  // 进入历史记录页
+  // enterHealthHistory() {
+  //   wx.navigateTo
+  // },
 
   /**
    * 生命周期函数--监听页面初次渲染完成

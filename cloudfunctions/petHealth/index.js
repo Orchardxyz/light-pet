@@ -7,10 +7,11 @@ const TcbRouter = require("tcb-router");
 const moment = require("moment");
 
 const db = cloud.database();
-const petCollection = db.collection('pet')
+const petCollection = db.collection("pet");
 const petRemindCollection = db.collection("pet_remind");
 const healthProjectCollection = db.collection("health_project");
-const subMsgCollection = db.collection("SubscribeMessage")
+const petTimelineCollection = db.collection("pet_timeline");
+const subMsgCollection = db.collection("SubscribeMessage");
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -49,6 +50,15 @@ exports.main = async (event, context) => {
     ctx.body = healthProjects;
   });
 
+  // 获取某个项目基本信息
+  app.router("healthProject", async ctx => {
+    const { projectId } = event;
+    const { data: project } = await healthProjectCollection
+      .doc(projectId)
+      .get();
+    ctx.body = project;
+  });
+
   app.router("project", async (ctx, next) => {
     const { petId, projectId } = event;
     const { data: healthProjects = [] } = await healthProjectCollection
@@ -64,38 +74,33 @@ exports.main = async (event, context) => {
     if (petProjects.length > 0) {
       result.lastTime = petProjects[0].remindTime.split(" ")[0];
     }
-    // 明日日期
-    const tomorrow = moment(Date.now() + DIFF)
-      .add(1, "days")
-      .format("YYYY-MM-DD");
-    result.tomorrow = tomorrow;
 
     ctx.body = result;
   });
 
   // 获取提醒项
   app.router("/remind/get", async (ctx, next) => {
-    const { remindId } = event
-    const { data: remind } = await petRemindCollection.doc(remindId).get()
-    const { petId, project, planTime, isReminded, remindTime } = remind
-    const { data: pet} = await petCollection.doc(petId).get()
+    const { remindId } = event;
+    const { data: remind } = await petRemindCollection.doc(remindId).get();
+    const { petId, project, planTime, isReminded, remindTime } = remind;
+    const { data: pet } = await petCollection.doc(petId).get();
     const formatTime = time => {
-      const dateArr = time.split(' ')[0].split('-')
+      const dateArr = time.split(" ")[0].split("-");
       return {
         year: dateArr[0],
         month: dateArr[1],
         day: dateArr[2]
-      }
-    }
+      };
+    };
     const result = {
       pet,
       project,
       isReminded,
       planTime: formatTime(planTime),
       remindTime: formatTime(remindTime)
-    }
-    ctx.body = result
-  })
+    };
+    ctx.body = result;
+  });
 
   // 添加提醒项
   app.router("/remind/add", async (ctx, next) => {
@@ -123,7 +128,7 @@ exports.main = async (event, context) => {
         planTime: `${planTime} ${planClock}`,
         isReminded: false,
         isFinished: false, // 是否已完成
-        finishTime: '', // 完成时间
+        finishTime: "", // 完成时间
         _openid: OPENID,
         createTime: db.serverDate()
       }
@@ -132,27 +137,99 @@ exports.main = async (event, context) => {
   });
 
   // 删除提醒项
-  app.router('/remind/delete', async (ctx, next) => {
-    const { remindId } = event
-    await petRemindCollection.doc(remindId).remove()
-    await subMsgCollection.where({remindId}).remove()
-  })
+  app.router("/remind/delete", async (ctx, next) => {
+    const { remindId } = event;
+    await petRemindCollection.doc(remindId).remove();
+    await subMsgCollection.where({ remindId }).remove();
+  });
 
   // 完成提醒项
-  app.router('/remind/finish', async (ctx, next) => {
-    const { remindId, isReminded } = event
+  app.router("/remind/finish", async (ctx, next) => {
+    const { remindId, isReminded, finishTime } = event;
     // 未提醒已完成的情况（即提前完成）,需要解除订阅消息
     if (!isReminded) {
-      await subMsgCollection.where({remindId}).remove()
+      await subMsgCollection.where({ remindId }).remove();
     }
     const result = await petRemindCollection.doc(remindId).update({
       data: {
         isFinished: true,
-        finishTime: db.serverDate(),
+        finishTime,
       }
-    })
-    ctx.body = result
-  })
+    });
+    ctx.body = result;
+  });
+
+  // 历史记录（时间轴）
+  app.router("/timeline/add", async ctx => {
+    const { remindId, pet = {} } = event;
+    // 获取提醒项
+    const { data: remind } = await petRemindCollection.doc(remindId).get();
+    const { projectId, finishTime } = remind;
+    // 正则提取完成时间的 年 月 日
+    const date = moment(finishTime + DIFF).format("YYYY-M-D HH:mm")
+    const temp = date.match(/\d+/g);
+    // 获取项目基本信息
+    const { data: healthProject } = await healthProjectCollection
+      .doc(projectId)
+      .get();
+    // 时间轴的其他参数
+    const { project, icon, color } = healthProject;
+    const params = {
+      project,
+      icon,
+      color
+    };
+
+    // 制定时间轴文字内容
+    const { petName } = pet;
+    let content = "";
+    switch (project) {
+      case "免疫":
+      case "体检":
+      case "驱虫":
+        content = `今天主人带${petName}去${project}啦，身体更健康！`;
+        break;
+      case "剪毛":
+        content = `今天主人帮${petName}${project}，现在身轻如燕！`;
+        break;
+      case "眼睛清洁":
+        content = `今天主人帮${petName}${project}，眼睛Blink Blink的`;
+        break;
+      case "耳道清洁":
+        content = `今天主人帮${petName}${project}，耳朵清爽极了`;
+        break;
+      case "洗澡":
+        content = `今天主人帮${petName}${project}，整个body干干净净的~`;
+        break;
+      default:
+        break;
+    }
+    const result = await petTimelineCollection.add({
+      data: {
+        pet,
+        remindId,
+        content,
+        params,
+        year: temp[0],
+        date: `${temp[1]}月${temp[2]}日`,
+        time: `${temp[3]}:${temp[4]}`,
+        createTime: finishTime
+      }
+    });
+    ctx.body = result;
+  });
+
+  // 获取时间轴
+  app.router("/timeline/get", async ctx => {
+    const { petId, start = 0, count = 10 } = event;
+    const { data: timeline } = await petTimelineCollection
+      .where({ pet: { _id: petId } })
+      .skip(start)
+      .limit(count)
+      .orderBy('createTime', 'desc')
+      .get();
+    ctx.body = timeline;
+  });
 
   return app.serve();
 };

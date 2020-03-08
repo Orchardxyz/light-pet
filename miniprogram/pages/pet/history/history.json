@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "LP-timeline": "/components/timeline/timeline",
+    "no-data": "/components/UI/no-data/no-data",
+    "avatar": "/components/UI/avatar/avatar"
+  }
+}

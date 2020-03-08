@@ -1,7 +1,7 @@
 .container {
-    margin: 13rpx 5rpx 0 5rpx;
+  margin: 13rpx 5rpx 0 5rpx;
 }
 
 image {
-    margin-bottom: 3rpx;
+  margin-bottom: 3rpx;
 }

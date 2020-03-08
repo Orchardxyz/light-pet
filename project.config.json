@@ -138,6 +138,14 @@
 					"id": -1,
 					"name": "2.2 评论和回复",
 					"pathName": "pages/notification/detail/detail",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 13,
+					"name": "3.4 健康历史记录",
+					"pathName": "pages/pet/history/history",
+					"query": "petId=74b140b45e3c22140b4e4ff25dba83d5",
 					"scene": null
 				}
 			]

@@ -80,9 +80,9 @@ Page({
           advice,
           icon,
           color,
-          lastTime = "",
-          tomorrow
+          lastTime = ""
         } = result;
+        const tomorrow = this._getTomorrow();
         this.setData({
           project,
           icon,
@@ -97,6 +97,18 @@ Page({
         });
         wx.hideLoading();
       });
+  },
+
+  // 获取明日日期
+  _getTomorrow() {
+    const date = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const year = date.getFullYear();
+    const month =
+      date.getMonth() + 1 < 10
+        ? `0${date.getMonth() + 1}`
+        : date.getMonth() + 1;
+    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+    return `${year}-${month}-${day}`;
   },
 
   planDateChange(event) {
