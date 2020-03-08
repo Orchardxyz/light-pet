@@ -173,12 +173,11 @@
   display: block;
 
   width: 85rpx;
-  height: 85rpx;
-  padding: 5rpx;
-  padding-left: 10rpx;
+  height: 90rpx;
+  padding-left: 20rpx;
   border-radius: 50%;
 
-  font-size: 75rpx;
+  font-size: 65rpx;
   color: #FFF;
 }
 

@@ -24,7 +24,8 @@ page {
   width: 95rpx;
   height: 95rpx;
   padding: 5rpx;
-  padding-left: 10rpx;
+  padding-left: 20rpx;
+  padding-bottom: 25rpx;
   border-radius: 50%;
   border: 3rpx solid #fff;
 
