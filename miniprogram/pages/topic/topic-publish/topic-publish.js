@@ -1,12 +1,19 @@
-// miniprogram/pages/topic/topic-publish/topic-publish.js
+import msgCheck from "../../../utils/security/msgCheck";
+import imgCheck from "../../../utils/security/imgCheck";
+import secWarn from "../../../utils/security/secWarn";
+import regeneratorRuntime from "../../../utils/runtime";
+
+const app = getApp();
+
 Page({
   /**
    * 页面的初始数据
    */
   data: {
+    type: "",
     topic: "",
-    topicText: "",
     isCustom: false,
+    cover: [], // 封面图
     files: [],
     uploadShow: true
   },
@@ -15,28 +22,86 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    const { topic } = options;
+    const { type } = options;
     this.setData({
-      topic
+      type
     });
-    if (topic === "CUSTOM") {
+    if (type === "CUSTOM") {
       this.setData({
         isCustom: true
       });
-    } else if (topic === "STORY") {
+    } else if (type === "STORY") {
       this.setData({
-        topicText: "微故事"
+        topic: "微故事"
       });
-    } else if (topic === "KNOWLEDGE") {
+    } else if (type === "KNOWLEDGE") {
       this.setData({
-        topicText: "微知识"
+        topic: "微知识"
       });
     }
   },
 
-  chooseImage() {
+  // 检查表单
+  _checkForm(topic = "", title, content) {
+    const { isCustom, cover } = this.data;
+    if (isCustom) {
+      return !(
+        topic.trim() === "" ||
+        title.trim() === "" ||
+        content.trim() === "" ||
+        cover.length === 0
+      );
+    } else {
+      const { topic } = this.data;
+      return !(
+        topic.trim() === "" ||
+        title.trim() === "" ||
+        content.trim() === "" ||
+        cover.length === 0
+      );
+    }
+  },
+
+  chooseCover() {
+    const { cover } = this.data;
+    const count = 1 - cover.length;
     wx.chooseImage({
-      count: 3,
+      count,
+      sizeType: ["original", "compressed"],
+      sourceType: ["album", "camera"],
+      success: result => {
+        if (result.errMsg === "chooseImage:ok") {
+          const { tempFilePaths } = result;
+          this.setData({
+            cover: tempFilePaths
+          });
+        }
+      }
+    });
+  },
+
+  previewCover(event) {
+    const {
+      currentTarget: { dataset }
+    } = event;
+    const { img } = dataset;
+    wx.previewImage({
+      current: img,
+      urls: [img]
+    });
+  },
+
+  deleteCover() {
+    this.setData({
+      cover: []
+    });
+  },
+
+  chooseImage() {
+    const { files } = this.data;
+    const count = 3 - files.length;
+    wx.chooseImage({
+      count,
       sizeType: ["original", "compressed"],
       sourceType: ["album", "camera"],
       success: result => {
@@ -78,6 +143,123 @@ Page({
       files,
       uploadShow: true
     });
+  },
+
+  // 发布
+  async handlePublish(event) {
+    const {
+      detail: {
+        value: { content, title, topic = "" }
+      }
+    } = event;
+    const { isCustom, type, cover, files } = this.data;
+    if (this._checkForm(topic, title, content)) {
+      wx.showLoading({
+        title: "话题发布中",
+        mask: true
+      });
+      const { nickName, avatarUrl } = app.getUserInfo();
+      if (msgCheck(topic + title + content)) {
+        const fileIDs = [];
+        let coverID = "";
+        const reg = /\.\w+$/;
+        files.map(async img => {
+          if (imgCheck(img)) {
+            const suffix = reg.exec(img)[0];
+            await wx.cloud.uploadFile({
+              // 路径名称唯一
+              cloudPath: `topic/enclosure/${Date.now()}-${Math.random() *
+                1000000}${suffix}`,
+              filePath: img,
+              success: result => {
+                fileIDs = fileIDs.concat(result.fileID);
+                resolve();
+              },
+              fail: () => {
+                reject();
+              }
+            });
+          } else {
+            wx.hideLoading();
+            secWarn("img");
+            return;
+          }
+        });
+        if (imgCheck(cover[0])) {
+          const suffix = reg.exec(cover[0])[0];
+          await wx.cloud.uploadFile({
+            // 路径名称唯一
+            cloudPath: `topic/cover/${Date.now()}-${Math.random() *
+              1000000}${suffix}`,
+            filePath: cover[0],
+            success: result => {
+              coverID = result.fileID;
+              resolve();
+            },
+            fail: () => {
+              reject();
+            }
+          });
+        } else {
+          wx.hideLoading();
+          secWarn("img");
+          return;
+        }
+        const topicObj = {
+          nickName,
+          avatarUrl,
+          topic: isCustom ? topic : this.data.topic,
+          title,
+          content,
+          cover: coverID,
+          enclosure: fileIDs,
+          type
+        };
+        wx.cloud
+          .callFunction({
+            name: "topic",
+            data: {
+              $url: "publish",
+              topicObj
+            }
+          })
+          .then(() => {
+            wx.hideLoading();
+            wx.showToast({
+              title: "发布成功",
+              icon: "success",
+              duration: 1500
+            });
+            // 返回上一页并刷新
+            wx.navigateBack();
+            const pages = getCurrentPages();
+            const prevPage = pages[pages.length - 2];
+            prevPage.onPullDownRefresh(1);
+          })
+          .catch(() => {
+            wx.hideLoading();
+            wx.showToast({
+              title: "发布失败",
+              icon: "warn",
+              duration: 1500
+            });
+          });
+      } else {
+        wx.hideLoading();
+        secWarn("msg");
+        return;
+      }
+    } else {
+      wx.showModal({
+        title: "提示",
+        content: "请将表单信息补充完整",
+        showCancel: true,
+        cancelText: "取消",
+        cancelColor: "#000000",
+        confirmText: "确定",
+        confirmColor: "#3CC51F"
+      });
+    }
   },
 
   /**

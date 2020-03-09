@@ -149,9 +149,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 14,
 					"name": "1.4 发布话题",
 					"pathName": "pages/topic/topic-publish/topic-publish",
+					"query": "type=CUSTOM",
 					"scene": null
 				}
 			]

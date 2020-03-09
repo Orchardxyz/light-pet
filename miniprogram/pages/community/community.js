@@ -35,7 +35,7 @@ Page({
     this.setData({
       momentList: [],
       isPetSelected: false,
-      currentIndex: -1
+      currentIndex: -1,
     });
   },
 
@@ -135,6 +135,26 @@ Page({
     });
   },
 
+  // 刷新数据
+  _refreshData(navbarActiveIndex = 0) {
+    this.setData({
+      navbarActiveIndex,
+    });
+    switch (navbarActiveIndex) {
+      case 0:
+        this._loadCommunityMoments();
+        break;
+      case 2:
+        this._loadCommunityMoments(0, "NEW");
+        break;
+      default:
+        this.setData({
+          publishBtnShow: false
+        });
+        break;
+    }
+  },
+
   handleClick(event) {
     const {
       currentTarget: {
@@ -204,26 +224,15 @@ Page({
    * 点击导航栏
    */
   handleNavBarTap(event) {
-    const {
-      currentTarget: {
-        dataset: { navbarIndex }
-      }
-    } = event;
-    this.setData({
-      navbarActiveIndex: navbarIndex
-    });
-    switch (navbarIndex) {
-      case 0:
-        this._loadCommunityMoments();
-        break;
-      case 2:
-        this._loadCommunityMoments(0, "NEW");
-        break;
-      default:
-        this.setData({
-          publishBtnShow: false
-        });
-        break;
+    if (app.isLogin()) {
+      const {
+        currentTarget: {
+          dataset: { navbarIndex }
+        }
+      } = event;
+      this._refreshData(navbarIndex)
+    } else {
+      this._setLoginShow();
     }
   },
 
@@ -269,11 +278,8 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
-    this._initMomentsList();
-    // this.data.navbarActiveIndex === 0
-    //   ? this._loadCommunityMoments()
-    //   : this._loadCommunityFollowingList();
+  onPullDownRefresh: function(navbarActiveIndex = 0) {
+    this._refreshData(navbarActiveIndex)
   },
 
   /**

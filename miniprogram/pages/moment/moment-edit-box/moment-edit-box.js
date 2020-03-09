@@ -129,7 +129,7 @@ Page({
                 fileIDs = fileIDs.concat(result.fileID);
                 resolve();
               },
-              fail: error => {
+              fail: () => {
                 reject();
               }
             });

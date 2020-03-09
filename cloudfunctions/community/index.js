@@ -16,15 +16,6 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const app = new TcbRouter({ event });
 
-  // 按照对象属性进行排序
-  const sortBy = (props = "", type = "desc") => (a, b) => {
-    if (type === "desc") {
-      return b[props] - a[props];
-    } else {
-      return a[props] - b[props];
-    }
-  };
-
   // 获取社区所有动态
   app.router("getAllMomentList", async (ctx, next) => {
     const { OPENID } = wxContext;
@@ -103,7 +94,7 @@ exports.main = async (event, context) => {
 
   // 添加动态到数据库中
   app.router("addMoment", async (ctx, next) => {
-    const { OPENID } = cloud.getWXContext();
+    const { OPENID } = wxContext;
     const { moment } = event;
     const result = await momentCollection.add({
       data: {
@@ -117,7 +108,7 @@ exports.main = async (event, context) => {
         createTime: db.serverDate()
       }
     });
-    return result;
+    ctx.body = result
   });
 
   // 删除动态

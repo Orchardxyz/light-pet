@@ -1,51 +1,76 @@
-<view class="weui-cells__title">话题名称（必填）</view>
-<view class="weui-cells weui-cells_after-title">
-    <view class="weui-cell">
-        <view wx:if="{{isCustom}}" class="weui-cell__bd">
-            <input class="weui-input" placeholder="请输入话题" />
-        </view>
-        <view wx:else class="weui-cell__bd">{{topicText}}</view>
-    </view>
-</view>
-<view class="weui-cells__title">内容（必填）</view>
-<view class="weui-cells weui-cells_after-title">
-    <view class="weui-cell">
-        <view class="weui-cell__bd">
-            <textarea class="weui-textarea" placeholder="请输入内容" style="height: 7.3em" />
-            <!-- <view class="weui-textarea-counter">0/200</view> -->
+<form class="" report-submit="true" bindsubmit="handlePublish">
+    <view class="weui-cells__title">话题名称（必填）</view>
+    <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell">
+            <view wx:if="{{isCustom}}" class="weui-cell__bd">
+                <input class="weui-input" name="topic" placeholder="请输入话题" />
+            </view>
+            <view wx:else class="weui-cell__bd">{{topic}}</view>
         </view>
     </view>
-</view>
-<view class="weui-cells__title">选择附件（可选）</view>
-<view class="page__bd">
-    <view class="weui-cells">
+    <view class="weui-cells__title">标题（必填）</view>
+    <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell">
             <view class="weui-cell__bd">
-                <view class="weui-uploader">
-                    <view class="weui-uploader__hd">
-                        <view class="weui-uploader__overview">
-                            <view class="weui-uploader__title">图片上传</view>
-                            <view class="weui-uploader__info">{{files.length}}/3</view>
-                        </view>
-                        <view class="weui-uploader__tips">长按删除</view>
+                <input class="weui-input" name="title" placeholder="请输入标题" />
+            </view>
+        </view>
+    </view>
+    <view class="weui-cells__title">封面（必选）</view>
+    <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell">
+            <view class="weui-uploader__files" id="uploaderFiles">
+                <block wx:for="{{cover}}" wx:key="*this">
+                    <view class="weui-uploader__file" bind:longpress="deleteCover" bindtap="previewCover" data-img="{{item}}">
+                        <image class="weui-uploader__img" src="{{item}}" mode="aspectFill" />
                     </view>
-                    <view class="weui-uploader__bd">
-                        <view class="weui-uploader__files" id="uploaderFiles">
-                            <block wx:for="{{files}}" wx:key="*this">
-                                <view class="weui-uploader__file" bind:longpress="deleteImage" bindtap="previewImage" data-img="{{item}}" data-images="{{files}}">
-                                    <image class="weui-uploader__img" src="{{item}}" mode="aspectFill" />
-                                </view>
-                            </block>
+                </block>
+            </view>
+            <view wx:if="{{cover.length === 0}}" class="weui-uploader__input-box">
+                <view class="weui-uploader__input" bindtap="chooseCover"></view>
+            </view>
+        </view>
+    </view>
+    <view class="weui-cells__title">内容（必填）</view>
+    <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell">
+            <view class="weui-cell__bd">
+                <textarea class="weui-textarea" name="content" placeholder="请输入内容" style="height: 6.3em" />
+                <!-- <view class="weui-textarea-counter">0/200</view> -->
+            </view>
+        </view>
+    </view>
+    <view class="weui-cells__title">选择附件（可选）</view>
+    <view class="page__bd">
+        <view class="weui-cells">
+            <view class="weui-cell">
+                <view class="weui-cell__bd">
+                    <view class="weui-uploader">
+                        <view class="weui-uploader__hd">
+                            <view class="weui-uploader__overview">
+                                <view class="weui-uploader__title">图片上传</view>
+                                <view class="weui-uploader__info">{{files.length}}/3</view>
+                            </view>
+                            <view class="weui-uploader__tips">长按删除</view>
                         </view>
-                        <view wx:if="{{uploadShow}}" class="weui-uploader__input-box">
-                            <view class="weui-uploader__input" bindtap="chooseImage"></view>
+                        <view class="weui-uploader__bd">
+                            <view class="weui-uploader__files" id="uploaderFiles">
+                                <block wx:for="{{files}}" wx:key="*this">
+                                    <view class="weui-uploader__file" bind:longpress="deleteImage" bindtap="previewImage" data-img="{{item}}" data-images="{{files}}">
+                                        <image class="weui-uploader__img" src="{{item}}" mode="aspectFill" />
+                                    </view>
+                                </block>
+                            </view>
+                            <view wx:if="{{uploadShow}}" class="weui-uploader__input-box">
+                                <view class="weui-uploader__input" bindtap="chooseImage"></view>
+                            </view>
                         </view>
                     </view>
                 </view>
             </view>
         </view>
     </view>
-</view>
-<view class="publish" style="margin: 50rpx;">
-    <button class="weui-btn" type="primary">发布</button>
-</view>
+    <view class="publish" style="margin: 50rpx;">
+        <button class="weui-btn" type="primary" form-type="submit">发布</button>
+    </view>
+</form>
