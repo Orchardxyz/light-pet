@@ -1,6 +1,6 @@
-import msgCheck from "../../utils/security/msgCheck";
-import imgCheck from "../../utils/security/imgCheck";
-import secWarn from "../../utils/security/secWarn";
+import msgCheck from "../../../utils/security/msgCheck";
+import imgCheck from "../../../utils/security/imgCheck";
+import secWarn from "../../../utils/security/secWarn";
 
 const MAX_WORDS_NUM = 140;
 const MAX_IMAGE_NUM = 9;

@@ -25,9 +25,12 @@ page {
   display: flex;
 }
 
-.moment-time {
+.moment-time,
+.moment-view {
+  display: inline;
   font-size: 24rpx;
   color: #939393;
+  margin-right: 25rpx;
 }
 
 .moment-content {
@@ -69,4 +72,10 @@ page {
   padding-left: 15rpx;
   color: #cc3333;
   font-weight: bold;
+}
+
+.icon-clock,
+.icon-view {
+  margin-right: 8rpx;
+  font-size: 28rpx;
 }

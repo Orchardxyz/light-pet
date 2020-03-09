@@ -1,3 +1,5 @@
+import increaseView from "../../utils/moment/increaseView";
+
 // 每页获取的最大数据
 const MAX_COUNT = 4;
 const app = getApp();
@@ -9,14 +11,15 @@ Page({
   data: {
     init: true,
     loginShow: false,
-    navbarActiveIndex: 0,
-    navbarTitle: ["热门动态", "爱宠话题", "最新动态"],
+    navbarActiveIndex: 1,
+    navbarTitle: ["热门动态", "宠物话题", "最新动态"],
     momentList: [[]],
     isPetSelected: false,
     animation: {},
     currentIndex: -1,
     petList: [],
     animation: {},
+    publishBtnShow: true,
     isAll: false
   },
 
@@ -37,7 +40,7 @@ Page({
   },
 
   // 加载社区所有动态
-  _loadCommunityMoments(start = 0) {
+  _loadCommunityMoments(start = 0, type = "HOT") {
     if (start === 0) {
       this._initMomentsList();
     }
@@ -51,6 +54,7 @@ Page({
         name: "community",
         data: {
           start,
+          type,
           count: MAX_COUNT,
           $url: "getAllMomentList"
         }
@@ -69,24 +73,12 @@ Page({
             isAll: true
           });
         }
+        this.setData({
+          publishBtnShow: true
+        });
         wx.hideLoading();
         wx.stopPullDownRefresh();
       });
-  },
-
-  // 加载关注的好友动态列表
-  _loadCommunityFollowingList(start = 0) {
-    if (start === 0) {
-      this._initMomentsList();
-    }
-    wx.showLoading({
-      title: "拼命加载中",
-      mask: true
-    });
-    this.setData({
-      momentList: this.data.momentList.concat(["follow1", "follow2", "follow3"])
-    });
-    wx.hideLoading();
   },
 
   // 抽屉动画
@@ -192,7 +184,7 @@ Page({
     if (currentIndex > -1) {
       const { nickName, avatarUrl } = app.getUserInfo();
       wx.navigateTo({
-        url: `../moment-edit-box/moment-edit-box?nickName=${nickName}&avatarUrl=${avatarUrl}&index=${currentIndex}`
+        url: `../moment/moment-edit-box/moment-edit-box?nickName=${nickName}&avatarUrl=${avatarUrl}&index=${currentIndex}`
       });
       this._animate("close");
     } else {
@@ -205,20 +197,34 @@ Page({
       isPetSelected: false,
       currentIndex: -1
     });
-    // this._animate("close");
+    this._animate("close");
   },
 
   /**
    * 点击导航栏
    */
   handleNavBarTap(event) {
-    let navbarTapIndex = event.currentTarget.dataset.navbarIndex;
+    const {
+      currentTarget: {
+        dataset: { navbarIndex }
+      }
+    } = event;
     this.setData({
-      navbarActiveIndex: navbarTapIndex
+      navbarActiveIndex: navbarIndex
     });
-    navbarTapIndex === 0
-      ? this._loadCommunityMoments()
-      : this._loadCommunityFollowingList();
+    switch (navbarIndex) {
+      case 0:
+        this._loadCommunityMoments();
+        break;
+      case 2:
+        this._loadCommunityMoments(0, "NEW");
+        break;
+      default:
+        this.setData({
+          publishBtnShow: false
+        });
+        break;
+    }
   },
 
   // 进入动态详情页
@@ -232,6 +238,7 @@ Page({
       wx.navigateTo({
         url: `../moment/moment-detail/moment-detail?momentId=${momentid}&isLike=${islike}`
       });
+      increaseView(momentid);
     } else {
       this.setData({
         loginShow: true

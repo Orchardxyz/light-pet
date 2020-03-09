@@ -27,9 +27,9 @@ exports.main = async (event, context) => {
 
   // 获取社区所有动态
   app.router("getAllMomentList", async (ctx, next) => {
-    const { keyword = "", start = 0, count = 10 } = event;
+    const { OPENID } = wxContext;
+    const { type = "HOT", keyword = "", start = 0, count = 10 } = event;
     // 会出现进入路由时OPENID还没有读到的情况，所以要在这里先执行一次
-    const { OPENID } = cloud.getWXContext();
     let condition = {};
     // 支持模糊查询
     if (keyword.trim() !== "") {
@@ -40,25 +40,36 @@ exports.main = async (event, context) => {
         })
       };
     }
-    let momentList = await momentCollection
-      .where(condition)
-      .skip(start)
-      .limit(count)
-      .orderBy("createTime", "desc")
-      .get()
-      .then(res => {
-        return res.data;
-      });
+    let momentList;
+    if (type === "HOT") {
+      momentList = await momentCollection
+        .where(condition)
+        .skip(start)
+        .limit(count)
+        .orderBy("viewCount", "desc")
+        .orderBy("likeCount", "desc")
+        .orderBy("commentCount", "desc")
+        .get()
+        .then(res => {
+          return res.data;
+        });
+    } else if (type === "NEW") {
+      momentList = await momentCollection
+        .where(condition)
+        .skip(start)
+        .limit(count)
+        .orderBy("createTime", "desc")
+        .get()
+        .then(res => {
+          return res.data;
+        });
+    }
     momentList.map(moment => {
-      const { _openid, likes = [], likeCount, commentCount, stars = [] } = moment;
+      const { _openid, likes = [], stars = [] } = moment;
       moment.isLike = likes.includes(OPENID);
       moment.isStar = stars.includes(OPENID);
       moment.isOwner = _openid === OPENID;
-      // 分配权重
-      moment.weight = commentCount * 0.4 + likeCount * 0.6
     });
-    momentList.sort(sortBy('weight', 'desc'));
-    console.log(momentList)
     ctx.body = momentList;
   });
 
@@ -100,6 +111,7 @@ exports.main = async (event, context) => {
         ...moment,
         commentCount: 0,
         likeCount: 0,
+        viewCount: 0, // 浏览量
         likes: [],
         stars: [],
         createTime: db.serverDate()
@@ -123,6 +135,17 @@ exports.main = async (event, context) => {
       console.log(err);
       ctx.body = err;
     }
+  });
+
+  // 增加浏览量
+  app.router("/view/increase", async ctx => {
+    const { momentId } = event;
+    const result = await momentCollection.doc(momentId).update({
+      data: {
+        viewCount: command.inc(1)
+      }
+    });
+    ctx.body = result;
   });
 
   // 点赞

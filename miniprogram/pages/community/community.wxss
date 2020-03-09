@@ -22,13 +22,13 @@
 
 /* navbar样式 */
 
-.movie-container {
+.navbar-container {
   display: flex;
   flex-direction: column;
 }
 .navbar {
   display: flex;
-  position: absolute;
+  position: fixed;
   flex-direction: row;
   left: 0;
   top: 0;
@@ -60,13 +60,39 @@
 
 /* 社区的动态列表样式 */
 
-/* .moment-list {
-  margin-top: 60rpx;
-} */
+.moment-list,
+.pet-topic {
+  margin-top: 65rpx;
+}
 
 .moment-panel {
   margin-bottom: 20rpx;
   box-sizing: border-box;
+}
+
+/* 爱宠话题 */
+.topic-classic {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 40rpx 0 20rpx 0;
+  background-color: #fff;
+}
+
+.topic-classic .topic-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.topic-classic .topic-wrapper .iconfont {
+  padding: 18rpx 32rpx;
+  border-radius: 50%;
+  font-size: 60rpx;
+  text-align: center;
+}
+
+.topic-classic .topic-wrapper text {
+  font-size: 35rpx;
 }
 
 /* 遮罩层 */

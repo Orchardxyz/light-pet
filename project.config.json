@@ -147,6 +147,12 @@
 					"pathName": "pages/pet/history/history",
 					"query": "petId=74b140b45e3c22140b4e4ff25dba83d5",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "1.4 发布话题",
+					"pathName": "pages/topic/topic-publish/topic-publish",
+					"scene": null
 				}
 			]
 		}

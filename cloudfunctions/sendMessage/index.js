@@ -25,6 +25,7 @@ exports.main = async (event, context) => {
   };
   const currentTime = timestampToTime(Date.now());
   try {
+    console.log('当前时间:', currentTime)
     const msgList = await subMsgCollection
       .where({
         done: false, // 未推送的订阅消息

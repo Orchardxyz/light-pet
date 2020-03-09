@@ -22,7 +22,15 @@
     </block>
   </view>
   <!-- 时间 -->
-  <view class="moment-time">{{createTime}}</view>
+  <view class="moment-time">
+    <i class="iconfont icon-clock" />
+    <text>{{createTime}}</text>
+  </view>
+  <!-- 浏览量 -->
+  <view class="moment-view">
+    <i class="iconfont icon-view" />
+    <text>{{moment.viewCount}}</text>
+  </view>
 </view>
 <!-- 登录 -->
 <LP-login modalShow="{{loginShow}}" />

@@ -3,31 +3,45 @@
         <no-data wx:if="{{init || momentList.length === 0}}" />
     </view>
     <!-- tab顶部栏内容切换 -->
-    <view class="movie-container">
+    <view class="navbar-container">
         <view class="navbar">
             <block wx:for="{{navbarTitle}}" wx:key="index">
-            <view 
-                class="navbar-item {{navbarActiveIndex === index ? 'navbar-item-active' : ''}}" 
-                data-navbar-index="{{index}}" 
-                catchtap="handleNavBarTap"
-            >
-                <text>{{item}}</text>
-            </view>
+                <view class="navbar-item {{navbarActiveIndex === index ? 'navbar-item-active' : ''}}" data-navbar-index="{{index}}" catchtap="handleNavBarTap">
+                    <text>{{item}}</text>
+                </view>
             </block>
         </view>
     </view>
-
     <!-- 动态列表 -->
-    <block wx:for="{{momentList}}" wx:for-item="momentItem" wx:key="index">
-        <view class="moment-list" wx:for="{{momentItem}}" wx:key="index">
-            <view class="moment-panel">
-                <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
-                <LP-moment-operation moment="{{item}}" />
+    <view wx:if="{{navbarActiveIndex === 0 || navbarActiveIndex === 2}}" class="moment-list">
+        <block wx:for="{{momentList}}" wx:for-item="momentItem" wx:key="index">
+            <view wx:for="{{momentItem}}" wx:key="index">
+                <view class="moment-panel">
+                    <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
+                    <LP-moment-operation moment="{{item}}" />
+                </view>
             </view>
+        </block>
+    </view>
+    <!-- 爱宠话题 -->
+    <view wx:if="{{navbarActiveIndex === 1}}" class="pet-topic">
+        <view class="topic-classic">
+            <navigator class="topic-wrapper" url="../topic/topic-publish/topic-publish?topic=STORY">
+                <i class="iconfont icon-movie" style="background-color: #FFFFCC; color: #4CB4E7" />
+                <text>微故事</text>
+            </navigator>
+            <navigator class="topic-wrapper" url="../topic/topic-publish/topic-publish?topic=KNOWLEDGE">
+                <i class="iconfont icon-zhishicopy" style="background-color: #FFCC99; color: #663300" />
+                <text>微知识</text>
+            </navigator>
+            <navigator class="topic-wrapper" url="../topic/topic-publish/topic-publish?topic=CUSTOM">
+                <i class="iconfont icon-topic1" style="background-color: #CCFFFF; color: #009A61" />
+                <text>自定义</text>
+            </navigator>
         </view>
-    </block>
+    </view>
     <!-- 发布动态的悬浮钮 -->
-    <view class="publish" bind:tap="onPublish">
+    <view wx:if="{{publishBtnShow}}" class="publish" bind:tap="onPublish">
         <i class="iconfont icon-pen"></i>
     </view>
     <LP-bottom-line wx:if="{{isAll}}" />
