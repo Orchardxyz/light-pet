@@ -40,15 +40,15 @@
             </navigator>
         </view>
         <view class="screen-wrapper">
-            <text style="color: #3399CC;">综合排序</text>
-            <view class="screen">
+            <text style="color: #3399CC;">{{topicSortType}}</text>
+            <view class="screen" bind:tap="openScreenMenu">
                 <text>筛选</text>
                 <i class="iconfont icon-screen" />
             </view>
         </view>
         <view class="topic-list">
-            <block wx:for="{{topicList}}" wx:key="*this">
-                <LP-topic-card topic="{{item}}"></LP-topic-card>
+            <block wx:for="{{topicList}}" wx:key="index">
+                <LP-topic-card topic="{{item}}" />
             </block>
         </view>
     </view>

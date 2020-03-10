@@ -5,6 +5,26 @@ import rankType from "../../utils/moment/rankType";
 const MAX_COUNT = 4;
 // 每页获取的最大话题数
 const MAX_TOPIC = 10;
+// 筛选类型
+const topicRankType = [
+  {
+    type: rankType.COMPREHENSIVE,
+    text: "综合排序"
+  },
+  {
+    type: rankType.NEWEST,
+    text: "最新话题"
+  },
+  {
+    type: rankType.MOST_COMMENT,
+    text: "评价最多"
+  },
+  {
+    type: rankType.MOST_VIEW,
+    text: "浏览量最高"
+  }
+];
+
 const app = getApp();
 
 Page({
@@ -18,6 +38,7 @@ Page({
     navbarTitle: ["热门动态", "实时动态", "宠物话题"],
     momentList: [[]],
     topicList: [],
+    topicSortType: "综合排序", // 排序方式
     isPetSelected: false,
     animation: {},
     currentIndex: -1,
@@ -179,7 +200,9 @@ Page({
         this._loadCommunityMoments(0, rankType.NEWEST);
         break;
       case 2:
-        this._loadTopicList();
+        const { topicSortType } = this.data;
+        const result = topicRankType.find(({ text }) => text === topicSortType);
+        this._loadTopicList(0, result.type);
         break;
       default:
         this.setData({
@@ -285,6 +308,28 @@ Page({
     } else {
       this.setData({
         loginShow: true
+      });
+    }
+  },
+
+  // 打开筛选菜单
+  openScreenMenu() {
+    const { navbarActiveIndex } = this.data;
+    const itemList = [];
+    if (navbarActiveIndex === 2) {
+      topicRankType.forEach(({ text }) => itemList.push(text));
+      wx.showActionSheet({
+        itemList,
+        itemColor: "#000000",
+        success: result => {
+          if (result.errMsg === "showActionSheet:ok") {
+            const { tapIndex } = result;
+            this.setData({
+              topicSortType: itemList[tapIndex]
+            });
+            this._refreshData(navbarActiveIndex)
+          }
+        }
       });
     }
   },

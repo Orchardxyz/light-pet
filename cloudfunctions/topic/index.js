@@ -41,24 +41,28 @@ exports.main = async (event, context) => {
           .limit(count)
           .orderBy("createTime", "desc")
           .get();
+        break;
       case rankType.MOST_COMMENT:
         result = await petTopicCollection
           .skip(start)
           .limit(count)
           .orderBy("commentCount", "desc")
           .get();
+        break;
       case rankType.MOST_LIKE:
         result = await petTopicCollection
           .skip(start)
           .limit(count)
           .orderBy("likeCount", "desc")
           .get();
+        break;
       case rankType.MOST_VIEW:
         result = await petTopicCollection
           .skip(start)
           .limit(count)
           .orderBy("viewCount", "desc")
           .get();
+        break;
       default:
         break;
     }
