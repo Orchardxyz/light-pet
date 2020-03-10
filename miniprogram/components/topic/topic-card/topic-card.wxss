@@ -1,0 +1,69 @@
+.container {
+  background-color: #fff;
+  padding: 10rpx 20rpx;
+  border-bottom: 1rpx solid #afaeae;
+}
+
+.topic-wrapper {
+  display: flex;
+}
+
+/* 封面 */
+.topic-wrapper .cover {
+  width: 165rpx;
+  height: 165rpx;
+  border-radius: 10rpx;
+}
+
+/* 基本信息 */
+.topic-wrapper .info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 15rpx;
+  font-size: 35rpx;
+}
+
+/* 第一行标题信息 */
+.info .topic {
+  display: flex;
+}
+
+.info .topic view {
+  display: flex;
+}
+
+.info .topic .topic-icon text {
+  margin-right: 10rpx;
+  font-weight: bold;
+}
+
+.info .topic .title {
+  color: #000;
+}
+
+/* 第二行内容 */
+.info .content {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+
+  width: 520rpx;
+  font-size: 32rpx;
+}
+
+/* 第三行一些数据 */
+.info .data {
+  display: flex;
+}
+.info .data .item {
+  font-size: 28rpx;
+  color: #939393;
+  margin-right: 25rpx;
+}
+
+.info .data .item .iconfont {
+  font-size: 30rpx;
+  margin-right: 8rpx;
+}

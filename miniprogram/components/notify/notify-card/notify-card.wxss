@@ -13,6 +13,7 @@
   border-bottom: 1rpx solid #E1E1E1;
 }
 
+
 .right view {
   margin-bottom: 10rpx;
 }

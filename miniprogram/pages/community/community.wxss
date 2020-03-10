@@ -75,7 +75,7 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 40rpx 0 20rpx 0;
+  padding: 35rpx 0 10rpx 0;
   background-color: #fff;
 }
 
@@ -93,6 +93,27 @@
 
 .topic-classic .topic-wrapper text {
   font-size: 35rpx;
+}
+
+/* 筛选 */
+.screen-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 5rpx 15rpx;
+}
+
+.screen-wrapper text {
+  font-size: 32rpx;
+}
+
+.screen-wrapper .screen {
+  margin-left: auto;
+}
+
+.screen-wrapper .iconfont {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-left: 5rpx;
 }
 
 /* 遮罩层 */

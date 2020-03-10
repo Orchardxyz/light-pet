@@ -16,10 +16,19 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const app = new TcbRouter({ event });
 
+  // 排序类型
+  const rankType = {
+    COMPREHENSIVE: "COMPREHENSIVE",
+    NEWEST: "NEWEST",
+    MOST_COMMENT: "MOST_COMMENT",
+    MOST_LIKE: "MOST_LIKE",
+    MOST_VIEW: "MOST_VIEW"
+  };
+
   // 获取社区所有动态
   app.router("getAllMomentList", async (ctx, next) => {
     const { OPENID } = wxContext;
-    const { type = "HOT", keyword = "", start = 0, count = 10 } = event;
+    const { type = rankType.COMPREHENSIVE, keyword = "", start = 0, count = 10 } = event;
     // 会出现进入路由时OPENID还没有读到的情况，所以要在这里先执行一次
     let condition = {};
     // 支持模糊查询
@@ -32,19 +41,19 @@ exports.main = async (event, context) => {
       };
     }
     let momentList;
-    if (type === "HOT") {
+    if (type === rankType.COMPREHENSIVE) {
       momentList = await momentCollection
         .where(condition)
         .skip(start)
         .limit(count)
-        .orderBy("viewCount", "desc")
         .orderBy("likeCount", "desc")
         .orderBy("commentCount", "desc")
+        .orderBy("viewCount", "desc")
         .get()
         .then(res => {
           return res.data;
         });
-    } else if (type === "NEW") {
+    } else if (type === rankType.NEWEST) {
       momentList = await momentCollection
         .where(condition)
         .skip(start)
@@ -108,7 +117,7 @@ exports.main = async (event, context) => {
         createTime: db.serverDate()
       }
     });
-    ctx.body = result
+    ctx.body = result;
   });
 
   // 删除动态

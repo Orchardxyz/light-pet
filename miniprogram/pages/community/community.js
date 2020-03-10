@@ -1,7 +1,10 @@
 import increaseView from "../../utils/moment/increaseView";
+import rankType from "../../utils/moment/rankType";
 
 // 每页获取的最大数据
 const MAX_COUNT = 4;
+// 每页获取的最大话题数
+const MAX_TOPIC = 10;
 const app = getApp();
 
 Page({
@@ -11,9 +14,10 @@ Page({
   data: {
     init: true,
     loginShow: false,
-    navbarActiveIndex: 1,
-    navbarTitle: ["热门动态", "宠物话题", "最新动态"],
+    navbarActiveIndex: 0,
+    navbarTitle: ["热门动态", "实时动态", "宠物话题"],
     momentList: [[]],
+    topicList: [],
     isPetSelected: false,
     animation: {},
     currentIndex: -1,
@@ -27,7 +31,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function() {
-    this._loadCommunityMoments();
+    this._refreshData(2);
   },
 
   // 初始化动态列表
@@ -35,12 +39,12 @@ Page({
     this.setData({
       momentList: [],
       isPetSelected: false,
-      currentIndex: -1,
+      currentIndex: -1
     });
   },
 
-  // 加载社区所有动态
-  _loadCommunityMoments(start = 0, type = "HOT") {
+  // 加载社区动态
+  _loadCommunityMoments(start = 0, type = rankType.COMPREHENSIVE) {
     if (start === 0) {
       this._initMomentsList();
     }
@@ -78,6 +82,33 @@ Page({
         });
         wx.hideLoading();
         wx.stopPullDownRefresh();
+      });
+  },
+
+  // 加载宠物话题数据
+  _loadTopicList(start = 0, type = rankType.COMPREHENSIVE) {
+    wx.showLoading({
+      title: "加载中",
+      mask: true
+    });
+    wx.cloud
+      .callFunction({
+        name: "topic",
+        data: {
+          $url: "getAll",
+          start,
+          count: MAX_TOPIC,
+          type
+        }
+      })
+      .then(res => {
+        const {
+          result: { data }
+        } = res;
+        this.setData({
+          topicList: data
+        });
+        wx.hideLoading();
       });
   },
 
@@ -138,14 +169,17 @@ Page({
   // 刷新数据
   _refreshData(navbarActiveIndex = 0) {
     this.setData({
-      navbarActiveIndex,
+      navbarActiveIndex
     });
     switch (navbarActiveIndex) {
       case 0:
         this._loadCommunityMoments();
         break;
+      case 1:
+        this._loadCommunityMoments(0, rankType.NEWEST);
+        break;
       case 2:
-        this._loadCommunityMoments(0, "NEW");
+        this._loadTopicList();
         break;
       default:
         this.setData({
@@ -230,7 +264,7 @@ Page({
           dataset: { navbarIndex }
         }
       } = event;
-      this._refreshData(navbarIndex)
+      this._refreshData(navbarIndex);
     } else {
       this._setLoginShow();
     }
@@ -279,7 +313,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function(navbarActiveIndex = 0) {
-    this._refreshData(navbarActiveIndex)
+    this._refreshData(navbarActiveIndex);
   },
 
   /**

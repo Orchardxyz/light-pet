@@ -166,19 +166,13 @@ Page({
         files.map(async img => {
           if (imgCheck(img)) {
             const suffix = reg.exec(img)[0];
-            await wx.cloud.uploadFile({
+            const { fileID } = await wx.cloud.uploadFile({
               // 路径名称唯一
               cloudPath: `topic/enclosure/${Date.now()}-${Math.random() *
                 1000000}${suffix}`,
               filePath: img,
-              success: result => {
-                fileIDs = fileIDs.concat(result.fileID);
-                resolve();
-              },
-              fail: () => {
-                reject();
-              }
             });
+            fileIDs.concat(fileID)
           } else {
             wx.hideLoading();
             secWarn("img");
@@ -187,19 +181,13 @@ Page({
         });
         if (imgCheck(cover[0])) {
           const suffix = reg.exec(cover[0])[0];
-          await wx.cloud.uploadFile({
+          const {fileID} = await wx.cloud.uploadFile({
             // 路径名称唯一
             cloudPath: `topic/cover/${Date.now()}-${Math.random() *
               1000000}${suffix}`,
-            filePath: cover[0],
-            success: result => {
-              coverID = result.fileID;
-              resolve();
-            },
-            fail: () => {
-              reject();
-            }
+            filePath: cover[0]
           });
+          coverID = fileID
         } else {
           wx.hideLoading();
           secWarn("img");
@@ -234,7 +222,7 @@ Page({
             wx.navigateBack();
             const pages = getCurrentPages();
             const prevPage = pages[pages.length - 2];
-            prevPage.onPullDownRefresh(1);
+            prevPage.onPullDownRefresh(2);
           })
           .catch(() => {
             wx.hideLoading();

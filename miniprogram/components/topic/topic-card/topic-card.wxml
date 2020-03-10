@@ -1,0 +1,38 @@
+<view class="container">
+  <view class="topic-wrapper">
+    <!-- 封面图 -->
+    <image src="{{topic.cover}}" class="cover" />
+    <!-- 右侧话题基本信息 -->
+    <view class="info">
+      <view class="topic">
+        <view wx:if="{{topic.type === 'CUSTOM'}}" class="topic-icon">
+          <text style="color: #009A61">#{{topic.topic}}#</text>
+        </view>
+        <view wx:else class="topic-icon">
+          <i class="iconfont icon-{{icon}}" style="color: {{color}}; margin-right: 5rpx;" />
+          <text style="color: {{color}};">{{topic.topic}}</text>
+        </view>
+        <text class="title">{{title}}</text>
+      </view>
+      <view class="content">{{topic.content}}</view>
+      <view class="data">
+        <view class="item">
+          <i class="iconfont icon-clock" />
+          <text>{{createTime}}</text>
+        </view>
+        <view class="item">
+          <i class="iconfont icon-speechbubble" />
+          <text>{{topic.commentCount}}</text>
+        </view>
+        <view class="item">
+          <i class="iconfont icon-view" />
+          <text>{{topic.viewCount}}</text>
+        </view>
+        <view class="item">
+          <i class="iconfont icon-like1" />
+          <text>{{topic.likeCount}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
