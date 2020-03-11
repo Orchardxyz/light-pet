@@ -64,6 +64,32 @@ Page({
     });
   },
 
+  // 刷新数据
+  _refreshData(navbarActiveIndex = 0) {
+    this.setData({
+      navbarActiveIndex,
+      isAll: false
+    });
+    switch (navbarActiveIndex) {
+      case 0:
+        this._loadCommunityMoments();
+        break;
+      case 1:
+        this._loadCommunityMoments(0, rankType.NEWEST);
+        break;
+      case 2:
+        const { topicSortType } = this.data;
+        const result = topicRankType.find(({ text }) => text === topicSortType);
+        this._loadTopicList(0, result.type);
+        break;
+      default:
+        this.setData({
+          publishBtnShow: false
+        });
+        break;
+    }
+  },
+
   // 加载社区动态
   _loadCommunityMoments(start = 0, type = rankType.COMPREHENSIVE) {
     if (start === 0) {
@@ -126,10 +152,20 @@ Page({
         const {
           result: { data }
         } = res;
-        this.setData({
-          topicList: data
-        });
+        const { topicList } = this.data;
+        if (data.length > 0) {
+          this.setData({
+            init: false,
+            [`topicList[${topicList.length}]`]: data
+          });
+        } else {
+          this.setData({
+            init: false,
+            isAll: true
+          });
+        }
         wx.hideLoading();
+        wx.stopPullDownRefresh();
       });
   },
 
@@ -185,31 +221,6 @@ Page({
     this.setData({
       loginShow: true
     });
-  },
-
-  // 刷新数据
-  _refreshData(navbarActiveIndex = 0) {
-    this.setData({
-      navbarActiveIndex
-    });
-    switch (navbarActiveIndex) {
-      case 0:
-        this._loadCommunityMoments();
-        break;
-      case 1:
-        this._loadCommunityMoments(0, rankType.NEWEST);
-        break;
-      case 2:
-        const { topicSortType } = this.data;
-        const result = topicRankType.find(({ text }) => text === topicSortType);
-        this._loadTopicList(0, result.type);
-        break;
-      default:
-        this.setData({
-          publishBtnShow: false
-        });
-        break;
-    }
   },
 
   handleClick(event) {
@@ -327,7 +338,7 @@ Page({
             this.setData({
               topicSortType: itemList[tapIndex]
             });
-            this._refreshData(navbarActiveIndex)
+            this._refreshData(navbarActiveIndex);
           }
         }
       });
@@ -365,9 +376,28 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function() {
-    const { momentList, isAll } = this.data;
+    const { navbarActiveIndex, momentList, topicList, isAll } = this.data;
     if (!isAll) {
-      this._loadCommunityMoments(momentList.length * MAX_COUNT);
+      switch (navbarActiveIndex) {
+        case 0:
+          this._loadCommunityMoments(momentList.length * MAX_COUNT);
+          break;
+        case 1:
+          this._loadCommunityMoments(
+            momentList.length * MAX_COUNT,
+            rankType.NEWEST
+          );
+          break;
+        case 2:
+          const { topicSortType } = this.data;
+          const result = topicRankType.find(
+            ({ text }) => text === topicSortType
+          );
+          this._loadTopicList(topicList.length, result.type);
+          break;
+        default:
+          break;
+      }
     }
   },
 

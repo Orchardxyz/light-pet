@@ -12,44 +12,49 @@
             </block>
         </view>
     </view>
-    <!-- 动态列表 -->
-    <view wx:if="{{navbarActiveIndex === 0 || navbarActiveIndex === 1}}" class="moment-list">
-        <block wx:for="{{momentList}}" wx:for-item="momentItem" wx:key="index">
-            <view wx:for="{{momentItem}}" wx:key="index">
-                <view class="moment-panel">
-                    <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
-                    <LP-moment-operation moment="{{item}}" />
+    <!-- tab内容页 -->
+    <view class="navbar-content">
+        <!-- 社区动态列表 -->
+        <view wx:if="{{navbarActiveIndex === 0 || navbarActiveIndex === 1}}" class="moment-list">
+            <block wx:for="{{momentList}}" wx:for-item="momentItem" wx:key="index">
+                <view wx:for="{{momentItem}}" wx:key="index">
+                    <view class="moment-panel">
+                        <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
+                        <LP-moment-operation moment="{{item}}" />
+                    </view>
+                </view>
+            </block>
+        </view>
+        <!-- 爱宠话题 -->
+        <view wx:if="{{navbarActiveIndex === 2}}" class="pet-topic">
+            <view class="topic-classic">
+                <navigator class="topic-wrapper" url="../topic/topic-publish/topic-publish?type=STORY">
+                    <i class="iconfont icon-movie" style="background-color: #FFFFCC; color: #4CB4E7" />
+                    <text>微故事</text>
+                </navigator>
+                <navigator class="topic-wrapper" url="../topic/topic-publish/topic-publish?type=KNOWLEDGE">
+                    <i class="iconfont icon-zhishicopy" style="background-color: #FFCC99; color: #663300" />
+                    <text>微知识</text>
+                </navigator>
+                <navigator class="topic-wrapper" url="../topic/topic-publish/topic-publish?type=CUSTOM">
+                    <i class="iconfont icon-topic1" style="background-color: #CCFFFF; color: #009A61" />
+                    <text>自定义</text>
+                </navigator>
+            </view>
+            <view class="screen-wrapper">
+                <text style="color: #3399CC;">{{topicSortType}}</text>
+                <view class="screen" bind:tap="openScreenMenu">
+                    <text>筛选</text>
+                    <i class="iconfont icon-screen" />
                 </view>
             </view>
-        </block>
-    </view>
-    <!-- 爱宠话题 -->
-    <view wx:if="{{navbarActiveIndex === 2}}" class="pet-topic">
-        <view class="topic-classic">
-            <navigator class="topic-wrapper" url="../topic/topic-publish/topic-publish?type=STORY">
-                <i class="iconfont icon-movie" style="background-color: #FFFFCC; color: #4CB4E7" />
-                <text>微故事</text>
-            </navigator>
-            <navigator class="topic-wrapper" url="../topic/topic-publish/topic-publish?type=KNOWLEDGE">
-                <i class="iconfont icon-zhishicopy" style="background-color: #FFCC99; color: #663300" />
-                <text>微知识</text>
-            </navigator>
-            <navigator class="topic-wrapper" url="../topic/topic-publish/topic-publish?type=CUSTOM">
-                <i class="iconfont icon-topic1" style="background-color: #CCFFFF; color: #009A61" />
-                <text>自定义</text>
-            </navigator>
-        </view>
-        <view class="screen-wrapper">
-            <text style="color: #3399CC;">{{topicSortType}}</text>
-            <view class="screen" bind:tap="openScreenMenu">
-                <text>筛选</text>
-                <i class="iconfont icon-screen" />
+            <view class="topic-list">
+                <block wx:for="{{topicList}}" wx:for-item="topicItem" wx:key="index">
+                    <view wx:for="{{topicItem}}" wx:key="index">
+                        <LP-topic-card topic="{{item}}" />
+                    </view>
+                </block>
             </view>
-        </view>
-        <view class="topic-list">
-            <block wx:for="{{topicList}}" wx:key="index">
-                <LP-topic-card topic="{{item}}" />
-            </block>
         </view>
     </view>
     <!-- 发布动态的悬浮钮 -->
