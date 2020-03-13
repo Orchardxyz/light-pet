@@ -331,10 +331,10 @@ Page({
   // 查看更多
   handleLinkMore(event) {
     const {
-      detail: { commentId, momentId }
+      detail: { commentId, momentId: topicId }
     } = event;
     wx.navigateTo({
-      url: `../comment-detail/comment-detail?momentId=${momentId}&commentId=${commentId}`
+      url: `../comment-detail/comment-detail?topicId=${topicId}&commentId=${commentId}`
     });
   },
 

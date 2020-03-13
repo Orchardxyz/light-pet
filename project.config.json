@@ -161,6 +161,13 @@
 					"pathName": "pages/topic/topic-detail/topic-detail",
 					"query": "topicId=1583924582460_0.25155515383003313_33571665-1583924584196_1_63670",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "1.6 话题评论详情",
+					"pathName": "pages/topic/comment-detail/comment-detail",
+					"query": "topicId=1583924582460_0.25155515383003313_33571665-1583924584196_1_63670&commentId=1584086205894_0.9508044166570577_33612339-1584086206399_2_34009",
+					"scene": null
 				}
 			]
 		}

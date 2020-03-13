@@ -10,6 +10,6 @@
       <text>：{{comment.content}}</text>
     </view>
     <view wx:else class="comment-content">{{comment.content}}</view>
-    <view class="comment-time">{{comment.createTime}}</view>
+    <view class="comment-time">{{createTime}}</view>
   </view>
 </view>

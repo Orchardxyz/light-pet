@@ -1,7 +1,6 @@
 {
   "component": true,
   "usingComponents": {
-    "avatar": "/components/UI/avatar/avatar",
-    "divider": "/components/UI/divider/divider"
+    "avatar": "/components/UI/avatar/avatar"
   }
 }

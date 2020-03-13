@@ -1,13 +1,26 @@
+import formatTime from "../../../utils/formatTime";
+
 Component({
-  data: {},
+  data: {
+    createTime: ""
+  },
   properties: {
     comment: Object,
-    isChild: Boolean,
+    isChild: Boolean
+  },
+  observers: {
+    ["comment.createTime"](time) {
+      if (time) {
+        this.setData({
+          createTime: formatTime(new Date(time))
+        });
+      }
+    }
   },
   methods: {
     handleComment() {
-      const { comment } = this.properties
-      this.triggerEvent('onComment', comment)
+      const { comment } = this.properties;
+      this.triggerEvent("onComment", comment);
     }
   }
-})
+});

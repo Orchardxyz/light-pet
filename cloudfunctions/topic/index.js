@@ -238,8 +238,8 @@ exports.main = async (event, context) => {
   // 获取评论详情
   app.router("/comment/detail", async ctx => {
     const { commentId } = event;
-    const result = await topicCommentCollection.doc(commentId).get();
-    ctx.body = result;
+    const { data: comment } = await topicCommentCollection.doc(commentId).get();
+    ctx.body = comment;
   });
 
   return app.serve();

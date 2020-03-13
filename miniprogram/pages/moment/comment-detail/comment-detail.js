@@ -75,12 +75,6 @@ Page({
         const {
           result: { data: comment }
         } = res;
-        const { createTime, children = [] } = comment;
-        comment.createTime = formatTime(new Date(createTime));
-        for (let i = 0; i < children.length; i++) {
-          const { createTime } = children[i];
-          children[i].createTime = formatTime(new Date(createTime));
-        }
         currentCommentId = commentId
         this.setData({ comment });
         wx.hideLoading();

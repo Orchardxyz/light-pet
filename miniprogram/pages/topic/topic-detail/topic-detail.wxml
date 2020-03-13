@@ -50,7 +50,7 @@
 <view wx:if="{{commentList.length > 0}}" class="container-bottom">
   <block wx:for="{{commentList}}" wx:for-item="commentItem" wx:key="index">
     <view wx:for="{{commentItem}}" wx:key="index">
-      <LP-comment-overview comment="{{item}}" momentId="{{topic._id}}" bind:onComment="handleReply" />
+      <LP-comment-overview comment="{{item}}" momentId="{{topic._id}}" bind:onComment="handleReply" bind:onLinkMore="handleLinkMore" />
     </view>
   </block>
   <LP-bottom-line wx:if="{{isAll}}" />

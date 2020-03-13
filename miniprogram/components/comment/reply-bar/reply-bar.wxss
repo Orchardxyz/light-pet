@@ -5,7 +5,7 @@
   background-color: #fff;
 }
 
-.operation {
+.reply {
   display: flex;
   justify-content: space-around;
   padding: 15rpx 5rpx;
@@ -41,9 +41,4 @@
 }
 .weui-demo-dialog_show .weui-half-screen-dialog {
   transform: translateY(0);
-}
-
-/* iconfont */
-.icon-like3 {
-  color: #ff1f18;
 }

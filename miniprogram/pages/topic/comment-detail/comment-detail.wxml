@@ -1,0 +1,6 @@
+<LP-comment-card bind:onComment="handleReply" comment="{{comment}}" />
+<block wx:for="{{comment.children}}" wx:key="index">
+    <LP-comment-card bind:onComment="handleSecReply" comment="{{item}}" isChild="{{true}}" />
+</block>
+<LP-bottom-line />
+<LP-reply-bar isOpen="{{isReplyOpen}}" placeholderText="{{placeholderText}}" bind:onReply="onReply" />
