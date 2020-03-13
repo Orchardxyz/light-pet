@@ -1,11 +1,12 @@
-import formatTime from '../../../utils/formatTime'
+import formatTime from "../../../utils/formatTime";
+import getIconStyle from "../../../utils/topic/getIconStyle";
 
 Component({
   data: {
     title: "",
     icon: "",
     color: "",
-    createTime: ''
+    createTime: ""
   },
   properties: {
     topic: Object
@@ -24,20 +25,7 @@ Component({
       }
     },
     ["topic.type"](type) {
-      let icon = "";
-      let color = "";
-      switch (type) {
-        case "KNOWLEDGE":
-          icon = "zhishicopy";
-          color = "#663300";
-          break;
-        case "STORY":
-          icon = "movie";
-          color = "#4CB4E7";
-          break;
-        default:
-          break;
-      }
+      const { icon, color } = getIconStyle(type);
       this.setData({
         icon,
         color
@@ -49,7 +37,7 @@ Component({
           createTime: formatTime(new Date(time))
         });
       }
-    },
+    }
   },
   methods: {}
 });

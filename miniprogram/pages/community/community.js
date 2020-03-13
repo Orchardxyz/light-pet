@@ -35,7 +35,7 @@ Page({
     init: true,
     loginShow: false,
     navbarActiveIndex: 0,
-    navbarTitle: ["热门动态", "实时动态", "宠物话题"],
+    navbarTitle: ["热门动态", "实时动态", "话题中心"],
     momentList: [[]],
     topicList: [],
     topicSortType: "综合排序", // 排序方式
@@ -52,7 +52,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function() {
-    this._refreshData(2);
+    this._refreshData();
   },
 
   // 初始化动态列表
@@ -78,14 +78,14 @@ Page({
         this._loadCommunityMoments(0, rankType.NEWEST);
         break;
       case 2:
+        this.setData({
+          publishBtnShow: false
+        });
         const { topicSortType } = this.data;
         const result = topicRankType.find(({ text }) => text === topicSortType);
         this._loadTopicList(0, result.type);
         break;
       default:
-        this.setData({
-          publishBtnShow: false
-        });
         break;
     }
   },
@@ -149,14 +149,12 @@ Page({
         }
       })
       .then(res => {
-        const {
-          result: { data }
-        } = res;
+        const { result } = res;
         const { topicList } = this.data;
-        if (data.length > 0) {
+        if (result.length > 0) {
           this.setData({
             init: false,
-            [`topicList[${topicList.length}]`]: data
+            [`topicList[${topicList.length}]`]: result
           });
         } else {
           this.setData({
@@ -323,6 +321,29 @@ Page({
     }
   },
 
+  // 进入话题详情页
+  entailTopicDetail(event) {
+    const {
+      currentTarget: {
+        dataset: { topicid: topicId }
+      }
+    } = event;
+    // 增加浏览量
+    wx.cloud
+      .callFunction({
+        name: "topic",
+        data: {
+          $url: "/view/increase",
+          topicId
+        }
+      })
+      .then(() => {
+        wx.navigateTo({
+          url: `../topic/topic-detail/topic-detail?topicId=${topicId}`
+        });
+      });
+  },
+
   // 打开筛选菜单
   openScreenMenu() {
     const { navbarActiveIndex } = this.data;
@@ -393,7 +414,7 @@ Page({
           const result = topicRankType.find(
             ({ text }) => text === topicSortType
           );
-          this._loadTopicList(topicList.length, result.type);
+          this._loadTopicList(topicList.length * MAX_TOPIC, result.type);
           break;
         default:
           break;

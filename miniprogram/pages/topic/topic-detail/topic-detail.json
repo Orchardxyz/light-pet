@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "avatar": "/components/UI/avatar/avatar",
+    "no-data": "/components/UI/no-data/no-data",
+    "LP-comment-overview": "/components/comment/comment-overview/comment-overview",
+    "LP-bottom-operation": "/components/topic/bottom-operation/bottom-operation",
+    "LP-bottom-line": "/components/bottom-line/bottom-line"
+  }
+}

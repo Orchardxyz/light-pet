@@ -21,7 +21,7 @@
           <text>{{createTime}}</text>
         </view>
         <view class="item">
-          <i class="iconfont icon-speechbubble" />
+          <i class="iconfont icon-comment1" />
           <text>{{topic.commentCount}}</text>
         </view>
         <view class="item">

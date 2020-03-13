@@ -1,8 +1,21 @@
+import formatTime from '../../../utils/formatTime'
+
 Component({
-  data: {},
+  data: {
+    createTime: ''
+  },
   properties: {
     comment: Object,
     momentId: String
+  },
+  observers: {
+    ['comment.createTime'](time) {
+      if (time) {
+        this.setData({
+          createTime: formatTime(new Date(time))
+        })
+      }
+    }
   },
   methods: {
     handleLinkMore() {
@@ -10,9 +23,7 @@ Component({
         comment: { _id },
         momentId
       } = this.properties;
-      wx.navigateTo({
-        url: `../comment-detail/comment-detail?momentId=${momentId}&commentId=${_id}`
-      });
+      this.triggerEvent("onLinkMore", { momentId, commentId: _id });
     },
 
     // 一级评论
@@ -22,7 +33,7 @@ Component({
           dataset: { comment, commentid: commentId }
         }
       } = event;
-      this.triggerEvent("onComment", {comment, commentId});
+      this.triggerEvent("onComment", { comment, commentId });
     }
   }
 });

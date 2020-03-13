@@ -51,7 +51,7 @@
             <view class="topic-list">
                 <block wx:for="{{topicList}}" wx:for-item="topicItem" wx:key="index">
                     <view wx:for="{{topicItem}}" wx:key="index">
-                        <LP-topic-card topic="{{item}}" />
+                        <LP-topic-card topic="{{item}}" data-topicid="{{item._id}}" bind:tap="entailTopicDetail" />
                     </view>
                 </block>
             </view>

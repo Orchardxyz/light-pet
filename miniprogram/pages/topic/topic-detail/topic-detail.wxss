@@ -1,0 +1,95 @@
+.container-top {
+  padding: 10rpx 15rpx;
+  background-color: #fff;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+}
+
+.user .right {
+  margin-left: 5rpx;
+}
+
+.user .right .time {
+  font-size: 28rpx;
+  color: #939393;
+}
+
+.content {
+  background-color: #fff;
+}
+
+.content .content-img {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+.content .topic-content {
+  font-size: 36rpx;
+}
+.content-img image {
+  width: 230rpx;
+  height: 230rpx;
+  margin: 10rpx 10rpx 10rpx 0;
+}
+
+.info {
+  display: flex;
+  margin-top: 5rpx;
+}
+
+.info .item {
+  font-size: 30rpx;
+  color: #939393;
+  margin-right: 40rpx;
+}
+
+.item .iconfont {
+  font-size: 35rpx;
+  margin-right: 8rpx;
+}
+
+.comment-title-bar {
+  display: flex;
+  padding: 5rpx 15rpx;
+  font-size: 32rpx;
+}
+
+.comment-title-bar .sort {
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  padding: 0 0 0 10rpx;
+}
+
+.sort .iconfont {
+  font-size: 36rpx;
+  padding-left: 15rpx;
+}
+
+.container-bottom {
+  background-color: #fff;
+  padding: 10rpx 20rpx;
+  margin-bottom: 90rpx;
+}
+
+/* 回复框 */
+.weui-demo-dialog {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s;
+}
+.weui-half-screen-dialog {
+  transition: all 0.3s;
+  transform: translateY(100%);
+}
+.weui-demo-dialog_show {
+  visibility: visible;
+  opacity: 1;
+}
+.weui-demo-dialog_show .weui-half-screen-dialog {
+  transform: translateY(0);
+}

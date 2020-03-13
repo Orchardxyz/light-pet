@@ -154,6 +154,13 @@
 					"pathName": "pages/topic/topic-publish/topic-publish",
 					"query": "type=CUSTOM",
 					"scene": null
+				},
+				{
+					"id": 15,
+					"name": "1.5 话题详情页",
+					"pathName": "pages/topic/topic-detail/topic-detail",
+					"query": "topicId=1583924582460_0.25155515383003313_33571665-1583924584196_1_63670",
+					"scene": null
 				}
 			]
 		}

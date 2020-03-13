@@ -1,0 +1,90 @@
+<view class="container-top">
+  <view class="user">
+    <avatar source="{{topic.avatarUrl}}" width="80" height="80" />
+    <view class="right">
+      <view class="nickName">{{topic.nickName}}</view>
+      <view class="time">{{topic.createTime}}</view>
+    </view>
+  </view>
+  <view class="content">
+    <view wx:if="{{icon}}">
+      <view style="display: inline;">
+        <i class="iconfont icon-{{icon}}" style="color: {{color}}" />
+        <text style="color: {{color}}">{{topic.topic}}</text>
+      </view>
+      <text class="topic-content">{{topic.content}}</text>
+    </view>
+    <view wx:else>
+      <text style="color: {{color}}">#{{topic}}#</text>
+      {{topic.content}}
+    </view>
+    <view class="content-img">
+      <block wx:for="{{topic.enclosure}}" wx:key="index">
+        <image src="{{item}}" />
+      </block>
+    </view>
+    <view class="info">
+      <view class="item">
+        <i class="iconfont icon-comment1" />
+        <text>{{topic.commentCount}}</text>
+      </view>
+      <view class="item">
+        <i class="iconfont icon-view" />
+        <text>{{topic.viewCount}}</text>
+      </view>
+      <view class="item">
+        <i class="iconfont icon-like1" />
+        <text>{{topic.likeCount}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="comment-title-bar">
+  <view class="title" style="font-weight: bold;">讨论区</view>
+  <view class="sort" bind:tap="changeSortType">
+    <text>按时间</text>
+    <i wx:if="{{isAsc}}" class="iconfont icon-sort-asc" />
+    <i wx:else class="iconfont icon-sort-desc" />
+  </view>
+</view>
+<view wx:if="{{commentList.length > 0}}" class="container-bottom">
+  <block wx:for="{{commentList}}" wx:for-item="commentItem" wx:key="index">
+    <view wx:for="{{commentItem}}" wx:key="index">
+      <LP-comment-overview comment="{{item}}" momentId="{{topic._id}}" bind:onComment="handleReply" />
+    </view>
+  </block>
+  <LP-bottom-line wx:if="{{isAll}}" />
+</view>
+<no-data wx:else />
+<view class="container-operation">
+  <LP-bottom-operation bind:onLike="handleLike" bind:onComment="handleComment" isLike="{{topic.isLike}}" />
+</view>
+<!-- 回复评论 -->
+<view class="page">
+  <view class="page__bd">
+    <view class="weui-demo-dialog {{isReplyOpen ? 'weui-demo-dialog_show' : ''}}">
+      <view class="weui-mask" bindtap="closeReplyDialog"></view>
+      <view class="weui-half-screen-dialog">
+        <view class="weui-half-screen-dialog__hd">
+          <view class="weui-half-screen-dialog__hd__side">
+            <view bindtap="closeReplyDialog" class="weui-icon-btn weui-icon-btn_close">关闭</view>
+          </view>
+          <view class="weui-half-screen-dialog__hd__main">
+            <text class="weui-half-screen-dialog__title">回复评论</text>
+            <text class="weui-half-screen-dialog__subtitle">{{wordNum}}/{{MAX_REPLY_COUNT}}</text>
+          </view>
+        </view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell">
+            <view class="weui-cell__bd">
+              <textarea name="content" class="weui-textarea" placeholder="{{replyPlaceholder}}" maxlength="{{MAX_REPLY_COUNT}}" show-confirm-bar="{{false}}" bindinput="handleReplyInput" style="height: 3.3em" />
+            </view>
+          </view>
+        </view>
+        <view class="weui-half-screen-dialog__ft">
+          <button type="primary" class="weui-btn" bind:tap="submitReply">提交</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

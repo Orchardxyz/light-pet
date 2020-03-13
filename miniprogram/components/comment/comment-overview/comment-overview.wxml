@@ -11,7 +11,7 @@
     catch:tap="handleComment" 
     hover-class="comment-click">
     <view class="comment-content">{{comment.content}}</view>
-    <view class="comment-time">{{comment.createTime}}</view>
+    <view class="comment-time">{{createTime}}</view>
     <view class="comment-childrenWrapper" wx:if="{{comment.children.length > 0}}">
       <block wx:for="{{comment.children}}" wx:key="index">
         <view wx:if="{{item.type === 1}}" data-comment="{{item}}" data-commentid="{{comment._id}}" catch:tap="handleComment" hover-class="comment-click">

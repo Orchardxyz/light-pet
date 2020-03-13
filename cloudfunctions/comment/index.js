@@ -18,12 +18,21 @@ exports.main = async (event, context) => {
   // 评论列表
   app.router("list", async (ctx, next) => {
     const { momentId = "", start = 0, count = 10 } = event;
-    const commentList = await commentCollection
+    const { data: commentList } = await commentCollection
       .where({ momentId })
       .skip(start)
       .orderBy("createTime", "asc")
       .limit(count)
       .get();
+    commentList.map(comment => {
+      const { children = [] } = comment;
+      if (children.length > 2) {
+        comment.isAll = false;
+        comment.children.splice(2)
+      } else {
+        comment.isAll = true;
+      }
+    });
     ctx.body = commentList;
   });
 

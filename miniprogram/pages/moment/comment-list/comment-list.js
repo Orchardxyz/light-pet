@@ -77,28 +77,12 @@ Page({
       })
       .then(res => {
         const {
-          result: { data = [] }
+          result
         } = res;
-        // 格式化时间
-        for (let i = 0; i < data.length; i++) {
-          const { createTime } = data[i];
-          data[i].createTime = formatTime(new Date(createTime));
-          const { children = [] } = data[i];
-          // 只展示两条以内的回复数据
-          const length = children.length <= 2 ? children.length : 2;
-          // 用来判断是否显示【查看更多】的字段
-          const isAll = children.length <= 2 ? true : false;
-          data[i].isAll = isAll;
-          children.splice(length);
-          for (let i = 0; i < length; i++) {
-            const { createTime } = children[i];
-            children[i].createTime = formatTime(new Date(createTime));
-          }
-        }
         const { commentList } = this.data;
-        if (data.length > 0) {
+        if (result.length > 0) {
           this.setData({
-            [`commentList[${commentList.length}]`]: data
+            [`commentList[${commentList.length}]`]: result
           });
         } else {
           this.setData({
@@ -124,6 +108,7 @@ Page({
     });
   },
 
+  // 回复
   handleReply(event) {
     const {
       detail: { commentId, comment }
@@ -140,6 +125,16 @@ Page({
       commentShow: true,
       placeholderTxt: `回复@${nickName}：`,
       defaultCommentValue: DEFAULT_COMMENT
+    });
+  },
+
+  // 查看更多
+  handleLinkMore(event) {
+    const {
+      detail: { commentId, momentId }
+    } = event;
+    wx.navigateTo({
+      url: `../comment-detail/comment-detail?momentId=${momentId}&commentId=${commentId}`
     });
   },
 

@@ -160,7 +160,7 @@ Page({
       });
       const { nickName, avatarUrl } = app.getUserInfo();
       if (msgCheck(topic + title + content)) {
-        const fileIDs = [];
+        let fileIDs = [];
         let coverID = "";
         const reg = /\.\w+$/;
         files.map(async img => {
@@ -172,7 +172,7 @@ Page({
                 1000000}${suffix}`,
               filePath: img,
             });
-            fileIDs.concat(fileID)
+            fileIDs.push(fileID)
           } else {
             wx.hideLoading();
             secWarn("img");
