@@ -23,6 +23,18 @@ exports.main = async (event, context) => {
     MOST_VIEW: "MOST_VIEW"
   };
 
+  // 计算综合排序权重
+  const updateWeight = async topicId => {
+    const { data: topic } = await momentCollection.doc(topicId).get();
+    const { likeCount, commentCount, viewCount } = topic;
+    const weight = likeCount * 0.5 + commentCount * 0.3 + viewCount * 0.2;
+    await petTopicCollection.doc(topicId).update({
+      data: {
+        weight
+      }
+    });
+  };
+
   // 获取数据
   app.router("getAll", async ctx => {
     const { type = rankType.COMPREHENSIVE, start = 0, count = 10 } = event;
@@ -32,9 +44,7 @@ exports.main = async (event, context) => {
         result = await petTopicCollection
           .skip(start)
           .limit(count)
-          .orderBy("likeCount", "desc")
-          .orderBy("commentCount", "desc")
-          .orderBy("viewCount", "desc")
+          .orderBy("weight", "desc")
           .get();
         break;
       case rankType.NEWEST:
@@ -93,6 +103,7 @@ exports.main = async (event, context) => {
         viewCount: command.inc(1)
       }
     });
+    updateWeight(topicId)
     ctx.body = result;
   });
 
@@ -107,6 +118,7 @@ exports.main = async (event, context) => {
         commentCount: 0,
         likeCount: 0,
         viewCount: 0, // 浏览量
+        weight: 0,
         likes: [],
         stars: [],
         createTime: db.serverDate()
@@ -125,6 +137,7 @@ exports.main = async (event, context) => {
         likeCount: command.inc(1)
       }
     });
+    updateWeight(topicId)
 
     ctx.body = result;
   });
@@ -145,6 +158,7 @@ exports.main = async (event, context) => {
         likeCount: command.inc(-1)
       }
     });
+    updateWeight(topicId)
 
     ctx.body = result;
   });
@@ -173,6 +187,7 @@ exports.main = async (event, context) => {
         commentCount: command.inc(1)
       }
     });
+    updateWeight(topicId)
 
     ctx.body = result;
   });
@@ -210,6 +225,7 @@ exports.main = async (event, context) => {
         commentCount: command.inc(1)
       }
     });
+    updateWeight(currentTopicId)
 
     ctx.body = result;
   });

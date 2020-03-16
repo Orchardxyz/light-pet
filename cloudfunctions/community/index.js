@@ -25,10 +25,27 @@ exports.main = async (event, context) => {
     MOST_VIEW: "MOST_VIEW"
   };
 
+  // 计算综合排序权重
+  const updateWeight = async momentId => {
+    const { data: moment } = await momentCollection.doc(momentId).get();
+    const { likeCount, commentCount, viewCount } = moment;
+    const weight = likeCount * 0.5 + commentCount * 0.3 + viewCount * 0.2;
+    await momentCollection.doc(momentId).update({
+      data: {
+        weight
+      }
+    });
+  };
+
   // 获取社区所有动态
   app.router("getAllMomentList", async (ctx, next) => {
     const { OPENID } = wxContext;
-    const { type = rankType.COMPREHENSIVE, keyword = "", start = 0, count = 10 } = event;
+    const {
+      type = rankType.COMPREHENSIVE,
+      keyword = "",
+      start = 0,
+      count = 10
+    } = event;
     // 会出现进入路由时OPENID还没有读到的情况，所以要在这里先执行一次
     let condition = {};
     // 支持模糊查询
@@ -46,9 +63,7 @@ exports.main = async (event, context) => {
         .where(condition)
         .skip(start)
         .limit(count)
-        .orderBy("likeCount", "desc")
-        .orderBy("commentCount", "desc")
-        .orderBy("viewCount", "desc")
+        .orderBy("weight", "desc")
         .get()
         .then(res => {
           return res.data;
@@ -112,6 +127,7 @@ exports.main = async (event, context) => {
         commentCount: 0,
         likeCount: 0,
         viewCount: 0, // 浏览量
+        weight: 0,
         likes: [],
         stars: [],
         createTime: db.serverDate()
@@ -145,6 +161,7 @@ exports.main = async (event, context) => {
         viewCount: command.inc(1)
       }
     });
+    updateWeight(momentId)
     ctx.body = result;
   });
 
@@ -170,6 +187,7 @@ exports.main = async (event, context) => {
         likeCount: command.inc(1)
       }
     });
+    updateWeight(momentId)
 
     return result;
   });
@@ -199,6 +217,7 @@ exports.main = async (event, context) => {
         likeCount: command.inc(-1)
       }
     });
+    updateWeight(momentId)
 
     return result;
   });
@@ -272,6 +291,7 @@ exports.main = async (event, context) => {
         commentCount: command.inc(1)
       }
     });
+    updateWeight(momentId)
 
     ctx.body = result;
   });
@@ -309,6 +329,7 @@ exports.main = async (event, context) => {
         commentCount: command.inc(1)
       }
     });
+    updateWeight(currentMomentId)
 
     ctx.body = result;
   });
