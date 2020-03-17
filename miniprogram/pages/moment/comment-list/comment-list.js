@@ -1,4 +1,3 @@
-import formatTime from "../../../utils/formatTime";
 import {
   DEFAULT_PLACHOLDER,
   DEFAULT_COMMENT
@@ -13,6 +12,7 @@ import secWarn from "../../../utils/security/secWarn";
 const app = getApp();
 
 let MAX_COUNT = 10;
+let replyContent = "";
 
 Page({
   /**
@@ -22,12 +22,14 @@ Page({
     momentId: "",
     moment: {},
     currentComment: {},
-    commentList: [],
-    isReply: false,
-    commentShow: false,
-    placeholderTxt: DEFAULT_PLACHOLDER,
-    defaultCommentValue: DEFAULT_COMMENT,
     currentCommentId: "", // 当前要评论的留言id
+    commentList: [],
+    // 回复
+    isReplyOpen: false,
+    MAX_REPLY_COUNT: 200,
+    wordNum: 0,
+    replyPlaceholder: DEFAULT_PLACHOLDER, // 回复框中的默认文字
+    defaultReplyValue: DEFAULT_COMMENT, // 回复框默认值
     replyUser: {},
     commentLevel: COMMENT,
     isAll: false
@@ -62,6 +64,9 @@ Page({
 
   // 加载评论列表
   _getCommentList(momentId, start = 0) {
+    if (start === 0) {
+      this._initData();
+    }
     wx.showLoading({
       title: "拼命加载中",
       mask: true
@@ -76,9 +81,7 @@ Page({
         }
       })
       .then(res => {
-        const {
-          result
-        } = res;
+        const { result } = res;
         const { commentList } = this.data;
         if (result.length > 0) {
           this.setData({
@@ -97,10 +100,9 @@ Page({
   // 初始化数据
   _initData() {
     this.setData({
-      isReply: false,
-      commentShow: false,
-      placeholderTxt: DEFAULT_PLACHOLDER,
-      defaultCommentValue: DEFAULT_COMMENT,
+      commentList: [],
+      replyPlaceholder: DEFAULT_PLACHOLDER, // 回复框中的默认文字
+      defaultReplyValue: DEFAULT_COMMENT, // 回复框默认值
       currentCommentId: "", // 当前要评论的留言id
       replyUser: {},
       commentLevel: COMMENT,
@@ -108,23 +110,42 @@ Page({
     });
   },
 
+  closeReplyDialog() {
+    this.setData({
+      isReplyOpen: false,
+      wordNum: 0,
+      replyPlaceholder: DEFAULT_PLACHOLDER,
+      defaultReplyValue: DEFAULT_COMMENT
+    });
+    replyContent = "";
+  },
+
+  handleReplyInput(event) {
+    const {
+      detail: { value }
+    } = event;
+    replyContent = value;
+    this.setData({
+      wordNum: value.length
+    });
+  },
+
   // 回复
   handleReply(event) {
     const {
-      detail: { commentId, comment }
+      detail: { comment, commentId }
     } = event;
     const { nickName, avatarUrl, _openid, type } = comment;
     const commentLevel = type === 0 ? FIRST_REPLY : SECOND_REPLY;
     const replyUser = type === 0 ? {} : { _openid, nickName, avatarUrl };
     this.setData({
+      isReplyOpen: true,
       currentComment: comment,
+      currentCommentId: commentId,
       commentLevel,
       replyUser,
-      currentCommentId: commentId,
-      isReply: true,
-      commentShow: true,
-      placeholderTxt: `回复@${nickName}：`,
-      defaultCommentValue: DEFAULT_COMMENT
+      replyPlaceholder: `回复@${nickName}：`,
+      defaultReplyValue: DEFAULT_COMMENT
     });
   },
 
@@ -139,28 +160,25 @@ Page({
   },
 
   // 回复
-  onReply(event) {
-    const { detail } = event;
-
-    if (detail.trim() === "") {
+  onReply() {
+    if (replyContent.trim() === "") {
       wx.showModal({
         title: "回复内容不能为空!"
       });
       return;
     }
-
     const { momentId, currentCommentId, commentLevel, replyUser } = this.data;
     wx.showLoading({
       title: "发表中"
     });
-    if (msgCheck(detail)) {
+    if (msgCheck(replyContent)) {
       const userInfo = app.getUserInfo();
       const reply = {
         ...userInfo,
         replyUser,
         currentMomentId: momentId,
         currentCommentId,
-        content: detail,
+        content: replyContent,
         type: commentLevel
       };
       wx.cloud.callFunction({
@@ -190,8 +208,9 @@ Page({
               { momentId: _id, commentId: currentCommentId },
               content,
               _img,
-              detail
+              replyContent
             );
+            this.closeReplyDialog();
             this._initData();
             this._getCommentList(momentId);
             wx.hideLoading();

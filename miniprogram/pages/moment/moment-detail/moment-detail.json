@@ -1,7 +1,7 @@
 {
   "usingComponents": {
-    "LP-moment-card": "/components/moment-card/moment-card",
-    "LP-comment-bar": "/components/comment/comment-bar/comment-bar",
+    "LP-moment-card": "/components/moment/moment-card/moment-card",
+    "moment-bottom-operation": "/components/moment/bottom-operation/bottom-operation",
     "no-data": "/components/UI/no-data/no-data"
   },
   "navigationBarTitleText": "详情"

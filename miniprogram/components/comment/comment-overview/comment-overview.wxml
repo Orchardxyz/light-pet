@@ -8,17 +8,17 @@
     style="padding-bottom: {{comment.children.length > 0 ? 30 : 0 }}rpx" 
     data-comment="{{comment}}" 
     data-commentid="{{comment._id}}" 
-    catch:tap="handleComment" 
+    catch:tap="handleReply" 
     hover-class="comment-click">
     <view class="comment-content">{{comment.content}}</view>
     <view class="comment-time">{{createTime}}</view>
     <view class="comment-childrenWrapper" wx:if="{{comment.children.length > 0}}">
       <block wx:for="{{comment.children}}" wx:key="index">
-        <view wx:if="{{item.type === 1}}" data-comment="{{item}}" data-commentid="{{comment._id}}" catch:tap="handleComment" hover-class="comment-click">
+        <view wx:if="{{item.type === 1}}" data-comment="{{item}}" data-commentid="{{comment._id}}" catch:tap="handleLinkMore" hover-class="comment-click">
           <text style="color: #3399CC">{{item.nickName}}</text>
           <text>：{{item.content}}</text>
         </view>
-        <view wx:elif="{{item.type === 2}}" data-comment="{{item}}" data-commentid="{{comment._id}}" catch:tap="handleComment" hover-class="comment-click">
+        <view wx:elif="{{item.type === 2}}" data-comment="{{item}}" data-commentid="{{comment._id}}" catch:tap="handleLinkMore" hover-class="comment-click">
           <text style="color: #3399CC">{{item.nickName}}</text>
           <text>回复</text>
           <text style="color: #3399CC">@{{item.replyUser.nickName}}</text>

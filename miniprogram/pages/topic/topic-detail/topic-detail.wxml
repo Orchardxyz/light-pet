@@ -15,7 +15,7 @@
       <text class="topic-content">{{topic.content}}</text>
     </view>
     <view wx:else>
-      <text style="color: {{color}}">#{{topic}}#</text>
+      <text style="color: {{color}}">#{{topic.topic}}#</text>
       {{topic.content}}
     </view>
     <view class="content-img">
@@ -50,7 +50,7 @@
 <view wx:if="{{commentList.length > 0}}" class="container-bottom">
   <block wx:for="{{commentList}}" wx:for-item="commentItem" wx:key="index">
     <view wx:for="{{commentItem}}" wx:key="index">
-      <LP-comment-overview comment="{{item}}" momentId="{{topic._id}}" bind:onComment="handleReply" bind:onLinkMore="handleLinkMore" />
+      <LP-comment-overview comment="{{item}}" momentId="{{topic._id}}" bind:onReply="handleReply" bind:onLinkMore="handleLinkMore" />
     </view>
   </block>
   <LP-bottom-line wx:if="{{isAll}}" />
@@ -77,7 +77,7 @@
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell">
             <view class="weui-cell__bd">
-              <textarea name="content" class="weui-textarea" placeholder="{{replyPlaceholder}}" maxlength="{{MAX_REPLY_COUNT}}" show-confirm-bar="{{false}}" bindinput="handleReplyInput" style="height: 3.3em" />
+              <textarea name="content" fixed="{{true}}" class="weui-textarea" placeholder="{{replyPlaceholder}}" maxlength="{{MAX_REPLY_COUNT}}" show-confirm-bar="{{false}}" bindinput="handleReplyInput" style="height: 3.3em" />
             </view>
           </view>
         </view>

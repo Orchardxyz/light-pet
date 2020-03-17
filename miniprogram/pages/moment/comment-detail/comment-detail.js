@@ -1,4 +1,3 @@
-import formatTime from "../../../utils/formatTime";
 import {
   DEFAULT_PLACHOLDER,
   DEFAULT_COMMENT
@@ -12,7 +11,7 @@ import secWarn from "../../../utils/security/secWarn";
 
 const app = getApp();
 
-let currentCommentId = ''
+let currentCommentId = "";
 
 Page({
   /**
@@ -22,11 +21,10 @@ Page({
     comment: {},
     moment: {},
     momentId: "",
-    isReply: false,
-    placeholderTxt: DEFAULT_PLACHOLDER,
-    commentShow: false,
+    isReplyOpen: false,
+    placeholderText: DEFAULT_PLACHOLDER,
     defaultCommentValue: DEFAULT_COMMENT,
-    commentLevel: 0,
+    replyLevel: FIRST_REPLY,
     replyUser: {}
   },
 
@@ -75,7 +73,7 @@ Page({
         const {
           result: { data: comment }
         } = res;
-        currentCommentId = commentId
+        currentCommentId = commentId;
         this.setData({ comment });
         wx.hideLoading();
       });
@@ -89,50 +87,52 @@ Page({
       placeholderTxt: DEFAULT_PLACHOLDER,
       commentShow: false,
       defaultCommentValue: DEFAULT_COMMENT,
-      commentLevel: 0,
+      replyLevel: FIRST_REPLY,
       replyUser: {}
+    });
+  },
+
+  _setPlaceholderText(nickName) {
+    this.setData({
+      placeholderText: `回复@${nickName}：`
     });
   },
 
   // 一级评论
   handleComment(event) {
     const {
-      detail: { _id, nickName }
+      detail: { nickName }
     } = event;
-    currentCommentId = _id
+    this._setPlaceholderText(nickName);
     this.setData({
-      isReply: true,
-      placeholderTxt: `回复@${nickName}：`,
-      commentShow: true,
-      defaultCommentValue: DEFAULT_COMMENT,
-      commentLevel: FIRST_REPLY
+      isReplyOpen: true,
+      replyLevel: FIRST_REPLY,
+      replyUser: {}
     });
   },
 
   // 二级评论回复
   handleSecComment(event) {
     const {
-      detail: { _openid, avatarUrl, nickName }
+      detail: { _openid, nickName, avatarUrl }
     } = event;
     const replyUser = {
       _openid,
       avatarUrl,
       nickName
     };
+    this._setPlaceholderText(nickName);
     this.setData({
-      replyUser,
-      isReply: true,
-      placeholderTxt: `回复@${nickName}：`,
-      commentShow: true,
-      defaultCommentValue: DEFAULT_COMMENT,
-      commentLevel: SECOND_REPLY
+      isReplyOpen: true,
+      replyLevel: SECOND_REPLY,
+      replyUser
     });
   },
 
   // 直接输入评论
   onComment(event) {
     this.setData({
-      commentLevel: FIRST_REPLY
+      replyLevel: FIRST_REPLY
     });
     this.onReply(event);
   },
@@ -146,9 +146,9 @@ Page({
       });
       return;
     }
-    const { momentId, commentLevel, replyUser } = this.data;
+    const { momentId, replyLevel, replyUser } = this.data;
     wx.showLoading({
-      title: "发表中"
+      title: "提交中"
     });
     if (msgCheck(detail)) {
       const userInfo = app.getUserInfo();
@@ -158,7 +158,7 @@ Page({
         currentMomentId: momentId,
         currentCommentId,
         content: detail,
-        type: commentLevel
+        type: replyLevel
       };
       wx.cloud.callFunction({
         name: "comment",
@@ -176,10 +176,8 @@ Page({
             const { content } = comment;
             const _img = img.length > 0 ? img[0] : "";
             notify(
-              commentLevel === FIRST_REPLY
-                ? comment._openid
-                : replyUser._openid,
-              commentLevel === FIRST_REPLY
+              replyLevel === FIRST_REPLY ? comment._openid : replyUser._openid,
+              replyLevel === FIRST_REPLY
                 ? comment.nickName
                 : replyUser.nickName,
               COMMENT_REPLY,
@@ -191,6 +189,7 @@ Page({
             );
             this._initData();
             this._getCommentDetail(currentCommentId);
+
             wx.hideLoading();
             wx.showToast({
               title: "回复成功!",

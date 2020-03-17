@@ -1,5 +1,21 @@
-@import "../../../style/comment-bar.wxss";
 page {
-    background-color: #FFF;
-    margin-bottom: 90rpx;
+  background-color: #fff;
+  margin-bottom: 90rpx;
+}
+
+.weui-demo-dialog {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s;
+}
+.weui-half-screen-dialog {
+  transition: all 0.3s;
+  transform: translateY(100%);
+}
+.weui-demo-dialog_show {
+  visibility: visible;
+  opacity: 1;
+}
+.weui-demo-dialog_show .weui-half-screen-dialog {
+  transform: translateY(0);
 }

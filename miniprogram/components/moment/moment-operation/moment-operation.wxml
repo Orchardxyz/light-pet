@@ -1,19 +1,26 @@
-<view class="container">
-  <view class="operation">
-    <view class="item" bind:tap="clickLike">
-      <i class="iconfont icon-{{isLike ? 'like3' : 'like2'}}}" />
-      <text>喜欢</text>
-    </view>
-    <view class="item" bind:tap="openCommentDialog">
-      <i class="iconfont icon-CommentEdit" />
-      <text>参与讨论</text>
-    </view>
+<view class="operation">
+  <view class="operation-item" bind:tap="handleComment">
+    <i class="iconfont icon-comment">
+      <text>{{moment.commentCount === 0 ? undefined : moment.commentCount}}</text>
+    </i>
+  </view>
+  <view class="operation-item" bind:tap="handleClickLike">
+    <i class="iconfont {{!moment.isLike ? 'icon-pet' : 'icon-pets'}}">
+      <text>{{moment.likeCount === 0 ? undefined : moment.likeCount}}</text>
+    </i>
+  </view>
+  <view class="operation-item">
+    <button size="mini" open-type="share" data-moment="{{moment}}" data-momentId="{{moment._id}}" class="operation-share-btn" hover-class="operation-share-btn-hover">
+      <i class="iconfont icon-fenxiang-1"></i>
+    </button>
   </view>
 </view>
+<!-- 登录 -->
+<LP-login modalShow="{{loginShow}}" />
 <!-- 发表评论 -->
 <view class="page">
   <view class="page__bd">
-    <view class="weui-demo-dialog {{isOpen ? 'weui-demo-dialog_show' : ''}}">
+    <view class="weui-demo-dialog {{commentShow ? 'weui-demo-dialog_show' : ''}}">
       <view class="weui-mask" bindtap="closeCommentDialog"></view>
       <view class="weui-half-screen-dialog">
         <view class="weui-half-screen-dialog__hd">
@@ -32,7 +39,6 @@
               name="content" 
               class="weui-textarea" 
               placeholder="请输入评论" 
-              value="{{defaultValue}}"
               maxlength="{{MAX_COUNT}}" 
               show-confirm-bar="{{false}}" 
               bindinput="handleInput"

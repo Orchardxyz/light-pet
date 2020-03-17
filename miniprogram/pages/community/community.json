@@ -1,8 +1,8 @@
 {
   "usingComponents": {
     "LP-login": "/components/login/login",
-    "LP-moment-card": "/components/moment-card/moment-card",
-    "LP-moment-operation": "/components/moment-operation/moment-operation",
+    "LP-moment-card": "/components/moment/moment-card/moment-card",
+    "LP-moment-operation": "/components/moment/moment-operation/moment-operation",
     "LP-bottom-line": "/components/bottom-line/bottom-line",
     "LP-topic-card": "/components/topic/topic-card/topic-card",
     "avatar": "/components/UI/avatar/avatar",

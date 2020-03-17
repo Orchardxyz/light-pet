@@ -1,8 +1,18 @@
 <view class="container">
-  <view class="comment">
+  <view class="operation">
     <view class="item" bind:tap="openCommentDialog">
       <i class="iconfont icon-comment" />
       <text>说一句</text>
+    </view>
+    <view class="item" bind:tap="clickLike">
+      <i class="iconfont icon-{{isLike ? 'pets' : 'pet'}}}" style="color: {{isLike ? '#FF1F18' : undefined}}"/>
+      <text>喜欢</text>
+    </view>
+    <view class="item">
+      <button size="mini" open-type="share" data-moment="{{moment}}" data-momentId="{{moment._id}}" class="operation-share-btn" style="background-color: #FFF;">
+        <i class="iconfont icon-fenxiang-1" />
+        <text style="font-size: 38rpx; font-weight: normal; color: #333;">分享</text>
+      </button>
     </view>
   </view>
 </view>

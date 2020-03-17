@@ -2,7 +2,7 @@ import formatTime from '../../../utils/formatTime'
 
 Component({
   data: {
-    createTime: ''
+    createTime: '',
   },
   properties: {
     comment: Object,
@@ -26,14 +26,13 @@ Component({
       this.triggerEvent("onLinkMore", { momentId, commentId: _id });
     },
 
-    // 一级评论
-    handleComment(event) {
+    handleReply(event) {
       const {
         currentTarget: {
           dataset: { comment, commentid: commentId }
         }
       } = event;
-      this.triggerEvent("onComment", { comment, commentId });
+      this.triggerEvent("onReply", { comment, commentId });
     }
   }
 });

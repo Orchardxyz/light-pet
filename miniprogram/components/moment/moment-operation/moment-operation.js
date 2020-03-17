@@ -1,44 +1,27 @@
-import { COMMENT } from "../../utils/commentType";
-import notify from "../../utils/notify/notify";
-import { LIKE, COMMENT_REPLY } from "../../utils/notify/notifyType";
-import notifyAction from "../../utils/notify/notifyAction";
-import msgCheck from "../../utils/security/msgCheck";
-import secWarn from "../../utils/security/secWarn";
+import { COMMENT } from "../../../utils/commentType";
+import notify from "../../../utils/notify/notify";
+import { LIKE, COMMENT_REPLY } from "../../../utils/notify/notifyType";
+import notifyAction from "../../../utils/notify/notifyAction";
+import msgCheck from "../../../utils/security/msgCheck";
+import secWarn from "../../../utils/security/secWarn";
 
 const app = getApp();
+
+let content = "";
 
 Component({
   data: {
     loginShow: false,
     commentShow: false,
     footerBottom: 0,
-    isLike: false,
-    likeCount: 0, // 点赞数
-    commentCount: 0, // 评论数
-    content: ""
+    wordNum: 0,
+    MAX_COUNT: 200
   },
   properties: {
     moment: Object
   },
   options: {
     styleIsolation: "apply-shared"
-  },
-  observers: {
-    ["moment.isLike"](isLike) {
-      this.setData({
-        isLike
-      });
-    },
-    ["moment.likeCount"](likeCount) {
-      this.setData({
-        likeCount
-      });
-    },
-    ["moment.commentCount"](commentCount) {
-      this.setData({
-        commentCount
-      });
-    }
   },
   methods: {
     _setLoginShow() {
@@ -47,28 +30,38 @@ Component({
       });
     },
 
-    /**
-     * 手机键盘弹起落下时的发布按钮部分样式变化
-     * @param {*} event
-     */
-    handleFocus(event) {
+    closeCommentDialog() {
       this.setData({
-        footerBottom: event.detail.height
+        commentShow: false,
+        wordNum: 0
       });
+      content = ''
     },
-    handleBlur() {
+
+    handleInput(event) {
+      const {
+        detail: { value }
+      } = event;
+      content = value;
       this.setData({
-        footerBottom: 0
+        wordNum: value.length
       });
     },
 
     // 点赞功能
     handleClickLike() {
       if (app.isLogin()) {
-        const { isLike, likeCount } = this.data;
         const {
-          moment: { _id: momentId, _openid, nickName, content, img = [] }
-        } = this.properties;
+          moment: {
+            _id: momentId,
+            _openid,
+            nickName,
+            content,
+            img = [],
+            isLike,
+            likeCount
+          }
+        } = this.data;
         const url = isLike ? "cancelLike" : "giveLike";
         wx.cloud
           .callFunction({
@@ -80,8 +73,8 @@ Component({
           })
           .then(() => {
             this.setData({
-              likeCount: isLike ? likeCount - 1 : likeCount + 1,
-              isLike: !isLike
+              ["moment.likeCount"]: isLike ? likeCount - 1 : likeCount + 1,
+              ["moment.isLike"]: !isLike
             });
             if (!isLike) {
               const _img = img.length > 0 ? img[0] : "";
@@ -120,12 +113,7 @@ Component({
     },
 
     // 评论
-    handleSubmit(event) {
-      let {
-        detail: {
-          value: { content }
-        }
-      } = event;
+    submitComment() {
       if (content.trim() === "") {
         wx.showModal({
           title: "评论内容不能为空!"
@@ -133,7 +121,7 @@ Component({
         return;
       }
       wx.showLoading({
-        title: "评论发表中"
+        title: "提交中"
       });
       if (msgCheck(content)) {
         const {
@@ -144,7 +132,7 @@ Component({
             img = [],
             content: _content
           }
-        } = this.properties;
+        } = this.data;
         const userInfo = app.getUserInfo();
         const { avatarUrl, nickName } = userInfo;
         const comment = {
@@ -163,11 +151,13 @@ Component({
             }
           })
           .then(() => {
-            const { commentCount } = this.data;
+            const {
+              moment: { commentCount }
+            } = this.data;
+            content = "";
             this.setData({
               commentShow: false,
-              content: "",
-              commentCount: commentCount + 1
+              ["moment.commentCount"]: commentCount + 1
             });
             wx.hideLoading({
               complete: res => {

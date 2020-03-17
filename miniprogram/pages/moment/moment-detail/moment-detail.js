@@ -10,6 +10,8 @@ const DEFAULT_PLACHOLDER = "请在此输入评论";
 const DEFAULT_COMMENT = "";
 const app = getApp();
 
+let replyContent = ''
+
 Page({
   /**
    * 页面的初始数据
@@ -17,16 +19,15 @@ Page({
   data: {
     momentId: "",
     moment: {},
-    isLike: false,
     currentCommentId: "",
-    likeCount: 0,
-    commentCount: 0,
     firstComment: {},
     isExpand: false, // 查看更多的按钮是否展开
-    commentShow: false, // 评论弹框是否显示
-    placeholderTxt: DEFAULT_PLACHOLDER, // 评论弹框中的默认文字
-    defaultCommentValue: DEFAULT_COMMENT, // 评论框默认值
-    isReply: false,
+    // 回复框
+    isReplyOpen: false,
+    wordNum: 0,
+    MAX_REPLY_COUNT: 200,
+    replyPlaceholder: DEFAULT_PLACHOLDER, // 回复框中的默认文字
+    defaultReplyValue: DEFAULT_COMMENT, // 回复框默认值
     commentLevel: COMMENT,
     replyUser: {}
   },
@@ -96,10 +97,28 @@ Page({
   _initData() {
     this.setData({
       currentCommentId: "",
-      commentShow: false,
-      placeholderTxt: DEFAULT_PLACHOLDER,
-      defaultCommentValue: DEFAULT_COMMENT,
-      isReply: false
+      replyPlaceholder: DEFAULT_PLACHOLDER,
+      defaultReplyValue: DEFAULT_COMMENT,
+    });
+  },
+
+  closeReplyDialog() {
+    this.setData({
+      isReplyOpen: false,
+      wordNum: 0,
+      replyPlaceholder: DEFAULT_PLACHOLDER,
+      defaultReplyValue: DEFAULT_COMMENT,
+    })
+    replyContent = ''
+  },
+
+  handleReplyInput(event) {
+    const {
+      detail: { value }
+    } = event;
+    replyContent = value;
+    this.setData({
+      wordNum: value.length
     });
   },
 
@@ -111,43 +130,18 @@ Page({
       }
     } = event;
     this.setData({
-      isReply: true,
+      isReplyOpen: true,
       currentCommentId: commentid,
-      placeholderTxt: `回复@${nickname}：`,
-      commentShow: true,
-      defaultCommentValue: "",
+      replyPlaceholder: `回复@${nickname}：`,
+      defaultReplyValue: "",
       commentLevel: FIRST_REPLY
-    });
-  },
-
-  // 二级评论回复
-  handleSecComment(event) {
-    const {
-      currentTarget: {
-        dataset: { comment = {}, commentid }
-      }
-    } = event;
-    const { _openid, avatarUrl, nickName } = comment;
-    const replyUser = {
-      _openid,
-      avatarUrl,
-      nickName
-    };
-    this.setData({
-      replyUser,
-      isReply: true,
-      currentCommentId: commentid,
-      placeholderTxt: `回复@${nickName}：`,
-      commentShow: true,
-      defaultCommentValue: "",
-      commentLevel: SECOND_REPLY
     });
   },
 
   // 直接评论
   onComment(event) {
     const { detail } = event;
-    const { momentId, commentLevel } = this.data;
+    const { momentId } = this.data;
     if (detail.trim() === "") {
       wx.showModal({
         title: "评论内容不能为空!"
@@ -163,7 +157,7 @@ Page({
         ...userInfo,
         momentId,
         content: detail,
-        type: commentLevel
+        type: COMMENT
       };
       wx.cloud
         .callFunction({
@@ -207,10 +201,9 @@ Page({
   },
 
   // 回复
-  onReply(event) {
-    const { detail } = event;
+  onReply() {
     const { momentId, currentCommentId, commentLevel, replyUser } = this.data;
-    if (detail.trim() === "") {
+    if (replyContent.trim() === "") {
       wx.showModal({
         title: "回复内容不能为空!"
       });
@@ -220,14 +213,14 @@ Page({
     wx.showLoading({
       title: "发表中"
     });
-    if (msgCheck(detail)) {
+    if (msgCheck(replyContent)) {
       const userInfo = app.getUserInfo();
       const reply = {
         ...userInfo,
         replyUser,
         currentMomentId: momentId,
         currentCommentId,
-        content: detail,
+        content: replyContent,
         type: commentLevel
       };
       wx.cloud
@@ -243,6 +236,7 @@ Page({
           wx.hideLoading({
             complete: res => {
               if (res.errMsg === "hideLoading:ok") {
+                this.closeReplyDialog()
                 this._getMomentDetail(momentId);
                 wx.showToast({
                   title: "回复成功!"
@@ -265,7 +259,7 @@ Page({
                   { momentId: _id, commentId: currentCommentId },
                   content,
                   _img,
-                  detail
+                  replyContent
                 );
               }
             }
@@ -301,13 +295,15 @@ Page({
 
   // 点赞
   handleLike() {
-    const { isLike, likeCount, moment } = this.data;
+    const { moment = {}} = this.data;
     const {
       _id: momentId,
       _openid: reciever_id,
       nickName,
       img = [],
-      content
+      content,
+      isLike,
+      likeCount
     } = moment;
     const url = isLike ? "cancelLike" : "giveLike";
     wx.cloud
@@ -320,8 +316,8 @@ Page({
       })
       .then(() => {
         this.setData({
-          likeCount: isLike ? likeCount - 1 : likeCount + 1,
-          isLike: !isLike
+          ['moment.likeCount']: isLike ? likeCount - 1 : likeCount + 1,
+          ['moment.isLike']: !isLike
         });
         // 发送通知
         if (!isLike) {

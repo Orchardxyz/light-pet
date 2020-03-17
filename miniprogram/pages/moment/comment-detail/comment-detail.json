@@ -2,6 +2,7 @@
   "usingComponents": {
     "LP-comment-card": "/components/comment/comment-card/comment-card",
     "LP-comment-bar": "/components/comment/comment-bar/comment-bar",
+    "LP-reply-bar": "/components/comment/reply-bar/reply-bar",
     "LP-bottom-line": "/components/bottom-line/bottom-line"
   },
   "navigationBarTitleText": "评论详情"

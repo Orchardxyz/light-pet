@@ -3,12 +3,8 @@
         <LP-moment-card moment="{{moment}}" bind:handleStar="onStar" />
     </view>
     <view class="detail-tab">
-        <text class="tab-item">评论 {{commentCount}}</text>
-        <text class="tab-item">点赞 {{likeCount}}</text>
-        <view class="tab-isLike">
-            <i class="iconfont {{isLike ? 'icon-pets' : 'icon-pet'}}" style="color: {{isLike ? '#FF1F18' : undefined}}" catch:tap="handleLike" />
-            <text wx:if="{{isLike}}" style="margin-left: 5rpx">已点赞</text>
-        </view>
+        <text class="tab-item">评论 {{moment.commentCount}}</text>
+        <text class="tab-item">点赞 {{moment.likeCount}}</text>
     </view>
     <view class="detail-comment" catch:tap="enterCommentDetail" data-commentid="{{firstComment._id}}" hover-class="comment-click">
         <view class="comment-title">
@@ -21,11 +17,11 @@
         </view>
         <view class="comment-childrenWrapper" wx:if="{{firstComment.children.length > 0}}">
             <block wx:for="{{firstComment.children}}" wx:key="index">
-                <view wx:if="{{item.type === 1}}" data-comment="{{item}}" data-commentid="{{firstComment._id}}" catch:tap="handleSecComment">
+                <view wx:if="{{item.type === 1}}" data-comment="{{item}}" data-commentid="{{firstComment._id}}" catch:tap="enterCommentDetail">
                     <text style="color: #3399CC">{{item.nickName}}</text>
                     <text>：{{item.content}}</text>
                 </view>
-                <view wx:elif="{{item.type === 2}}" data-comment="{{item}}" data-commentid="{{firstComment._id}}" catch:tap="handleSecComment">
+                <view wx:elif="{{item.type === 2}}" data-comment="{{item}}" data-commentid="{{firstComment._id}}" catch:tap="enterCommentDetail">
                     <text style="color: #3399CC">{{item.nickName}}</text>
                     <text>回复</text>
                     <text style="color: #3399CC">@{{item.replyUser.nickName}}</text>
@@ -37,11 +33,40 @@
             </view>
         </view>
     </view>
-    <no-data wx:if="{{commentCount === 0}}" />
+    <no-data wx:if="{{moment.commentCount === 0}}" />
     <button wx:elif="{{isExpand}}" class="more-btn" style="width: 95%" bind:tap="enterCommentList">
         查看更多评论
     </button>
 </scroll-view>
-<view class="detail-operation">
-    <LP-comment-bar commentShow="{{commentShow}}" placeholderTxt="{{placeholderTxt}}" defaultValue="{{defaultCommentValue}}" isReply="{{isReply}}" bind:handleReply="onReply" bind:handleComment="onComment" />
+
+<!-- 直接评论 -->
+<moment-bottom-operation isLike="{{moment.isLike}}" bind:onLike="handleLike" bind:onComment="onComment"/>
+<!-- 回复评论 -->
+<view class="page">
+  <view class="page__bd">
+    <view class="weui-demo-dialog {{isReplyOpen ? 'weui-demo-dialog_show' : ''}}">
+      <view class="weui-mask" bindtap="closeReplyDialog"></view>
+      <view class="weui-half-screen-dialog">
+        <view class="weui-half-screen-dialog__hd">
+          <view class="weui-half-screen-dialog__hd__side">
+            <view bindtap="closeReplyDialog" class="weui-icon-btn weui-icon-btn_close">关闭</view>
+          </view>
+          <view class="weui-half-screen-dialog__hd__main">
+            <text class="weui-half-screen-dialog__title">回复评论</text>
+            <text class="weui-half-screen-dialog__subtitle">{{wordNum}}/{{MAX_REPLY_COUNT}}</text>
+          </view>
+        </view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell">
+            <view class="weui-cell__bd">
+              <textarea name="content" fixed="{{true}}" class="weui-textarea" placeholder="{{replyPlaceholder}}" value="{{defaultReplyValue}}" maxlength="{{MAX_REPLY_COUNT}}" show-confirm-bar="{{false}}" bindinput="handleReplyInput" style="height: 3.3em" />
+            </view>
+          </view>
+        </view>
+        <view class="weui-half-screen-dialog__ft">
+          <button type="primary" class="weui-btn" bind:tap="onReply">提交</button>
+        </view>
+      </view>
+    </view>
+  </view>
 </view>

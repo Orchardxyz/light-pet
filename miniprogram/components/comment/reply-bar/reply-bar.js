@@ -24,6 +24,7 @@ Component({
         defaultValue: "",
         wordNum: 0
       });
+      content = ''
     },
     handleInput(event) {
       const {
@@ -36,6 +37,7 @@ Component({
     },
     submitReply() {
       this.triggerEvent("onReply", content);
+      this.closeReplyDialog()
     }
   }
 });

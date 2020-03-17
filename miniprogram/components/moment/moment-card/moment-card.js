@@ -1,7 +1,7 @@
-import formatTime from "../../utils/formatTime";
-import { STAR } from "../../utils/notify/notifyType";
-import { STAR_MOMENT } from "../../utils/notify/notifyAction";
-import notify from "../../utils/notify/notify";
+import formatTime from "../../../utils/formatTime";
+import { STAR } from "../../../utils/notify/notifyType";
+import { STAR_MOMENT } from "../../../utils/notify/notifyAction";
+import notify from "../../../utils/notify/notify";
 
 const app = getApp();
 

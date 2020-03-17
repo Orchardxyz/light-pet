@@ -26,8 +26,8 @@ exports.main = async (event, context) => {
   // 计算综合排序权重
   const updateWeight = async topicId => {
     const { data: topic } = await momentCollection.doc(topicId).get();
-    const { likeCount, commentCount, viewCount } = topic;
-    const weight = likeCount * 0.5 + commentCount * 0.3 + viewCount * 0.2;
+    const { likes, commentCount, viewCount } = topic;
+    const weight = likes.length * 0.5 + commentCount * 0.3 + viewCount * 0.2;
     await petTopicCollection.doc(topicId).update({
       data: {
         weight

@@ -25,7 +25,7 @@
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell">
             <view class="weui-cell__bd">
-              <textarea name="content" value="{{defaultValue}}" class="weui-textarea" placeholder="{{placeholderText}}" maxlength="{{MAX_COUNT}}" show-confirm-bar="{{false}}" bindinput="handleInput" style="height: 3.3em" />
+              <textarea name="content" value="{{defaultValue}}" class="weui-textarea" placeholder="{{placeholderText}}" maxlength="{{MAX_COUNT}}" show-confirm-bar="{{false}}" bindinput="handleInput" fixed="{{true}}" style="height: 3.3em" />
             </view>
           </view>
         </view>

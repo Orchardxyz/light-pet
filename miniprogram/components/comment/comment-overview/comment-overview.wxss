@@ -1,6 +1,6 @@
 @import "../../../style/comment-click.wxss";
 
-.comment-container {
+.comment-overview {
   padding: 20rpx;
 }
 
