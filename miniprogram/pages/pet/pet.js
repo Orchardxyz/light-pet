@@ -1,11 +1,11 @@
 // pages/record/record.js
 import formatSpecies from "../../utils/formatSpecies";
 
-const app = getApp()
+const app = getApp();
 
 // 无须与页面绑定的数据
-let currentPetId = ''
-let currentIndex = -1
+let currentPetId = "";
+let currentIndex = -1;
 
 Page({
   /**
@@ -20,7 +20,9 @@ Page({
     currentSpecies: "",
     animation: {},
     btnIsLoading: [],
-    currentHealthProjects: []
+    currentHealthProjects: [],
+    isMenuOpen: false,
+    selectedPetId: "" // 操作时被选的宠物id
   },
 
   /**
@@ -50,7 +52,7 @@ Page({
             pets: petList,
             init: false
           });
-          wx.setStorageSync('petList', petList);
+          wx.setStorageSync("petList", petList);
           petList.map(() => {
             const { btnIsLoading = [] } = this.data;
             this.setData({
@@ -127,12 +129,12 @@ Page({
     const { _id: petId, petName, species } = pet;
     const { btnIsLoading } = this.data;
     btnIsLoading[index] = true;
-    currentPetId = petId
-    currentIndex = index
+    currentPetId = petId;
+    currentIndex = index;
     this.setData({
       currentPetName: petName,
       currentSpecies: formatSpecies(species),
-      btnIsLoading,
+      btnIsLoading
     });
     wx.cloud
       .callFunction({
@@ -158,6 +160,42 @@ Page({
 
   closeDrawer(event) {
     this._animate("close");
+  },
+
+  // 打开操作菜单
+  openMenu(event) {
+    const {
+      currentTarget: {
+        dataset: { petid }
+      }
+    } = event;
+    this.setData({
+      isMenuOpen: true,
+      currentPetId: petid
+    });
+  },
+
+  // 关闭菜单
+  closeMenu() {
+    this.setData({
+      isMenuOpen: false
+    });
+  },
+
+  writeDiary() {
+    const { nickName, avatarUrl } = app.getUserInfo();
+    const { currentPetId } = this.data;
+    const petList = wx.getStorageSync("petList");
+    let currentIndex;
+    petList.map(({ _id }, index) => {
+      if (_id === currentPetId) {
+        currentIndex = index;
+        return;
+      }
+    });
+    wx.navigateTo({
+      url: `../moment/moment-edit-box/moment-edit-box?nickName=${nickName}&avatarUrl=${avatarUrl}&index=${currentIndex}`
+    });
   },
 
   // 进入宠物添加页
@@ -216,8 +254,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
-    this.closeDrawer()
-    this._loadPetList()
+    this.closeDrawer();
+    this._loadPetList();
   },
 
   /**

@@ -1,4 +1,4 @@
-@import '../../style/no-data.wxss';
+@import "../../style/no-data.wxss";
 
 .record {
   background-color: rgb(226, 247, 226);
@@ -52,8 +52,8 @@
   padding: 20rpx;
   border: 1rpx;
   border-radius: 15rpx;
-  background-color: #FFF;
-  box-shadow: 0 0 10px #CCC;
+  background-color: #fff;
+  box-shadow: 0 0 10px #ccc;
 }
 
 .pet-card .card-item {
@@ -74,15 +74,15 @@
 .card-item .pet-nameplate {
   display: flex;
   font-size: 30rpx;
-  color: #F7F7F7;
+  color: #f7f7f7;
 }
 
 .card-item .pet-nameplate :nth-child(1) {
   padding: 3rpx;
   border-top-left-radius: 10rpx;
   border-bottom-left-radius: 10rpx;
-  border-right: 1rpx solid #F2F2F2;
-  background-color: #FF6600;
+  border-right: 1rpx solid #f2f2f2;
+  background-color: #ff6600;
 }
 
 .card-item .pet-nameplate :nth-child(2) {
@@ -99,6 +99,15 @@
   margin-left: auto;
 }
 
+/* 操作 */
+.operation {
+  margin-left: auto;
+}
+.operation .iconfont {
+  font-size: 40rpx;
+  padding: 5rpx;
+}
+
 .iconfont {
   margin-right: 12rpx;
 }
@@ -107,17 +116,16 @@
 .health-management {
   display: flex;
   justify-content: center;
-  margin-top: 15rpx; 
-  border-top: 1px solid #F7F7F7
+  margin-top: 15rpx;
+  border-top: 1px solid #f7f7f7;
 }
 
 .health-btn {
   margin-top: 18rpx;
-  background-color: #009A61;
+  background-color: #009a61;
   font-weight: normal;
   color: #fff;
 }
-
 
 /* 抽屉遮罩层 样式 */
 .drawer-mask {
@@ -140,16 +148,16 @@
   bottom: 0;
   z-index: 1000;
   width: 100%;
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .drawer-title {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1rpx solid #CCC;
+  border-bottom: 1rpx solid #ccc;
   padding: 15rpx 0;
-  color: #009A61;
+  color: #009a61;
 }
 
 .drawer-content {
@@ -174,14 +182,24 @@
 
   width: 85rpx;
   height: 90rpx;
-  padding-left: 20rpx;
+  padding: 2rpx 0 5rpx 20rpx;
   border-radius: 50%;
 
   font-size: 65rpx;
-  color: #FFF;
+  color: #fff;
 }
 
 .drawer-item text {
   font-size: 35rpx;
   color: #333;
+}
+
+.weui-demo-dialog {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s;
+}
+.weui-demo-dialog_show {
+  visibility: visible;
+  opacity: 1;
 }

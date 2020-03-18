@@ -33,13 +33,18 @@
                             </view>
                         </view>
                     </view>
+                    <view class="operation">
+                        <i class="iconfont icon-pet-menu" catch:tap="openMenu" data-petid="{{item._id}}" />
+                    </view>
                 </view>
                 <view class="card-item">
                     <i class="iconfont icon-clock" style="color: #CDCDCD" />
                     陪伴时长
                     <view class="item-right">
                         <text>已陪伴你</text>
-                        <text style="font-size: 35rpx; font-weight: bold; padding: 0 10rpx;">{{item.companyDays}}</text>
+                        <view style="display: inline; font-size: 35rpx; font-weight: bold; padding: 0 10rpx;">
+                            {{item.companyDays}}
+                        </view>
                         <text>天</text>
                     </view>
                 </view>
@@ -60,7 +65,7 @@
                 </view>
                 <navigator class="card-item" url="./history/history?petId={{item._id}}">
                     <i class="iconfont icon-timeline" style="color: #1890ff" />
-                    历史记录
+                    提醒记录
                     <view class="item-right">
                         <text style="color: #1890ff">详情 >></text>
                     </view>
@@ -68,7 +73,7 @@
                 <view class="health-management">
                     <button class="health-btn" size="mini" style="width: 95%" data-pet="{{item}}" data-index="{{index}}" bind:tap="openDrawer" loading="{{btnIsLoading[index]}}">
                         <i wx:if="{{!btnIsLoading[index]}}" class="iconfont icon-tongzhi" style="color: #FF9900" />
-                        健康管理提醒
+                        设置提醒
                     </button>
                 </view>
             </view>
@@ -92,3 +97,18 @@
     </view>
 </view>
 <LP-login modalShow="{{loginShow}}" />
+<!-- 选择操作 -->
+<view class="weui-demo-dialog {{isMenuOpen ? 'weui-demo-dialog_show' : ''}}">
+    <view class="weui-mask" bindtap="closeMenu"></view>
+    <view class="weui-actionsheet {{isMenuOpen ? 'weui-actionsheet_toggle' : ''}}">
+        <view class="weui-actionsheet__title">
+            <view class="weui-actionsheet__title-text">选择操作</view>
+        </view>
+        <view class="weui-actionsheet__menu">
+            <view class="weui-actionsheet__cell" catch:tap="writeDiary">写日记</view>
+        </view>
+        <view class="weui-actionsheet__action">
+            <view class="weui-actionsheet__cell" bindtap="closeMenu">取消</view>
+        </view>
+    </view>
+</view>
