@@ -5,6 +5,7 @@
       <view class="nickName">{{topic.nickName}}</view>
       <view class="time">{{topic.createTime}}</view>
     </view>
+    <i wx:if="{{topic.isOwner}}" class="iconfont icon-menu" style="margin-left: auto;" catch:tap="openMenu" />
   </view>
   <view class="content">
     <view wx:if="{{icon}}">
@@ -87,4 +88,19 @@
       </view>
     </view>
   </view>
+</view>
+<!-- 选择操作 -->
+<view class="weui-demo-dialog {{isMenuOpen ? 'weui-demo-dialog_show' : ''}}">
+    <view class="weui-mask" catch:tap="closeMenu"></view>
+    <view class="weui-actionsheet {{isMenuOpen ? 'weui-actionsheet_toggle' : ''}}">
+        <view class="weui-actionsheet__title">
+            <view class="weui-actionsheet__title-text">选择操作</view>
+        </view>
+        <view class="weui-actionsheet__menu">
+            <view class="weui-actionsheet__cell weui-actionsheet__cell_warn" catch:tap="handleDelete">删除</view>
+        </view>
+        <view class="weui-actionsheet__action">
+            <view class="weui-actionsheet__cell" catch:tap="closeMenu">取消</view>
+        </view>
+    </view>
 </view>

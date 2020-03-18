@@ -34,7 +34,7 @@
                         </view>
                     </view>
                     <view class="operation">
-                        <i class="iconfont icon-pet-menu" catch:tap="openMenu" data-petid="{{item._id}}" />
+                        <i class="iconfont icon-menu" catch:tap="openMenu" data-petid="{{item._id}}" />
                     </view>
                 </view>
                 <view class="card-item">

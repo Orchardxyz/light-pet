@@ -137,7 +137,7 @@ exports.main = async (event, context) => {
   });
 
   // 删除动态
-  app.router("deleteMoment", async (ctx, nect) => {
+  app.router("deleteMoment", async ctx => {
     const { momentId } = event;
     try {
       await momentCollection.doc(momentId).remove();

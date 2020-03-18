@@ -38,6 +38,7 @@ exports.main = async (event, context) => {
   // 获取数据
   app.router("getAll", async ctx => {
     const { type = rankType.COMPREHENSIVE, start = 0, count = 10 } = event;
+    const { OPENID } = wxContext
     let result;
     switch (type) {
       case rankType.COMPREHENSIVE:
@@ -82,6 +83,7 @@ exports.main = async (event, context) => {
     topicList.map(item => {
       item.enclosure = [];
       item.likes = [];
+      item.isOwner = item._openid === OPENID
     });
     ctx.body = topicList;
   });
@@ -92,6 +94,7 @@ exports.main = async (event, context) => {
     const { OPENID } = wxContext;
     const { data: topic } = await petTopicCollection.doc(topicId).get();
     topic.isLike = topic.likes.includes(OPENID);
+    topic.isOwner = topic._openid === OPENID
     ctx.body = topic;
   });
 
@@ -125,6 +128,23 @@ exports.main = async (event, context) => {
       }
     });
     ctx.body = result;
+  });
+
+  // 删除话题
+  app.router("delete", async ctx => {
+    const { topicId } = event;
+    try {
+      await petTopicCollection.doc(topicId).remove();
+      await topicCommentCollection.where({ topicId }).remove();
+      await notifyCollection
+        .where({
+          source_params: { topicId }
+        })
+        .remove();
+    } catch (err) {
+      console.log(err);
+      ctx.body = err;
+    }
   });
 
   // 点赞

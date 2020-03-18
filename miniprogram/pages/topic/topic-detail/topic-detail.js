@@ -29,7 +29,9 @@ Page({
     replyUser: {},
     wordNum: 0,
     MAX_REPLY_COUNT: 200,
-    replyPlaceholder: ""
+    replyPlaceholder: "",
+    // 操作菜单
+    isMenuOpen: false
   },
 
   /**
@@ -126,6 +128,31 @@ Page({
       });
   },
 
+  _deleteTopic() {
+    wx.showLoading({
+      title: "话题删除中",
+      mask: true
+    });
+    const {
+      topic: { _id: topicId }
+    } = this.data;
+    wx.cloud
+      .callFunction({
+        name: "topic",
+        data: {
+          $url: "delete",
+          topicId
+        }
+      })
+      .then(() => {
+        wx.hideLoading();
+        wx.navigateBack();
+        const pages = getCurrentPages();
+        const prevPage = pages[pages.length - 2];
+        prevPage._refreshData(2);
+      });
+  },
+
   // 点赞
   handleLike() {
     const {
@@ -152,6 +179,36 @@ Page({
           });
         }
       });
+  },
+
+  openMenu() {
+    this.setData({
+      isMenuOpen: true
+    });
+  },
+
+  closeMenu() {
+    this.setData({
+      isMenuOpen: false
+    });
+  },
+
+  // 删除
+  handleDelete() {
+    wx.showModal({
+      content: "确认删除本条内容吗？",
+      showCancel: true,
+      cancelText: "取消",
+      cancelColor: "#000000",
+      confirmText: "确定",
+      confirmColor: "#3CC51F",
+      success: result => {
+        if (result.confirm) {
+          this.closeMenu();
+          this._deleteTopic();
+        }
+      }
+    });
   },
 
   // 直接评论
@@ -254,7 +311,7 @@ Page({
       });
       return;
     }
-    this.closeReplyDialog()
+    this.closeReplyDialog();
     const {
       topic: { _id: topicId },
       currentComment: { _id: commentId },

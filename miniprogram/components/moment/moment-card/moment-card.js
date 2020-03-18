@@ -11,6 +11,7 @@ Component({
     createTime: "",
     isStar: false,
     menuShow: false,
+    isMenuOpen: false
   },
   properties: {
     moment: Object
@@ -96,7 +97,15 @@ Component({
               });
               const { _openid, nickName, img = [], content } = moment;
               const _img = img.length > 0 ? img[0] : "";
-              notify(_openid, nickName, STAR, STAR_MOMENT, { momentId }, content, _img);
+              notify(
+                _openid,
+                nickName,
+                STAR,
+                STAR_MOMENT,
+                { momentId },
+                content,
+                _img
+              );
             });
         }
       } else {
@@ -104,20 +113,36 @@ Component({
       }
     },
 
+    openMenu() {
+      this.setData({
+        isMenuOpen: true
+      });
+    },
+
+    closeMenu() {
+      this.setData({
+        isMenuOpen: false
+      });
+    },
+
     // 删除
     handleDelete() {
       wx.showModal({
-        content: '确认删除本条内容吗？',
+        content: "确认删除本条内容吗？",
         showCancel: true,
-        cancelText: '取消',
-        cancelColor: '#000000',
-        confirmText: '确定',
-        confirmColor: '#3CC51F',
-        success: (result) => {
-          if(result.confirm){
-            
+        cancelText: "取消",
+        cancelColor: "#000000",
+        confirmText: "确定",
+        confirmColor: "#3CC51F",
+        success: result => {
+          if (result.confirm) {
+            const {
+              moment: { _id: momentId }
+            } = this.data;
+            this.closeMenu()
+            this.triggerEvent("onDelete", momentId);
           }
-        },
+        }
       });
     }
   }

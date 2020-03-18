@@ -9,7 +9,7 @@
       </view>
     </view>
     <i class="iconfont {{isStar ? 'icon-star' : 'icon-star-copy'}} " style="color: {{isStar ? '#FF9900' : undefined}};" catch:tap="handleStar" />
-    <!-- <i wx:if="{{moment.isOwner}}" class="iconfont icon-shanchu1" catch:tap="handleDelete" /> -->
+    <i wx:if="{{moment.isOwner}}" class="iconfont icon-menu" catch:tap="openMenu" />
   </view>
   <!-- 文字内容 -->
   <view class="moment-content">
@@ -31,6 +31,21 @@
     <i class="iconfont icon-view" />
     <text>{{moment.viewCount}}</text>
   </view>
+</view>
+<!-- 选择操作 -->
+<view class="weui-demo-dialog {{isMenuOpen ? 'weui-demo-dialog_show' : ''}}">
+    <view class="weui-mask" catch:tap="closeMenu"></view>
+    <view class="weui-actionsheet {{isMenuOpen ? 'weui-actionsheet_toggle' : ''}}">
+        <view class="weui-actionsheet__title">
+            <view class="weui-actionsheet__title-text">选择操作</view>
+        </view>
+        <view class="weui-actionsheet__menu">
+            <view class="weui-actionsheet__cell weui-actionsheet__cell_warn" catch:tap="handleDelete">删除</view>
+        </view>
+        <view class="weui-actionsheet__action">
+            <view class="weui-actionsheet__cell" catch:tap="closeMenu">取消</view>
+        </view>
+    </view>
 </view>
 <!-- 登录 -->
 <LP-login modalShow="{{loginShow}}" />

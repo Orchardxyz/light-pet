@@ -57,19 +57,21 @@ Page({
   },
 
   // 初始化动态列表
-  _initMomentsList() {
+  _initData() {
     this.setData({
       momentList: [],
+      topicList: [],
       isPetSelected: false,
-      currentIndex: -1
+      currentIndex: -1,
+      isAll: false,
     });
   },
 
   // 刷新数据
   _refreshData(navbarActiveIndex = 0) {
+    this._initData()
     this.setData({
       navbarActiveIndex,
-      isAll: false
     });
     switch (navbarActiveIndex) {
       case 0:
@@ -93,9 +95,6 @@ Page({
 
   // 加载社区动态
   _loadCommunityMoments(start = 0, type = rankType.COMPREHENSIVE) {
-    if (start === 0) {
-      this._initMomentsList();
-    }
     wx.showLoading({
       title: "拼命加载中",
       mask: true
@@ -254,6 +253,35 @@ Page({
     }
   },
 
+  // 删除动态
+  handleDeleteMoment(event) {
+    const { detail: momentId } = event
+    wx.showLoading({
+      title: '删除中',
+      mask: true
+    })
+    wx.cloud.callFunction({
+      name: 'community',
+      data: {
+        $url: 'deleteMoment',
+        momentId
+      }
+    }).then(() => {
+      const { currentTarget: {dataset: {index}}} = event
+      const { momentList } = this.data
+      momentList.map(moment => {
+        const {_id} = moment[index]
+        if (_id === momentId) {
+          moment.splice(index, 1)
+        }
+      })
+      this.setData({
+        momentList
+      })
+      wx.hideLoading();
+    })
+  },
+
   // 进入动态详情页
   enterMomentDetail(event) {
     if (app.isLogin()) {
@@ -341,7 +369,8 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function(navbarActiveIndex = 0) {
+  onPullDownRefresh: function() {
+    const { navbarActiveIndex } = this.data
     this._refreshData(navbarActiveIndex);
   },
 
