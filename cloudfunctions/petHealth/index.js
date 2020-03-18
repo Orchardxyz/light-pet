@@ -19,6 +19,16 @@ exports.main = async (event, context) => {
   const app = new TcbRouter({ event });
   const DIFF = 8 * 60 * 60 * 1000; // 小程序云函数调用的时差
 
+  // 获取所有项目列表
+  app.router("/projectList/all", async ctx => {
+    const { start = 0, count = 20 } = event;
+    const { data: projectList } = await healthProjectCollection
+      .skip(start)
+      .limit(count)
+      .get();
+    ctx.body = projectList;
+  });
+
   // 获取对应提醒项目列表
   app.router("projectList", async (ctx, next) => {
     const { petId, species } = event;
@@ -153,7 +163,7 @@ exports.main = async (event, context) => {
     const result = await petRemindCollection.doc(remindId).update({
       data: {
         isFinished: true,
-        finishTime,
+        finishTime
       }
     });
     ctx.body = result;
@@ -166,7 +176,7 @@ exports.main = async (event, context) => {
     const { data: remind } = await petRemindCollection.doc(remindId).get();
     const { projectId, finishTime } = remind;
     // 正则提取完成时间的 年 月 日
-    const date = moment(finishTime + DIFF).format("YYYY-M-D HH:mm")
+    const date = moment(finishTime + DIFF).format("YYYY-M-D HH:mm");
     const temp = date.match(/\d+/g);
     // 获取项目基本信息
     const { data: healthProject } = await healthProjectCollection
@@ -226,7 +236,7 @@ exports.main = async (event, context) => {
       .where({ pet: { _id: petId } })
       .skip(start)
       .limit(count)
-      .orderBy('createTime', 'desc')
+      .orderBy("createTime", "desc")
       .get();
     ctx.body = timeline;
   });
