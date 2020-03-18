@@ -63,29 +63,35 @@
     </view>
     <LP-bottom-line wx:if="{{isAll}}" />
 </view>
-<!-- 遮罩层 -->
-<view wx:if="{{isPetSelected}}" class="mask" />
-<!-- 选择宠物 -->
-<view wx:if="{{isPetSelected}}" class="select-pet" animation="{{animation}}">
-    <view class="modal-content">
-        <view class="title">请先选择一只宠物</view>
-        <divider />
-        <scroll-view class="petWrapper" scroll-y="{{true}}">
-            <block wx:for="{{petList}}" wx:key="index">
-                <view class="pet {{currentIndex === index ? 'selected' : ''}}" data-index="{{index}}" bind:tap="handleClick">
-                    <view class="pet-intro">
-                        <avatar source="{{item.petAvatar}}" width="55" height="55" />
-                        <text>{{item.petName}}</text>
-                    </view>
-                    <i wx:if="{{currentIndex === index}}" class="iconfont icon-finger" style="color: red" />
+<!-- 宠物选择框 -->
+<view class="weui-demo-dialog {{isPetDialogOpen ? 'weui-demo-dialog_show' : ''}}">
+    <view class="weui-mask" bindtap="closeDialog"></view>
+    <view class="weui-dialog__wrp" bindtap="closeDialog">
+        <view class="weui-dialog">
+            <view class="weui-dialog__hd">
+                <view class="weui-dialog__title">选择一只宠物</view>
+            </view>
+            <view class="weui-dialog__bd">
+                <view class="petWrapper">
+                    <scroll-view scroll-y="{{true}}">
+                        <block wx:for="{{petList}}" wx:key="index">
+                            <view class="pet {{currentIndex === index ? 'selected' : ''}}" data-index="{{index}}" catch:tap="handleClick">
+                                <view class="pet-intro">
+                                    <avatar source="{{item.petAvatar}}" width="55" height="55" />
+                                    <text>{{item.petName}}</text>
+                                </view>
+                                <i wx:if="{{currentIndex === index}}" class="iconfont icon-finger" style="color: red" />
+                            </view>
+                        </block>
+                    </scroll-view>
                 </view>
-            </block>
-        </scroll-view>
-        <divider />
-        <view class="modal-operation">
-            <button size="mini" bind:tap="handleCancel">取消</button>
-            <divider type="vertical" height="70" />
-            <button size="mini" bind:tap="handlePublish">确定</button>
+            </view>
+            <view class="weui-dialog__ft">
+                <view class="weui-dialog__btn weui-dialog__btn_default" bindtap="closeDialog">
+                    取消
+                </view>
+                <view class="weui-dialog__btn" bindtap="handlePublish">确定</view>
+            </view>
         </view>
     </view>
 </view>

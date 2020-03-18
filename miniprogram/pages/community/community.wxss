@@ -110,52 +110,6 @@
   margin-left: 5rpx;
 }
 
-/* 遮罩层 */
-.mask {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-
-  width: 100%;
-  height: 100%;
-
-  background: #000;
-  opacity: 0.5;
-  overflow: hidden;
-}
-
-/* 选择宠物 样式 */
-.select-pet {
-  position: fixed;
-  /* top: 50%; */
-  /* left: 50%; */
-  top: 30%;
-  left: 15%;
-  transform: translate(-50%, -50%);
-  z-index: 101;
-
-  padding: 10rpx 20rpx;
-  width: 70%;
-  border-radius: 20rpx;
-  box-shadow: 0 0 10px #333;
-  background-color: #fff;
-}
-
-.petWrapper {
-  height: 250rpx;
-}
-
-.pet {
-  display: flex;
-  align-items: center;
-  border-radius: 5rpx;
-}
-
-.pet.selected {
-  background-color: rgb(226, 247, 226);
-}
-
 .pet-intro {
   display: flex;
   align-items: center;
@@ -173,4 +127,27 @@
   font-size: 40rpx;
   font-weight: normal;
   background-color: #fff;
+}
+
+/* 选择宠物模态框样式 */
+.petWrapper {
+  width: 500rpx;
+  height: 300rpx;
+}
+.pet {
+  display: flex;
+  align-items: center;
+  border-radius: 5rpx;
+}
+.pet.selected {
+  background-color: rgb(226, 247, 226);
+}
+.weui-demo-dialog {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.weui-demo-dialog_show {
+  visibility: visible;
+  opacity: 1;
 }
