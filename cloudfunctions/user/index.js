@@ -7,11 +7,28 @@ cloud.init();
 const db = cloud.database();
 const petCollection = db.collection("pet");
 const momentCollection = db.collection("moments");
+const notifyCollection = db.collection("notification");
 
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const app = new TcbRouter({ event });
+
+  // 首页
+  app.router("index", async ctx => {
+    const { OPENID } = wxContext;
+    const { data: petList } = await petCollection
+      .where({ owner_id: OPENID })
+      .get();
+    const condition = { reciever_id: OPENID, isRead: false };
+    const { data: total } = await notifyCollection
+      .where({ ...condition })
+      .get();
+    ctx.body = {
+      petNum: petList.length,
+      unReadMsgNum: total.length
+    };
+  });
 
   app.router("getPetNum", async (ctx, next) => {
     const { OPENID } = wxContext;
@@ -23,7 +40,7 @@ exports.main = async (event, context) => {
 
   app.router("diary", async (ctx, next) => {
     const { OPENID } = wxContext;
-    const { start = 0, count = 10 } = event
+    const { start = 0, count = 10 } = event;
     const { data: momentList } = await momentCollection
       .where({ _openid: OPENID })
       .skip(start)

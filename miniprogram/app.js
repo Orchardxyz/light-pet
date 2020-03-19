@@ -79,7 +79,7 @@ App({
         const { total } = result;
         if (total > 0 && total < 100) {
           wx.setTabBarBadge({
-            index: 1,
+            index: 2,
             text: `${total}`
           });
         } else if (total > 99) {

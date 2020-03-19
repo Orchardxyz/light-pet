@@ -14,8 +14,8 @@ page {
 }
 
 .iconfont-wrapper {
-  padding: 12rpx;
-  border-radius: 50%;
+  padding: 12rpx 20rpx;
+  border-radius: 25%;
   color: #fff;
 }
 

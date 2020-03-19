@@ -37,7 +37,7 @@
                     <text>微知识</text>
                 </navigator>
                 <navigator class="topic-wrapper" url="../topic/topic-publish/topic-publish?type=CUSTOM">
-                    <i class="iconfont icon-topic1" style="background-color: #CCFFFF; color: #009A61" />
+                    <i class="iconfont icon-topic" style="background-color: #CCFFFF; color: #009A61" />
                     <text>自定义</text>
                 </navigator>
             </view>

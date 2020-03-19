@@ -43,6 +43,16 @@
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </view>
+    <navigator class="user-content-item" style="margin-top: 15rpx" url="../notification/notification">
+        <view class="item-left">
+            <i class="iconfont icon-message" style="color: #1890ff" />
+            <text>消息箱</text>
+        </view>
+        <view class="item-right">
+        <view class="weui-badge" style="margin-left: 5px;">{{unReadMsgNum}}</view>
+            <i class="iconfont icon-xuanzeqixiayige_o" />
+        </view>
+    </navigator>
     <view class="user-content-item" style="margin-top: 15rpx" bind:tap="onShare">
         <view class="item-left">
             <i class="iconfont icon-xiaochengxu" style="color: #009A61" />

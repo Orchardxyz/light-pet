@@ -12,7 +12,7 @@
         </view>
     </view>
     <view class="notification-item" data-type="{{notifyType.STAR}}" bind:tap="enterDetail">
-        <view class="iconfont-wrapper" style="background-color: #990033">
+        <view class="iconfont-wrapper" style="background-color: #FFCC33">
             <i class="iconfont icon-star-copy" />
         </view>
         <view class="content-wrapper">
@@ -24,7 +24,7 @@
         </view>
     </view>
     <view class="notification-item" data-type="{{notifyType.LIKE}}" bind:tap="enterDetail">
-        <view class="iconfont-wrapper" style="background-color: #FFCC33">
+        <view class="iconfont-wrapper" style="background-color: #990033">
             <i class="iconfont icon-pet" />
         </view>
         <view class="content-wrapper">
@@ -36,11 +36,23 @@
         </view>
     </view>
     <view class="notification-item" data-type="{{notifyType.COMMENT_REPLY}}" bind:tap="enterDetail">
-        <view class="iconfont-wrapper" style="background-color: #009A61">
+        <view class="iconfont-wrapper" style="background-color: #1890ff">
             <i class="iconfont icon-pinglun" />
         </view>
         <view class="content-wrapper">
             <view class="content">评论和回复</view>
+            <view class="content-right">
+                <badge wx:if="{{notifyCount.comment_reply}}" count="{{notifyCount.comment_reply}}" />
+                <i class="iconfont icon-xuanzeqixiayige_o" />
+            </view>
+        </view>
+    </view>
+    <view class="notification-item" data-type="{{notifyType.COMMENT_REPLY}}" bind:tap="enterDetail">
+        <view class="iconfont-wrapper" style="background-color: #009A61">
+            <i class="iconfont icon-topic" />
+        </view>
+        <view class="content-wrapper">
+            <view class="content">话题相关</view>
             <view class="content-right">
                 <badge wx:if="{{notifyCount.comment_reply}}" count="{{notifyCount.comment_reply}}" />
                 <i class="iconfont icon-xuanzeqixiayige_o" />

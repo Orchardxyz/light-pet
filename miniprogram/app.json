@@ -39,12 +39,6 @@
         "selectedIconPath": "images/community-selected.png"
       },
       {
-        "pagePath": "pages/notification/notification",
-        "text": "消息",
-        "iconPath": "images/notification.png",
-        "selectedIconPath": "images/notification-selected.png"
-      },
-      {
         "pagePath": "pages/pet/pet",
         "text": "爱宠",
         "iconPath": "images/pet.png",

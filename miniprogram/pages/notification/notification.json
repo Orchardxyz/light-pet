@@ -3,5 +3,5 @@
     "badge": "/components/UI/badge/badge",
     "LP-login": "/components/login/login"
   },
-  "navigationBarTitleText": "消息提醒"
+  "navigationBarTitleText": "消息箱"
 }

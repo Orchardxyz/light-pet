@@ -6,7 +6,8 @@ Page({
    */
   data: {
     loginShow: false,
-    petNum: 0
+    petNum: 0,
+    unReadMsgNum: undefined
   },
 
   /**
@@ -32,13 +33,16 @@ Page({
         .callFunction({
           name: "user",
           data: {
-            $url: "getPetNum"
+            $url: "index"
           }
         })
         .then(res => {
-          const { result } = res;
+          const {
+            result: { petNum, unReadMsgNum }
+          } = res;
           this.setData({
-            petNum: result
+            petNum,
+            unReadMsgNum
           });
           wx.hideLoading();
         });
