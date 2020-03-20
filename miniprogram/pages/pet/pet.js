@@ -13,6 +13,7 @@ Page({
    */
   data: {
     loginShow: false,
+    loginStatus: false,
     pets: [],
     init: true,
     drawerShow: false,
@@ -49,6 +50,8 @@ Page({
         .then(res => {
           const { result: petList = [] } = res;
           this.setData({
+            loginStatus: true,
+            loginShow: false,
             pets: petList,
             init: false
           });
@@ -63,10 +66,15 @@ Page({
           wx.stopPullDownRefresh();
         });
     } else {
-      this.setData({
-        loginShow: true
-      });
+      this.handleLogin()
     }
+  },
+
+  handleLogin() {
+    this.setData({
+      loginShow: true,
+      loginStatus: false
+    });
   },
 
   // 抽屉动画

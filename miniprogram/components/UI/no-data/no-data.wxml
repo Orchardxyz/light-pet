@@ -1,4 +1,5 @@
 <view class="container">
   <i class="iconfont icon-wu" style="font-size: {{size}}rpx" />
   <text>暂无数据~</text>
+  <view wx:if="{{!loginStatus}}" style="color: #1890ff; margin-top: 5rpx" catch:tap="openLogin">请先登录哦，点击这里</view>
 </view>

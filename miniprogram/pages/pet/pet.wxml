@@ -1,5 +1,5 @@
 <view wx:if="{{init}}" class="no-data">
-    <no-data />
+    <no-data loginStatus="{{loginStatus}}" bind:onLogin="handleLogin" />
 </view>
 <view wx:else class="record">
     <view class="record-title">

@@ -14,33 +14,39 @@ App({
       });
     }
 
-    this.globalData = {};
+    this.globalData = {
+      isLogin: false
+    };
 
-    // 获取openId
-    // this.getOpenId();
+    this._init()
+
     // 获取用户信息
-    this.getUserInfo();
+    // this.getUserInfo();
     // 获取宠物列表
-    this.getPetList();
+    // this.getPetList();
     // 获取未读消息数
-    this.getUnreadMsg();
+    // this.getUnreadMsg();
   },
 
-  getOpenId() {
-    wx.cloud
-      .callFunction({
-        name: "login"
-      })
-      .then(res => {
-        const {
-          result: { openid }
-        } = res;
-        this.globalData.openid = openid;
-      });
+  _init() {
+    wx.getSetting({
+      success: result => {
+        if (result.authSetting["scope.userInfo"]) {
+          wx.getUserInfo({
+            success: result => {
+              const { userInfo } = result;
+              this.setLoginData(true, userInfo);
+            }
+          });
+        } else {
+          this.setLoginData(false, {});
+        }
+      }
+    });
   },
 
   isLogin() {
-    return wx.getStorageSync("isLogin");
+    return this.globalData.isLogin;
   },
 
   getUserInfo() {
@@ -48,8 +54,14 @@ App({
   },
 
   setLoginData(isLogin, userInfo) {
-    wx.setStorageSync("isLogin", isLogin);
+    this.globalData.isLogin = isLogin;
     wx.setStorageSync("userInfo", userInfo);
+    if (isLogin) {
+      this.getPetList();
+      this.getUnreadMsg();
+    } else {
+      this.setPetList([])
+    }
   },
 
   getPetList() {
@@ -64,6 +76,10 @@ App({
         const { result = [] } = res;
         wx.setStorageSync("petList", result);
       });
+  },
+
+  setPetList(data) {
+    wx.setStorageSync("petList", data)
   },
 
   getUnreadMsg() {

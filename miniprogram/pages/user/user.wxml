@@ -5,7 +5,8 @@
     <open-data type="userNickName" class="user-nickname" />
     <!-- <text class="user-intro">这个人很懒，什么也没写~</text> -->
 </view>
-<view class="user-content">
+<no-data wx:if="{{loginShow}}" loginStatus="{{loginStatus}}" bind:onLogin="handleLogin" />
+<view wx:else class="user-content">
     <view class="user-content-item">
         <view class="item-left">
             <i class="iconfont icon-chongwufuwu" style="color: #FF9900" />

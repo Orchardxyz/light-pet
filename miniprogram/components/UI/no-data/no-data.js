@@ -3,11 +3,19 @@ Component({
   properties: {
     size: {
       type: Number,
-      value: 300
+      value: 280
     },
+    loginStatus: {
+      type: Boolean,
+      value: true
+    }
   },
   options: {
-    styleIsolation: 'apply-shared',
+    styleIsolation: "apply-shared"
   },
-  methods: {}
-})
+  methods: {
+    openLogin() {
+      this.triggerEvent("onLogin");
+    }
+  }
+});

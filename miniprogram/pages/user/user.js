@@ -5,6 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    loginStatus: false,
     loginShow: false,
     petNum: 0,
     unReadMsgNum: undefined
@@ -17,8 +18,9 @@ Page({
     this._init();
   },
 
-  _setLoginShow() {
+  handleLogin() {
     this.setData({
+      loginStatus: false,
       loginShow: true
     });
   },
@@ -42,12 +44,14 @@ Page({
           } = res;
           this.setData({
             petNum,
-            unReadMsgNum
+            unReadMsgNum,
+            loginStatus: true,
+            loginShow: false
           });
           wx.hideLoading();
         });
     } else {
-      this._setLoginShow();
+      this.handleLogin();
     }
   },
 
@@ -57,7 +61,7 @@ Page({
         url: "./diary/diary"
       });
     } else {
-      this._setLoginShow();
+      this.handleLogin();
     }
   },
 
@@ -67,7 +71,7 @@ Page({
         url: "./like/like"
       });
     } else {
-      this._setLoginShow();
+      this.handleLogin();
     }
   },
 
@@ -77,7 +81,7 @@ Page({
         url: "./star/star"
       });
     } else {
-      this._setLoginShow();
+      this.handleLogin();
     }
   },
 
@@ -111,7 +115,9 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {},
+  onShow: function() {
+    this._init();
+  },
 
   /**
    * 生命周期函数--监听页面隐藏
