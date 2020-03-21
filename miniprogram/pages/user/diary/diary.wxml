@@ -1,9 +1,29 @@
-<scroll-view scroll-y="{{true}}">
-    <block wx:for="{{momentList}}" wx:for-item="momentItem" wx:key="index">
-        <view class="wrapper" wx:for="{{momentItem}}" wx:key="index">
-            <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
-            <LP-moment-operation moment="{{item}}" />
+<view class="navbar-container">
+    <view class="navbar">
+        <block wx:for="{{navbarTitle}}" wx:key="index">
+            <view class="navbar-item {{navbarActiveIndex === index ? 'navbar-item-active' : ''}}" data-navbar-index="{{index}}" catchtap="handleNavBarTap">
+                <text>{{item}}</text>
+            </view>
+        </block>
+    </view>
+</view>
+<view class="content">
+    <view class="diary" wx:if="{{navbarActiveIndex === 0}}">
+        <scroll-view scroll-y="{{true}}">
+            <block wx:for="{{momentList}}" wx:for-item="momentItem" wx:key="index">
+                <view class="wrapper" wx:for="{{momentItem}}" wx:key="index">
+                    <LP-moment-card moment="{{item}}" data-islike="{{item.isLike}}" data-momentid="{{item._id}}" bind:tap="enterMomentDetail" />
+                    <LP-moment-operation moment="{{item}}" />
+                </view>
+            </block>
+        </scroll-view>
+    </view>
+    <view class="health" wx:if="{{navbarActiveIndex === 1}}">
+        <view wx:if="{{timelineList.length > 0}}" wx:for="{{timelineList}}" wx:for-item="timelineItem" wx:key="index">
+            <block wx:for="{{timelineItem}}" wx:key="index">
+                <LP-timeline petShow="true" month="{{item.month}}" year="{{item.year}}" timeline="{{item.children}}" />
+            </block>
         </view>
-    </block>
-</scroll-view>
+    </view>
+</view>
 <LP-bottom-line wx:if="{{isAll}}" />

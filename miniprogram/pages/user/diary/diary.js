@@ -1,24 +1,36 @@
-// miniprogram/pages/user/star/star.js
+import formatTimeline from "../../../utils/formatTimeline";
 
-let MAX_COUNT = 4
+let MAX_COUNT = 4;
+let MAX_TIMELINE = 10;
 
 Page({
   /**
    * 页面的初始数据
    */
   data: {
-    momentList: [[]],
-    isAll: false,
+    navbarTitle: ["日记", "健康"],
+    navbarActiveIndex: 0,
+    momentList: [],
+    timelineList: [],
+    isAll: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this._init();
+    this._loadDiary();
   },
 
-  _init(start = 0) {
+  _init() {
+    this.setData({
+      momentList: [],
+      timelineList: [],
+      isAll: false
+    });
+  },
+
+  _loadDiary(start = 0) {
     wx.showLoading({
       title: "加载中",
       mask: true
@@ -29,24 +41,77 @@ Page({
         data: {
           $url: "diary",
           start,
-          count: MAX_COUNT,
+          count: MAX_COUNT
         }
       })
       .then(res => {
         const { result } = res;
-        const { momentList } = this.data
+        const { momentList } = this.data;
         if (result.length > 0) {
           this.setData({
             [`momentList[${momentList.length}]`]: result
-          })
+          });
         } else {
           this.setData({
             isAll: true
-          })
+          });
         }
         wx.hideLoading();
         wx.stopPullDownRefresh();
       });
+  },
+
+  _loadTimeline(start = 0) {
+    wx.showLoading({
+      title: "加载中",
+      mask: true
+    });
+    wx.cloud
+      .callFunction({
+        name: "petHealth",
+        data: {
+          $url: "/timeline/all",
+          start,
+          count: MAX_TIMELINE
+        }
+      })
+      .then(res => {
+        const { result } = res;
+        const { timelineList } = this.data;
+        if (result.length > 0) {
+          this.setData({
+            [`timelineList[${timelineList.length}]`]: formatTimeline(result)
+          });
+        }
+        wx.hideLoading();
+        wx.stopPullDownRefresh();
+      });
+  },
+
+  _refreshData(navbarIndex) {
+    this._init();
+    this.setData({
+      navbarActiveIndex: navbarIndex
+    });
+    switch (navbarIndex) {
+      case 0:
+        this._loadDiary();
+        break;
+      case 1:
+        this._loadTimeline();
+        break;
+      default:
+        break;
+    }
+  },
+
+  handleNavBarTap(event) {
+    const {
+      currentTarget: {
+        dataset: { navbarIndex }
+      }
+    } = event;
+    this._refreshData(navbarIndex);
   },
 
   // 进入动态详情页
@@ -85,16 +150,24 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
-    this._init();
+    const { navbarActiveIndex } = this.data;
+    this._refreshData(navbarActiveIndex);
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function() {
-    const { isAll, momentList } = this.data
+    const { isAll, momentList, navbarActiveIndex } = this.data;
     if (!isAll) {
-      this._init(momentList.length * MAX_COUNT)
+      switch (navbarActiveIndex) {
+        case 0:
+          this._loadDiary(momentList.length * MAX_COUNT);
+          break;
+        case 1:
+          this._loadTimeline();
+          break;
+      }
     }
   },
 

@@ -241,5 +241,18 @@ exports.main = async (event, context) => {
     ctx.body = timeline;
   });
 
+  // 获取所有时间轴数据
+  app.router("/timeline/all", async ctx => {
+    const { start = 0, count = 10 } = event;
+    const { OPENID } = wxContext;
+    const { data: timeline } = await petTimelineCollection
+      .where({ pet: { owner_id: OPENID } })
+      .skip(start)
+      .limit(count)
+      .orderBy("createTime", "desc")
+      .get();
+    ctx.body = timeline;
+  });
+
   return app.serve();
 };

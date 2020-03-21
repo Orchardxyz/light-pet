@@ -43,6 +43,11 @@ page {
   background-color: #fff;
 }
 
+.item-left {
+  display: flex;
+  align-items: center;
+}
+
 .item-left text {
   display: inline-block;
   padding-left: 20rpx;

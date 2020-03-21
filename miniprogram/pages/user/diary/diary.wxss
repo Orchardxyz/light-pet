@@ -1,4 +1,13 @@
-/* miniprogram/pages/user/diary/diary.wxss */
+@import "../../../style/navbar.wxss";
 .wrapper {
   margin-bottom: 15rpx;
+}
+
+.content {
+  margin-top: 75rpx;
+}
+
+.content .health {
+  padding: 0 0 15rpx 0;
+  background-color: #FFF;
 }
