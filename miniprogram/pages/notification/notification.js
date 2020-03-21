@@ -12,7 +12,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    loginShow: false,
     notifyType: {
       SYSTEM,
       STAR,
@@ -30,108 +29,97 @@ Page({
   },
 
   _init() {
-    if (app.isLogin()) {
-      wx.showLoading({
-        title: "加载中",
-        mask: true
-      });
-      wx.cloud
-        .callFunction({
-          name: "notification",
-          data: {
-            $url: "index"
-          }
-        })
-        .then(res => {
-          const { result } = res;
-          app.getUnreadMsg()
-          this.setData({
-            notifyCount: result
-          });
-          wx.stopPullDownRefresh();
-          wx.hideLoading();
+    wx.showLoading({
+      title: "加载中",
+      mask: true
+    });
+    wx.cloud
+      .callFunction({
+        name: "notification",
+        data: {
+          $url: "index"
+        }
+      })
+      .then(res => {
+        const { result } = res;
+        app.getUnreadMsg();
+        this.setData({
+          notifyCount: result
         });
-    } else {
-      this.setData({
-        loginShow: true
+        wx.stopPullDownRefresh();
+        wx.hideLoading();
       });
-    }
   },
 
   _handleHasRead(type) {
-    if (app.isLogin()) {
-      const {
-        notifyCount: { total }
-      } = this.data;
-      let currentCount;
-      switch (type) {
-        case SYSTEM:
-          const {
-            notifyCount: { system }
-          } = this.data;
-          currentCount = system;
-          this.setData({
-            ["notifyCount.system"]: 0
-          });
-          break;
-        case LIKE:
-          const {
-            notifyCount: { like }
-          } = this.data;
-          currentCount = like;
-          this.setData({
-            ["notifyCount.like"]: 0
-          });
-          break;
-        case STAR:
-          const {
-            notifyCount: { star }
-          } = this.data;
-          currentCount = star;
-          this.setData({
-            ["notifyCount.star"]: 0
-          });
-          break;
-        case COMMENT_REPLY:
-          const {
-            notifyCount: { comment_reply }
-          } = this.data;
-          currentCount = comment_reply;
-          this.setData({
-            ["notifyCount.comment_reply"]: 0
-          });
-          break;
-        default:
-          currentCount = "";
-      }
-      if (total - currentCount > 0) {
-        wx.setTabBarBadge({
-          index: 1,
-          text: `${total - currentCount}`
+    const {
+      notifyCount: { total }
+    } = this.data;
+    let currentCount;
+    switch (type) {
+      case SYSTEM:
+        const {
+          notifyCount: { system }
+        } = this.data;
+        currentCount = system;
+        this.setData({
+          ["notifyCount.system"]: 0
         });
-      } else {
-        wx.removeTabBarBadge({
-          index: 1
+        break;
+      case LIKE:
+        const {
+          notifyCount: { like }
+        } = this.data;
+        currentCount = like;
+        this.setData({
+          ["notifyCount.like"]: 0
         });
-      }
-      wx.cloud
-        .callFunction({
-          name: "notification",
-          data: {
-            $url: "read",
-            type
-          }
-        })
-        .then(() => {
-          wx.navigateTo({
-            url: `./detail/detail?type=${type}`
-          });
+        break;
+      case STAR:
+        const {
+          notifyCount: { star }
+        } = this.data;
+        currentCount = star;
+        this.setData({
+          ["notifyCount.star"]: 0
         });
+        break;
+      case COMMENT_REPLY:
+        const {
+          notifyCount: { comment_reply }
+        } = this.data;
+        currentCount = comment_reply;
+        this.setData({
+          ["notifyCount.comment_reply"]: 0
+        });
+        break;
+      default:
+        currentCount = 0;
+        break;
+    }
+    if (total - currentCount > 0) {
+      wx.setTabBarBadge({
+        index: 2,
+        text: `${total - currentCount}`
+      });
     } else {
-      this.setData({
-        loginShow: true
+      wx.removeTabBarBadge({
+        index: 2
       });
     }
+    wx.cloud
+      .callFunction({
+        name: "notification",
+        data: {
+          $url: "read",
+          type
+        }
+      })
+      .then(() => {
+        wx.navigateTo({
+          url: `./detail/detail?type=${type}`
+        });
+      });
   },
 
   /**
@@ -145,7 +133,13 @@ Page({
         dataset: { type }
       }
     } = event;
-    this._handleHasRead(type);
+    if (type === "topic") {
+      wx.navigateTo({
+        url: `./topic/topic?type=${type}`
+      });
+    } else {
+      this._handleHasRead(type);
+    }
   },
 
   /**

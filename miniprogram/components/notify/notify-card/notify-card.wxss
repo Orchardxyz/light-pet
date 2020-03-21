@@ -10,7 +10,7 @@
   margin-top: 10rpx;
   margin-left: 5rpx;
   padding-bottom: 20rpx;
-  border-bottom: 1rpx solid #E1E1E1;
+  /* border-bottom: 1rpx solid #E1E1E1; */
 }
 
 
@@ -38,8 +38,9 @@
 }
 
 .contentWrapper image {
-  width: 120rpx;
-  height: 120rpx;
+  width: 160rpx;
+  height: 140rpx;
+  border-radius: 5rpx;
 }
 
 .contentWrapper .content {

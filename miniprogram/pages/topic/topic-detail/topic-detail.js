@@ -3,6 +3,9 @@ import getIconStyle from "../../../utils/topic/getIconStyle";
 import commentType from "../../../utils/commentType";
 import msgCheck from "../../../utils/security/msgCheck";
 import regeneratorRuntime from "../../../utils/runtime";
+import notifyAction from "../../../utils/notify/notifyAction";
+import notify from "../../../utils/notify/notify";
+import notifyType from "../../../utils/notify/notifyType";
 
 const app = getApp();
 
@@ -156,7 +159,7 @@ Page({
   // 点赞
   handleLike() {
     const {
-      topic: { _id: topicId, isLike, likeCount = 0 }
+      topic: { _id: topicId, _openid, nickName, content, cover, isLike, likeCount = 0 }
     } = this.data;
     const url = isLike ? "unlike" : "like";
     const num = isLike ? -1 : 1;
@@ -177,6 +180,17 @@ Page({
             ["topic.isLike"]: !isLike,
             ["topic.likeCount"]: likeCount + num
           });
+          if (!isLike) {
+            notify(
+              _openid,
+              nickName,
+              notifyType.TOPIC_LIKE,
+              notifyAction.TOPIC_LIKE,
+              { topicId },
+              content,
+              cover
+            );
+          }
         }
       });
   },
@@ -215,7 +229,7 @@ Page({
   handleComment(event) {
     const { detail } = event;
     const {
-      topic: { _id: topicId }
+      topic: { _id: topicId, _openid, nickName: recieverName, content: _content  }
     } = this.data;
     wx.showLoading({
       title: "提交中",
@@ -248,6 +262,16 @@ Page({
           isAsc: false
         });
         this._loadTopicComment(0, "desc");
+        notify(
+          _openid,
+          recieverName,
+          notifyType.TOPIC_COMMENT_REPLY,
+          notifyAction.TOPIC_COMMENT,
+          { topicId },
+          _content,
+          '',
+          detail
+        );
       })
       .catch(() => {
         wx.hideLoading();
@@ -314,7 +338,7 @@ Page({
     this.closeReplyDialog();
     const {
       topic: { _id: topicId },
-      currentComment: { _id: commentId },
+      currentComment: { _id: commentId, _openid, nickName, content: _content },
       commentLevel,
       replyUser
     } = this.data;
@@ -340,26 +364,6 @@ Page({
         success: res => {
           const { result } = res;
           if (result.errMsg === "document.update:ok") {
-            // const {
-            //   moment: { _id, img = [] }
-            // } = this.data;
-            // const _img = img.length > 0 ? img[0] : "";
-            // const { currentComment } = this.data;
-            // const { content } = currentComment;
-            // notify(
-            //   commentLevel === FIRST_REPLY
-            //     ? currentComment._openid
-            //     : replyUser._openid,
-            //   commentLevel === FIRST_REPLY
-            //     ? currentComment.nickName
-            //     : replyUser.nickName,
-            //   COMMENT_REPLY,
-            //   notifyAction.REPLY,
-            //   { momentId: _id, commentId: currentCommentId },
-            //   content,
-            //   _img,
-            //   detail
-            // );
             wx.hideLoading();
             wx.showToast({
               title: "回复成功!",
@@ -369,6 +373,16 @@ Page({
               isAsc: true
             });
             this._loadTopicComment(0);
+            notify(
+              _openid,
+              nickName,
+              notifyType.TOPIC_COMMENT_REPLY,
+              notifyAction.TOPIC_REPLY,
+              { topicId, commentId },
+              _content,
+              "",
+              replyContent
+            );
           } else {
             wx.hideLoading();
             wx.showToast({

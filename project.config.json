@@ -168,6 +168,13 @@
 					"pathName": "pages/notification/notification",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "4.2.1 话题相关",
+					"pathName": "pages/notification/topic/topic",
+					"query": "",
+					"scene": null
 				}
 			]
 		}

@@ -7,7 +7,7 @@
     <view class="notifyText">
       <text style="font-size: 38rpx">{{notify_text}}</text>
     </view>
-    <view class="contentWrapper" data-sourceid="{{notification.source_id}}" catch:tap="enterDetail">
+    <view class="contentWrapper" catch:tap="enterDetail">
       <image wx:if="{{notification.img}}" src="{{notification.img}}" />
       <view class="content">
         <text style="color: #3399CC">{{notification.reciever_name}}：</text>

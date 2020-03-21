@@ -47,18 +47,16 @@
             </view>
         </view>
     </view>
-    <view class="notification-item" data-type="{{notifyType.COMMENT_REPLY}}" bind:tap="enterDetail">
+    <view class="notification-item" data-type="topic" bind:tap="enterDetail">
         <view class="iconfont-wrapper" style="background-color: #009A61">
             <i class="iconfont icon-topic" />
         </view>
         <view class="content-wrapper">
             <view class="content">话题相关</view>
             <view class="content-right">
-                <badge wx:if="{{notifyCount.comment_reply}}" count="{{notifyCount.comment_reply}}" />
+                <badge wx:if="{{notifyCount.topic_comment_reply+notifyCount.topic_like}}" count="{{notifyCount.topic_comment_reply+notifyCount.topic_like}}" />
                 <i class="iconfont icon-xuanzeqixiayige_o" />
             </view>
         </view>
     </view>
 </view>
-
-<LP-login modalShow="{{loginShow}}" />

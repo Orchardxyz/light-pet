@@ -65,7 +65,7 @@
                 </view>
                 <navigator class="card-item" url="./history/history?petId={{item._id}}">
                     <i class="iconfont icon-timeline" style="color: #1890ff" />
-                    提醒记录
+                    健康记录
                     <view class="item-right">
                         <text style="color: #1890ff">详情 >></text>
                     </view>

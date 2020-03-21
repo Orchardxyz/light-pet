@@ -7,6 +7,7 @@ const TcbRouter = require("tcb-router");
 
 const db = cloud.database();
 const notifyCollection = db.collection("notification");
+const petTopicCollection = db.collection("pet_topic");
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -16,35 +17,52 @@ exports.main = async (event, context) => {
     SYSTEM: "SYSTEM",
     LIKE: "LIKE",
     STAR: "STAR",
-    COMMENT_REPLY: "COMMENT_REPLY"
+    COMMENT_REPLY: "COMMENT_REPLY",
+    TOPIC_LIKE: "TOPIC_LIKE",
+    TOPIC_COMMENT_REPLY: "TOPIC_COMMENT_REPLY",
+    TOPIC_STAR: "TOPIC_STAR"
   };
 
   // 展示页
   app.router("index", async (ctx, next) => {
     const { OPENID } = wxContext;
-    const { SYSTEM, LIKE, STAR, COMMENT_REPLY } = notify_type;
+    const {
+      SYSTEM,
+      LIKE,
+      STAR,
+      COMMENT_REPLY,
+      TOPIC_LIKE,
+      TOPIC_COMMENT_REPLY
+    } = notify_type;
     const condition = { reciever_id: OPENID, isRead: false };
-    const { data: total } = await notifyCollection
-      .where({ ...condition })
-      .get();
-    const { data: system } = await notifyCollection
+    const { total } = await notifyCollection.where({ ...condition }).count();
+    const { total: system } = await notifyCollection
       .where({ ...condition, type: SYSTEM })
-      .get();
-    const { data: like } = await notifyCollection
+      .count();
+    const { total: like } = await notifyCollection
       .where({ ...condition, type: LIKE })
-      .get();
-    const { data: star } = await notifyCollection
+      .count();
+    const { total: star } = await notifyCollection
       .where({ ...condition, type: STAR })
-      .get();
-    const { data: comment_reply } = await notifyCollection
+      .count();
+    const { total: comment_reply } = await notifyCollection
       .where({ ...condition, type: COMMENT_REPLY })
-      .get();
+      .count();
+    const { total: topic_like } = await notifyCollection
+      .where({ ...condition, type: TOPIC_LIKE })
+      .count();
+    const { total: topic_comment_reply } = await notifyCollection
+      .where({ ...condition, type: TOPIC_COMMENT_REPLY })
+      .count();
+
     ctx.body = {
-      total: total.length,
-      system: system.length,
-      like: like.length,
-      star: star.length,
-      comment_reply: comment_reply.length
+      total,
+      system,
+      like,
+      star,
+      comment_reply,
+      topic_like,
+      topic_comment_reply
     };
   });
 
@@ -91,6 +109,18 @@ exports.main = async (event, context) => {
 
   // 获取相应类型的通知
   app.router("get", async (ctx, next) => {
+    const { type, start = 0, count = 10 } = event;
+    const { OPENID } = wxContext;
+    const { data: notifyList = [] } = await notifyCollection
+      .where({ type, reciever_id: OPENID })
+      .skip(start)
+      .limit(count)
+      .orderBy("createTime", "desc")
+      .get();
+    ctx.body = notifyList;
+  });
+
+  app.router("/topic/get", async ctx => {
     const { type, start = 0, count = 10 } = event;
     const { OPENID } = wxContext;
     const { data: notifyList = [] } = await notifyCollection

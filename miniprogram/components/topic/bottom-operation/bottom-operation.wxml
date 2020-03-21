@@ -1,7 +1,7 @@
 <view class="container">
   <view class="operation">
     <view class="item" bind:tap="clickLike">
-      <i class="iconfont icon-{{isLike ? 'like3' : 'like2'}}}" />
+      <i class="iconfont icon-{{isLike ? 'like3' : 'like2'}}}" style="color: {{isLike ? '#FF1F18' : undefined}}" />
       <text>喜欢</text>
     </view>
     <view class="item" bind:tap="openCommentDialog">

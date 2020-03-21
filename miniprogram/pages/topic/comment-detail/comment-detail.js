@@ -1,6 +1,9 @@
 import { FIRST_REPLY, SECOND_REPLY } from "../../../utils/commentType";
 import msgCheck from "../../../utils/security/msgCheck";
 import secWarn from "../../../utils/security/secWarn";
+import notifyAction from "../../../utils/notify/notifyAction";
+import notify from "../../../utils/notify/notify";
+import notifyType from "../../../utils/notify/notifyType";
 
 const app = getApp();
 
@@ -81,12 +84,13 @@ Page({
 
   handleSecReply(event) {
     const {
-      detail: { _openid, nickName, avatarUrl }
+      detail: { _openid, nickName, avatarUrl, content }
     } = event;
     const replyUser = {
       _openid,
       avatarUrl,
-      nickName
+      nickName,
+      content
     };
     this._setPlaceholderText(nickName);
     this.setData({
@@ -104,12 +108,8 @@ Page({
       });
       return;
     }
-    const {
-      comment: { _id: commentId },
-      topicId,
-      replyLevel,
-      replyUser
-    } = this.data;
+    const { comment, topicId, replyLevel, replyUser } = this.data;
+    const { _id: commentId } = comment;
     wx.showLoading({
       title: "提交中"
     });
@@ -139,6 +139,16 @@ Page({
           });
           this._initData();
           this._loadCommentDetail(commentId);
+          notify(
+            replyLevel === FIRST_REPLY ? comment._openid : replyUser._openid,
+            replyLevel === FIRST_REPLY ? comment.nickName : replyUser.nickName,
+            notifyType.TOPIC_COMMENT_REPLY,
+            notifyAction.TOPIC_REPLY,
+            { topicId, commentId },
+            replyLevel === FIRST_REPLY ? comment.content : replyUser.content,
+            "",
+            detail
+          );
         });
     } else {
       wx.hideLoading();

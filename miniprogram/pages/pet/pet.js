@@ -13,7 +13,7 @@ Page({
    */
   data: {
     loginShow: false,
-    loginStatus: false,
+    loginStatus: true,
     pets: [],
     init: true,
     drawerShow: false,

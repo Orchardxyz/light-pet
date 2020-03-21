@@ -1,6 +1,7 @@
 {
   "component": true,
   "usingComponents": {
-    "avatar": "/components/UI/avatar/avatar"
+    "avatar": "/components/UI/avatar/avatar",
+    "LP-topic-card": "/components/topic/topic-card/topic-card"
   }
 }

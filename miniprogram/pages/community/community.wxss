@@ -1,5 +1,6 @@
 /* pages/community/community.wxss */
 @import "../../style/no-data.wxss";
+@import "../../style/navbar.wxss";
 
 .publish {
   display: flex;
@@ -18,44 +19,6 @@
   margin-left: 18rpx;
   font-size: 65rpx;
   color: #fff;
-}
-
-/* navbar样式 */
-
-.navbar-container {
-  display: flex;
-  flex-direction: column;
-}
-.navbar {
-  display: flex;
-  position: fixed;
-  flex-direction: row;
-  left: 0;
-  top: 0;
-  z-index: 99;
-
-  width: 100%;
-  background-color: #fff;
-  border-bottom: 1rpx solid #dfdfdf;
-  box-sizing: border-box;
-
-  font-size: 33rpx;
-  color: #a8a8a8;
-  text-align: center;
-}
-.navbar-item {
-  flex: 1;
-  padding: 10rpx 0px;
-}
-.navbar-item-active {
-  border-bottom: 5rpx solid #009a61;
-  font-weight: 500;
-  color: #009a61;
-  transition: all 0.4s;
-}
-
-.navbar-content {
-  margin-top: 65rpx;
 }
 
 /* 社区的动态列表样式 */

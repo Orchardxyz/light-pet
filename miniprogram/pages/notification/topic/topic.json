@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "badge": "/components/UI/badge/badge",
+    "LP-notify-card": "/components/notify/notify-card/notify-card",
+    "LP-bottom-line": "/components/bottom-line/bottom-line"
+  },
+  "navigationBarTitleText": "话题相关通知"
+}

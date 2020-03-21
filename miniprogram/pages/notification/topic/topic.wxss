@@ -1,0 +1,4 @@
+@import "../../../style/navbar.wxss";
+page {
+    background-color: #FFF;
+}

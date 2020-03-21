@@ -1,0 +1,18 @@
+<view class="navbar-container">
+    <view class="navbar">
+        <block wx:for="{{navbarTitle}}" wx:key="index">
+            <view class="navbar-item {{navbarActiveIndex === index ? 'navbar-item-active' : ''}}" style="display: flex; align-items: center; justify-content: center" data-navbar-index="{{index}}" catchtap="handleNavBarTap">
+                <text style="margin-right: 10rpx">{{item}}</text>
+                <!-- <badge count="8"></badge> -->
+            </view>
+        </block>
+    </view>
+</view>
+<view class="content-wrapper" style="margin-top: 80rpx; padding: 10rpx">
+    <block wx:for="{{notifyList}}" wx:for-item="notifyItem" wx:key="index">
+        <view wx:for="{{notifyItem}}" wx:key="index">
+            <LP-notify-card notification="{{item}}" />
+        </view>
+    </block>
+</view>
+<LP-bottom-line wx:if="{{isAll}}" />
