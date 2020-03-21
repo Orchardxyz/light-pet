@@ -7,7 +7,7 @@
         <!-- 竖线 -->
         <view class="line"></view>
         <!-- 圆点 -->
-        <view class="dot"></view>
+        <view class="dot" style="left: {{left}}rpx"></view>
       </view>
       <view class="content">
         <text class="date">{{item.date}}</text>

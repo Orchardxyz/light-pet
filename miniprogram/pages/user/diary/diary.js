@@ -12,13 +12,15 @@ Page({
     navbarActiveIndex: 0,
     momentList: [],
     timelineList: [],
-    isAll: false
+    isAll: false,
+    phone: "" // 获取本机机型，用来适配时间轴组件样式
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    this._getPhone()
     this._loadDiary();
   },
 
@@ -112,6 +114,13 @@ Page({
       }
     } = event;
     this._refreshData(navbarIndex);
+  },
+
+  _getPhone() {
+    const { model } = wx.getSystemInfoSync();
+    this.setData({
+      phone: model
+    });
   },
 
   // 进入动态详情页

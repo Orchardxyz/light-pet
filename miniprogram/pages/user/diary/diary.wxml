@@ -21,7 +21,7 @@
     <view class="health" wx:if="{{navbarActiveIndex === 1}}">
         <view wx:if="{{timelineList.length > 0}}" wx:for="{{timelineList}}" wx:for-item="timelineItem" wx:key="index">
             <block wx:for="{{timelineItem}}" wx:key="index">
-                <LP-timeline petShow="true" month="{{item.month}}" year="{{item.year}}" timeline="{{item.children}}" />
+                <LP-timeline petShow="true" month="{{item.month}}" year="{{item.year}}" timeline="{{item.children}}" phone="{{phone}}" />
             </block>
         </view>
     </view>

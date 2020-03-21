@@ -31,7 +31,7 @@
   background: #009a61;
   position: absolute;
   top: 21rpx;
-  left: 21rpx;
+  /* left: 21rpx; */
   border-radius: 50%;
 }
 
