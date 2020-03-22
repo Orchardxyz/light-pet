@@ -18,7 +18,7 @@ App({
       isLogin: false
     };
 
-    this._init()
+    this._init();
 
     // 获取用户信息
     // this.getUserInfo();
@@ -26,6 +26,17 @@ App({
     // this.getPetList();
     // 获取未读消息数
     // this.getUnreadMsg();
+  },
+
+  _login() {
+    const userInfo = this.getUserInfo();
+    wx.cloud.callFunction({
+      name: "user",
+      data: {
+        $url: "login",
+        userInfo
+      }
+    });
   },
 
   _init() {
@@ -36,6 +47,7 @@ App({
             success: result => {
               const { userInfo } = result;
               this.setLoginData(true, userInfo);
+              this._login();
             }
           });
         } else {
@@ -60,7 +72,7 @@ App({
       this.getPetList();
       this.getUnreadMsg();
     } else {
-      this.setPetList([])
+      this.setPetList([]);
     }
   },
 
@@ -79,7 +91,7 @@ App({
   },
 
   setPetList(data) {
-    wx.setStorageSync("petList", data)
+    wx.setStorageSync("petList", data);
   },
 
   getUnreadMsg() {

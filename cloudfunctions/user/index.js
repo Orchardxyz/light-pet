@@ -8,11 +8,36 @@ const db = cloud.database();
 const petCollection = db.collection("pet");
 const momentCollection = db.collection("moments");
 const notifyCollection = db.collection("notification");
+const userCollection = db.collection("user");
 
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const app = new TcbRouter({ event });
+
+  app.router("login", async ctx => {
+    const { OPENID } = wxContext;
+    const { userInfo } = event;
+    const { data: user } = await userCollection
+      .where({ _openid: OPENID })
+      .get();
+    let result;
+    if (user.length > 0) {
+      result = await userCollection.where({ _openid: OPENID }).update({
+        data: {
+          ...userInfo
+        }
+      });
+    } else {
+      result = await userCollection.add({
+        data: {
+          _openid: OPENID,
+          ...userInfo
+        }
+      });
+    }
+    ctx.body = result;
+  });
 
   // 首页
   app.router("index", async ctx => {
