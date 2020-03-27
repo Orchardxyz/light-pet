@@ -1,4 +1,6 @@
 @import "../../style/no-data.wxss";
+@import "../../style/weui-common/actionsheet.wxss";
+@import "../../style/weui-common/half-screen-dialog.wxss";
 
 .record {
   background-color: rgb(226, 247, 226);
@@ -36,8 +38,6 @@
 }
 
 .record-blank .blank-content {
-  /* border: 1rpx dotted #333; */
-  /* border-radius: 50%; */
   padding: 5rpx;
 }
 
@@ -143,23 +143,6 @@
 }
 
 /* 抽屉样式 */
-.drawer {
-  position: fixed;
-  bottom: 0;
-  z-index: 1000;
-  width: 100%;
-  background-color: #fff;
-}
-
-.drawer-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1rpx solid #ccc;
-  padding: 15rpx 0;
-  color: #009a61;
-}
-
 .drawer-content {
   display: flex;
   align-items: baseline;
@@ -171,10 +154,11 @@
 }
 
 .drawer-item {
+  flex-basis: 33%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 35rpx;
+  margin: 10rpx 0;
 }
 
 .drawer-item .iconfont {
@@ -192,14 +176,4 @@
 .drawer-item text {
   font-size: 35rpx;
   color: #333;
-}
-
-.weui-demo-dialog {
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.3s;
-}
-.weui-demo-dialog_show {
-  visibility: visible;
-  opacity: 1;
 }

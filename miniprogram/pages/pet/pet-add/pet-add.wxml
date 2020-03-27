@@ -1,7 +1,7 @@
 <form bindsubmit="handleSubmit" >
     <view class="container">
         <view class="pet-avatar" bind:tap="uploadAvatar">
-            <image src="{{avatar}}" />
+            <image src="{{avatar}}" mode="aspectFill" />
             <i class="iconfont icon-camera" />
         </view>
         <view class="pet-content">
@@ -12,11 +12,11 @@
             <view class="item">
                 爱宠性别
                 <view class="item-right">
-                    <view data-sex="male" catch:tap="selectSex">
+                    <view data-sex="male" class="pet-sex" catch:tap="selectSex">
                         <i class="iconfont icon-nan" style="color: {{selectedSex === 'male' ? '#99CCFF' : undefined}}" />
                         <text style="margin-left: 10rpx; margin-right: 50rpx;">GG</text>
                     </view>
-                    <view data-sex="female" catch:tap="selectSex">
+                    <view data-sex="female" class="pet-sex" catch:tap="selectSex">
                         <i class="iconfont icon-nv " style="color: {{selectedSex === 'female' ? 'pink' : undefined}}" />
                         <text style="margin-left: 10rpx;">MM</text>
                     </view>
@@ -25,11 +25,11 @@
             <view class="item">
                 爱宠品种
                 <view class="item-right">
-                    <view data-species="cat" catch:tap="selectSpecies">
+                    <view data-species="cat" class="pet-variety" catch:tap="selectSpecies">
                         <i class="iconfont icon-cat" style="color: {{selectedSpecies === 'cat' ? '#FF9900' : undefined}}" />
                         <text style="margin-left: 10rpx; margin-right: 50rpx;">喵喵</text>
                     </view>
-                    <view data-species="dog" catch:tap="selectSpecies">
+                    <view data-species="dog" class="pet-variety" catch:tap="selectSpecies">
                         <i class="iconfont icon-dog " style="color: {{selectedSpecies === 'dog' ? '#996600' : undefined}}" />
                         <text style="margin-left: 10rpx;">汪汪</text>
                     </view>
@@ -39,7 +39,7 @@
                 爱宠种类
                 <view class="item-right">
                     <picker mode="selector" range="{{varieties}}" bindchange="handleVarietyChange">
-                        <input class="item-right" name="variety" value="{{variety}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
+                        <input disabled="{{true}}" class="item-right" name="variety" value="{{variety}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
                     </picker>
                     <i class="iconfont icon-xuanzeqixiayige_o" />
                 </view>
@@ -48,7 +48,7 @@
                 爱宠生日
                 <view class="item-right">
                     <picker mode="date" start="2010-01-01" end="{{today}}" bindchange="handleBirthdayChange">
-                        <input class="item-right" name="birthday" value="{{birthday}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
+                        <input disabled="{{true}}" class="item-right" name="birthday" value="{{birthday}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
                     </picker>
                     <i class="iconfont icon-xuanzeqixiayige_o" />
                 </view>
@@ -57,7 +57,7 @@
                 收养时间
                 <view class="item-right">
                     <picker mode="date" start="2010-01-01" end="{{today}}" bindchange="handleAdoptChange">
-                        <input class="item-right" name="adoptTime" value="{{adoptTime}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
+                        <input disabled="{{true}}" class="item-right" name="adoptTime" value="{{adoptTime}}" placeholder="请选择" placeholder-class="placeholderTxt" style="text-align: right" />
                     </picker>
                     <i class="iconfont icon-xuanzeqixiayige_o" />
                 </view>

@@ -34,7 +34,8 @@ App({
       name: "user",
       data: {
         $url: "login",
-        userInfo
+        userInfo,
+        timestamp: Date.now()
       }
     });
   },

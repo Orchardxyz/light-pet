@@ -5,5 +5,4 @@
 <LP-bottom-line />
 <view class="detail-operation">
     <LP-reply-bar isOpen="{{isReplyOpen}}" placeholderText="{{placeholderText}}" bind:onReply="onReply" />
-    <!-- <LP-comment-bar commentShow="{{commentShow}}" placeholderTxt="{{placeholderTxt}}" defaultValue="{{defaultCommentValue}}" isReply="{{isReply}}" bind:handleReply="onReply" bind:handleComment="onComment" /> -->
 </view>

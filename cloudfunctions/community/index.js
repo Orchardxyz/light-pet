@@ -140,7 +140,15 @@ exports.main = async (event, context) => {
   app.router("deleteMoment", async ctx => {
     const { momentId } = event;
     try {
+      const { data: moment } = await momentCollection.doc(momentId).get()
+      const { img = [] } = moment
       await momentCollection.doc(momentId).remove();
+      // 删除云存储图片
+      if (img.length > 0) {
+        await cloud.deleteFile({
+          fileList: img
+        })
+      }
       await commentCollection.where({ momentId }).remove();
       await notifyCollection
         .where({

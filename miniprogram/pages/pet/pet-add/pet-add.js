@@ -52,11 +52,6 @@ Page({
           this.setData({
             avatar: tempFilePaths[0]
           });
-        } else {
-          wx.showToast({
-            title: "操作失败",
-            icon: "warn"
-          });
         }
       },
       fail: () => {

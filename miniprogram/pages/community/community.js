@@ -52,8 +52,9 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function() {
-    this._refreshData();
+  onLoad: function(options) {
+    const { index = 0 } = options
+    this._refreshData(parseInt(index));
   },
 
   // 初始化动态列表
@@ -63,15 +64,15 @@ Page({
       topicList: [],
       isPetSelected: false,
       currentIndex: -1,
-      isAll: false,
+      isAll: false
     });
   },
 
   // 刷新数据
   _refreshData(navbarActiveIndex = 0) {
-    this._initData()
+    this._initData();
     this.setData({
-      navbarActiveIndex,
+      navbarActiveIndex
     });
     switch (navbarActiveIndex) {
       case 0:
@@ -255,31 +256,37 @@ Page({
 
   // 删除动态
   handleDeleteMoment(event) {
-    const { detail: momentId } = event
+    const { detail: momentId } = event;
     wx.showLoading({
-      title: '删除中',
+      title: "删除中",
       mask: true
-    })
-    wx.cloud.callFunction({
-      name: 'community',
-      data: {
-        $url: 'deleteMoment',
-        momentId
-      }
-    }).then(() => {
-      const { currentTarget: {dataset: {index}}} = event
-      const { momentList } = this.data
-      momentList.map(moment => {
-        const {_id} = moment[index]
-        if (_id === momentId) {
-          moment.splice(index, 1)
+    });
+    wx.cloud
+      .callFunction({
+        name: "community",
+        data: {
+          $url: "deleteMoment",
+          momentId
         }
       })
-      this.setData({
-        momentList
-      })
-      wx.hideLoading();
-    })
+      .then(() => {
+        const {
+          currentTarget: {
+            dataset: { index }
+          }
+        } = event;
+        const { momentList } = this.data;
+        momentList.map(moment => {
+          const { _id } = moment[index];
+          if (_id === momentId) {
+            moment.splice(index, 1);
+          }
+        });
+        this.setData({
+          momentList
+        });
+        wx.hideLoading();
+      });
   },
 
   // 进入动态详情页
@@ -370,7 +377,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
-    const { navbarActiveIndex } = this.data
+    const { navbarActiveIndex } = this.data;
     this._refreshData(navbarActiveIndex);
   },
 

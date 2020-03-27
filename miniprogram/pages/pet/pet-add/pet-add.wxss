@@ -23,13 +23,12 @@
   bottom: 5rpx;
   right: 5rpx;
 
-  width: 30rpx;
   background-color: #fff;
   border: 1rpx solid #ccc;
   border-radius: 50%;
-  padding: 3rpx;
+  padding: 0 7rpx;
 
-  font-size: 30rpx;
+  font-size: 25rpx;
   color: #009a61;
 }
 
@@ -42,12 +41,14 @@
 
 .pet-content .item {
   display: flex;
+  align-items: center;
   border-top: 1rpx solid #f7f7f7;
   padding: 20rpx 15rpx;
 }
 
 .item .item-right {
   display: flex;
+  align-items: center;
   margin-left: auto;
 }
 
@@ -56,8 +57,18 @@
   color: #ccc;
 }
 
+.pet-sex,
+.pet-variety {
+  display: flex;
+  align-items: center;
+}
+
 .icon-nan,
-.icon-nv,
+.icon-nv {
+  margin: 0;
+  color: #ccc;
+  font-size: 48rpx;
+}
 .icon-cat,
 .icon-dog {
   margin: 0;

@@ -14,7 +14,7 @@
         <block wx:for="{{item.data}}" wx:key="index">
           <view class="detail-wrapper">
             <view wx:if="{{petShow}}" class="pet-avatar">
-              <image src="{{item.petAvatar}}" lazy-load="false" />
+              <image src="{{item.petAvatar}}" mode="aspectFill" lazy-load="false" />
             </view>
             <i class="iconfont {{item.icon}}" style="color: {{item.color}}" />
             <text style="color: {{item.color}}; margin-right: 10rpx;">{{item.project}}</text>

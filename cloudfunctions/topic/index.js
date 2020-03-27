@@ -38,7 +38,7 @@ exports.main = async (event, context) => {
   // 获取数据
   app.router("getAll", async ctx => {
     const { type = rankType.COMPREHENSIVE, start = 0, count = 10 } = event;
-    const { OPENID } = wxContext
+    const { OPENID } = wxContext;
     let result;
     switch (type) {
       case rankType.COMPREHENSIVE:
@@ -83,7 +83,7 @@ exports.main = async (event, context) => {
     topicList.map(item => {
       item.enclosure = [];
       item.likes = [];
-      item.isOwner = item._openid === OPENID
+      item.isOwner = item._openid === OPENID;
     });
     ctx.body = topicList;
   });
@@ -94,7 +94,7 @@ exports.main = async (event, context) => {
     const { OPENID } = wxContext;
     const { data: topic } = await petTopicCollection.doc(topicId).get();
     topic.isLike = topic.likes.includes(OPENID);
-    topic.isOwner = topic._openid === OPENID
+    topic.isOwner = topic._openid === OPENID;
     ctx.body = topic;
   });
 
@@ -106,7 +106,7 @@ exports.main = async (event, context) => {
         viewCount: command.inc(1)
       }
     });
-    updateWeight(topicId)
+    updateWeight(topicId);
     ctx.body = result;
   });
 
@@ -134,7 +134,14 @@ exports.main = async (event, context) => {
   app.router("delete", async ctx => {
     const { topicId } = event;
     try {
+      const { data: topic } = petTopicCollection.doc(topicId).get();
+      const { img = [] } = topic;
       await petTopicCollection.doc(topicId).remove();
+      if (img.length > 0) {
+        await cloud.deleteFile({
+          fileList: img
+        });
+      }
       await topicCommentCollection.where({ topicId }).remove();
       await notifyCollection
         .where({
@@ -157,7 +164,7 @@ exports.main = async (event, context) => {
         likeCount: command.inc(1)
       }
     });
-    updateWeight(topicId)
+    updateWeight(topicId);
 
     ctx.body = result;
   });
@@ -178,7 +185,7 @@ exports.main = async (event, context) => {
         likeCount: command.inc(-1)
       }
     });
-    updateWeight(topicId)
+    updateWeight(topicId);
 
     ctx.body = result;
   });
@@ -207,7 +214,7 @@ exports.main = async (event, context) => {
         commentCount: command.inc(1)
       }
     });
-    updateWeight(topicId)
+    updateWeight(topicId);
 
     ctx.body = result;
   });
@@ -245,7 +252,7 @@ exports.main = async (event, context) => {
         commentCount: command.inc(1)
       }
     });
-    updateWeight(currentTopicId)
+    updateWeight(currentTopicId);
 
     ctx.body = result;
   });

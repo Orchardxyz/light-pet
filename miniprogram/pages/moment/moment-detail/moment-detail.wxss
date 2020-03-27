@@ -1,4 +1,4 @@
-/* miniprogram/pages/moment/moment-detail/moment-detail.wxss */
+@import "../../../style/weui-common/half-screen-dialog.wxss";
 .moment-detail {
   background-color: #fff;
 }
@@ -94,22 +94,4 @@
 .icon-pet,
 .icon-pets {
   padding: 5rpx 4rpx;
-}
-
-/* 回复框样式 */
-.weui-demo-dialog {
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.3s;
-}
-.weui-half-screen-dialog {
-  transition: all 0.3s;
-  transform: translateY(100%);
-}
-.weui-demo-dialog_show {
-  visibility: visible;
-  opacity: 1;
-}
-.weui-demo-dialog_show .weui-half-screen-dialog {
-  transform: translateY(0);
 }

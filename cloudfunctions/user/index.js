@@ -17,7 +17,7 @@ exports.main = async (event, context) => {
 
   app.router("login", async ctx => {
     const { OPENID } = wxContext;
-    const { userInfo } = event;
+    const { userInfo, timestamp } = event;
     const { data: user } = await userCollection
       .where({ _openid: OPENID })
       .get();
@@ -25,14 +25,16 @@ exports.main = async (event, context) => {
     if (user.length > 0) {
       result = await userCollection.where({ _openid: OPENID }).update({
         data: {
-          ...userInfo
+          ...userInfo,
+          timestamp
         }
       });
     } else {
       result = await userCollection.add({
         data: {
           _openid: OPENID,
-          ...userInfo
+          ...userInfo,
+          timestamp
         }
       });
     }
@@ -130,6 +132,13 @@ exports.main = async (event, context) => {
     });
     ctx.body = fileID;
   });
+
+  // 获取已授权登录的用户
+  app.router('/user/list', async ctx => {
+    const { start = 0, count = 10 } = event
+    const { data: userList } = await userCollection.skip(start).limit(count).get()
+    ctx.body = userList
+  })
 
   return app.serve();
 };

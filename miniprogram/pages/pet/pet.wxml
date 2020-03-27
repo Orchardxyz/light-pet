@@ -23,7 +23,7 @@
         <block wx:for="{{pets}}" wx:key="index">
             <view class="pet-card">
                 <view class="card-item">
-                    <image src="{{item.petAvatar}}" class="pet-avatar" />
+                    <image src="{{item.petAvatar}}" mode="aspectFill" class="pet-avatar" />
                     <view style="margin-left: 20rpx">
                         <view style="margin-bottom: 8rpx">{{item.petName}}</view>
                         <view class="pet-nameplate">
@@ -79,22 +79,6 @@
             </view>
         </block>
     </scroll-view>
-    <!-- 遮罩层 -->
-    <view wx:if="{{drawerShow}}" class="drawer-mask" bind:tap="closeDrawer" />
-    <!-- 健康提醒项目 -->
-    <view wx:if="{{drawerShow}}" class="drawer" animation="{{animation}}">
-        <view class="drawer-title">设置【{{currentSpecies}}-{{currentPetName}}】的提醒事项</view>
-        <view class="drawer-content">
-            <no-data wx:if="{{!currentHealthProjects.length}}" />
-            <block wx:for="{{currentHealthProjects}}" wx:key="index">
-                <view class="drawer-item" data-project="{{item}}" catch:tap="enterDetailPage">
-                    <i class="iconfont {{item.icon}}" style="background-color: {{item.color}}" />
-                    <text>{{item.project}}</text>
-                    <text wx:if="{{item.hasSet}}" style="font-size: 30rpx; color: #999">(已开启)</text>
-                </view>
-            </block>
-        </view>
-    </view>
 </view>
 <LP-login modalShow="{{loginShow}}" />
 <!-- 选择操作 -->
@@ -109,6 +93,46 @@
         </view>
         <view class="weui-actionsheet__action">
             <view class="weui-actionsheet__cell" bindtap="closeMenu">取消</view>
+        </view>
+    </view>
+</view>
+<view class="page">
+    <view class="page__bd">
+        <view class="weui-demo-dialog {{drawerShow ? 'weui-demo-dialog_show' : ''}}">
+            <view class="weui-mask" bindtap="closeDrawer"></view>
+            <view class="weui-half-screen-dialog">
+                <view class="weui-half-screen-dialog__hd">
+                    <view class="weui-half-screen-dialog__hd__side">
+                        <view bindtap="closeDrawer" class="weui-icon-btn weui-icon-btn_close">
+                            关闭
+                        </view>
+                    </view>
+                    <view class="weui-half-screen-dialog__hd__main">
+                        <text class="weui-half-screen-dialog__title">
+                            设置【{{currentPetName}}】的提醒事项
+                        </text>
+                        <text class="weui-half-screen-dialog__subtitle">{{currentSpecies}}</text>
+                    </view>
+                </view>
+                <view class="weui-cells weui-cells_after-title">
+                    <view class="weui-cell">
+                        <view class="weui-cell__bd">
+                            <view class="drawer-content">
+                                <no-data wx:if="{{!currentHealthProjects.length}}" />
+                                <block wx:for="{{currentHealthProjects}}" wx:key="index">
+                                    <view class="drawer-item" data-project="{{item}}" catch:tap="enterDetailPage">
+                                        <i class="iconfont {{item.icon}}" style="background-color: {{item.color}}" />
+                                        <text>{{item.project}}</text>
+                                        <view wx:if="{{item.hasSet}}" style="color: #999">
+                                            (已开启)
+                                        </view>
+                                    </view>
+                                </block>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
         </view>
     </view>
 </view>

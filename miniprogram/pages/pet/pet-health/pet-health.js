@@ -201,7 +201,6 @@ Page({
             }
           })
           .then(res => {
-            console.log(res);
             this.setData({
               hasSet: true,
               openBtnTxt: "已开启",

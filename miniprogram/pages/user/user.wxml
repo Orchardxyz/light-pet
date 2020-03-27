@@ -50,7 +50,7 @@
             <text>消息箱</text>
         </view>
         <view class="item-right">
-        <view class="weui-badge" style="margin-left: 5px;">{{unReadMsgNum}}</view>
+        <view wx:if="{{unReadMsgNum !== 0}}" class="weui-badge" style="margin-left: 5px;">{{unReadMsgNum}}</view>
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </navigator>

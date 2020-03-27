@@ -161,17 +161,12 @@ Page({
           })
           .then(() => {
             wx.hideLoading();
-            wx.showToast({
-              title: "发布成功"
+            wx.reLaunch({
+              url: "../../community/community?index=1",
             });
-            // 返回上一页并刷新
-            wx.navigateBack();
-            const pages = getCurrentPages();
-            const prevPage = pages[pages.length - 2];
-            prevPage.onPullDownRefresh();
           })
           .catch(err => {
-            console.log(err)
+            console.log(err);
             wx.hideLoading();
             wx.showToast({
               title: "发布失败"
@@ -183,6 +178,5 @@ Page({
       secWarn("msg");
       return;
     }
-
   }
 });

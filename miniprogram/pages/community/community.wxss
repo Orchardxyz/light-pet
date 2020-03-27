@@ -1,6 +1,7 @@
 /* pages/community/community.wxss */
 @import "../../style/no-data.wxss";
 @import "../../style/navbar.wxss";
+@import "../../style/weui-common/half-screen-dialog.wxss";
 
 .publish {
   display: flex;
@@ -104,13 +105,4 @@
 }
 .pet.selected {
   background-color: rgb(226, 247, 226);
-}
-.weui-demo-dialog {
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.weui-demo-dialog_show {
-  visibility: visible;
-  opacity: 1;
 }

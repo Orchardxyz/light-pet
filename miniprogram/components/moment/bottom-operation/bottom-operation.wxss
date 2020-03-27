@@ -1,3 +1,4 @@
+@import "../../../style/weui-common/half-screen-dialog.wxss";
 .container {
   position: fixed;
   bottom: 0;
@@ -24,23 +25,6 @@
   font-size: 40rpx;
   margin-right: 15rpx;
   color: #666;
-}
-
-.weui-demo-dialog {
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.3s;
-}
-.weui-half-screen-dialog {
-  transition: all 0.3s;
-  transform: translateY(100%);
-}
-.weui-demo-dialog_show {
-  visibility: visible;
-  opacity: 1;
-}
-.weui-demo-dialog_show .weui-half-screen-dialog {
-  transform: translateY(0);
 }
 
 /* iconfont */
