@@ -2,7 +2,9 @@
 const cloud = require("wx-server-sdk");
 const TcbRouter = require("tcb-router");
 
-cloud.init();
+cloud.init({
+  env: cloud.DYNAMIC_CURRENT_ENV
+});
 
 const db = cloud.database();
 const petCollection = db.collection("pet");
@@ -134,11 +136,14 @@ exports.main = async (event, context) => {
   });
 
   // 获取已授权登录的用户
-  app.router('/user/list', async ctx => {
-    const { start = 0, count = 10 } = event
-    const { data: userList } = await userCollection.skip(start).limit(count).get()
-    ctx.body = userList
-  })
+  app.router("/user/list", async ctx => {
+    const { start = 0, count = 10 } = event;
+    const { data: userList } = await userCollection
+      .skip(start)
+      .limit(count)
+      .get();
+    ctx.body = userList;
+  });
 
   return app.serve();
 };
