@@ -53,7 +53,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    const { index = 0 } = options
+    const { index = 0 } = options;
     this._refreshData(parseInt(index));
   },
 
@@ -118,6 +118,11 @@ Page({
           this.setData({
             init: false,
             [`momentList[${momentList.length}]`]: result
+          });
+        } else if (start === 0) {
+          this.setData({
+            init: false,
+            isAll: false
           });
         } else {
           this.setData({

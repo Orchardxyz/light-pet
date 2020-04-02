@@ -16,6 +16,22 @@ Component({
     }
   },
   methods: {
+    _getCurrentPageUrl() {
+      const pages = getCurrentPages(); //获取加载的页面
+      const currentPage = pages[pages.length - 1]; //获取当前页面的对象
+      const url = currentPage.route; //当前页面url
+      const options = currentPage.options; //如果要获取url中所带的参数可以查看options
+
+      //拼接url的参数
+      let urlWithArgs = `../../${url}?`;
+      for (let key in options) {
+        const value = options[key];
+        urlWithArgs += key + "=" + value + "&";
+      }
+      urlWithArgs = urlWithArgs.substring(0, urlWithArgs.length - 1);
+
+      return urlWithArgs;
+    },
     // 微信授权登录
     getUserInfoLogin(event) {
       const app = getApp();
@@ -28,13 +44,8 @@ Component({
         this.setData({
           loginShow: false
         });
-        wx.startPullDownRefresh({
-          success: result => {
-            if (result.errMsg === "startPullDownRefresh:ok") {
-              wx.stopPullDownRefresh();
-            }
-          }
-        });
+        const url = this._getCurrentPageUrl();
+        wx.reLaunch({ url });
       } else {
         setLoginData(false, {});
         wx.showModal({
