@@ -7,6 +7,7 @@ Page({
   data: {
     loginStatus: true,
     loginShow: false,
+    userInfo: {},
     petNum: 0,
     unReadMsgNum: undefined
   },
@@ -30,6 +31,10 @@ Page({
       wx.showLoading({
         title: "稍等",
         mask: true
+      });
+      const userInfo = wx.getStorageSync("userInfo");
+      this.setData({
+        userInfo
       });
       wx.cloud
         .callFunction({

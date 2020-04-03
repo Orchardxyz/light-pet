@@ -1,34 +1,31 @@
+<view class="user-container" style="background: url({{userInfo.avatarUrl}}) no-repeat top/cover" />
+<view class="user-mask" />
 <view class="user-header">
-    <view class="user-avatarUrl">
-        <open-data type="userAvatarUrl" />
+    <image src="{{userInfo.avatarUrl}}" class="user-avatarUrl" mode="aspectFill" />
+    <view class="user-detail">
+        <view class="user-nickname">{{userInfo.nickName}}</view>
+        <view class="user-info">
+            <view wx:if="{{userInfo.gender}}" style="color: {{userInfo.gender === 1 ? '#99CCFF' : 'pink'}};">
+                <i class="iconfont icon-{{userInfo.gender === 1 ? 'nan': 'nv'}}" style="font-size: 42rpx" />
+            </view>
+            <view class="pet">爱宠：{{petNum}}只</view>
+        </view>
     </view>
-    <open-data type="userNickName" class="user-nickname" />
-    <!-- <text class="user-intro">这个人很懒，什么也没写~</text> -->
 </view>
 <no-data wx:if="{{loginShow}}" loginStatus="{{loginStatus}}" bind:onLogin="handleLogin" />
 <view wx:else class="user-content">
-    <view class="user-content-item">
-        <view class="item-left">
-            <i class="iconfont icon-chongwufuwu" style="color: #FF9900" />
-            <text>爱宠</text>
-        </view>
-        <view class="item-right">
-            <text class="strong-font">{{petNum}}</text>
-            <text class="small-font">只</text>
-        </view>
-    </view>
     <view class="user-content-item" bind:tap="enterDiary">
         <view class="item-left">
-            <i class="iconfont icon-yonghuxiangce" style="color: #0099CC" />
+            <i class="iconfont icon-diary" />
             <text>养宠日记</text>
         </view>
         <view class="item-right">
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </view>
-    <view class="user-content-item" style="margin-top: 15rpx"  bind:tap="enterMyLike">
+    <view class="user-content-item" bind:tap="enterMyLike">
         <view class="item-left">
-            <i class="iconfont icon-like" style="color: #FF6600" />
+            <i class="iconfont icon-like4" />
             <text>我赞过的</text>
         </view>
         <view class="item-right">
@@ -37,26 +34,28 @@
     </view>
     <view class="user-content-item" bind:tap="enterMyStar">
         <view class="item-left">
-            <i class="iconfont icon-star1" style="font-size: 58rpx; color: #CC0033" />
+            <i class="iconfont icon-star3" />
             <text>我的收藏</text>
         </view>
         <view class="item-right">
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </view>
-    <navigator class="user-content-item" style="margin-top: 15rpx" url="../notification/notification">
+    <navigator class="user-content-item" url="../notification/notification">
         <view class="item-left">
-            <i class="iconfont icon-message" style="color: #1890ff" />
+            <i class="iconfont icon-message" />
             <text>消息箱</text>
         </view>
         <view class="item-right">
-        <view wx:if="{{unReadMsgNum !== 0}}" class="weui-badge" style="margin-left: 5px;">{{unReadMsgNum}}</view>
+            <view wx:if="{{unReadMsgNum !== 0}}" class="weui-badge" style="margin-left: 5px;">
+                {{unReadMsgNum}}
+            </view>
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </navigator>
-    <view class="user-content-item" style="margin-top: 15rpx" bind:tap="onShare">
+    <view class="user-content-item" bind:tap="onShare">
         <view class="item-left">
-            <i class="iconfont icon-xiaochengxu" style="color: #009A61" />
+            <i class="iconfont icon-scan" />
             <text>分享</text>
         </view>
         <view class="item-right">
@@ -64,5 +63,4 @@
         </view>
     </view>
 </view>
-
 <LP-login modalShow="{{loginShow}}" />
