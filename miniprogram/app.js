@@ -9,8 +9,8 @@ App({
         //   env 参数决定接下来小程序发起的云开发调用（wx.cloud.xxx）会默认请求到哪个云环境的资源
         //   此处请填入环境 ID, 环境 ID 可打开云控制台查看
         //   如不填则使用默认环境（第一个创建的环境）
-        env: "light-pet-test-bdanx", // 测试环境
-        // env: "light-pet-release-l8ncn",
+        // env: "light-pet-test-bdanx", // 测试环境
+        env: "light-pet-release-l8ncn",
         traceUser: true
       });
     }
@@ -119,5 +119,30 @@ App({
           });
         }
       });
+  },
+
+  checkUpdate() {
+    const updateManager = wx.getUpdateManager();
+    // 检查版本更新
+    updateManager.onCheckForUpdate(result => {
+      if (result.hasUpdate) {
+        updateManager.onUpdateReady(() => {
+          wx.showModal({
+            title: "更新提示",
+            content: "新版本已经准备好，是否重启应用？",
+            showCancel: true,
+            cancelText: "取消",
+            cancelColor: "#000000",
+            confirmText: "确定",
+            confirmColor: "#3CC51F",
+            success: result => {
+              if (result.confirm) {
+                updateManager.applyUpdate();
+              }
+            }
+          });
+        });
+      }
+    });
   }
 });
