@@ -35,7 +35,7 @@
     <view class="user-content-item" bind:tap="enterMyStar">
         <view class="item-left">
             <i class="iconfont icon-star3" />
-            <text>我的收藏</text>
+            <text>收藏夹</text>
         </view>
         <view class="item-right">
             <i class="iconfont icon-xuanzeqixiayige_o" />
@@ -53,6 +53,15 @@
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </navigator>
+    <view class="user-content-item" bind:tap="enterAdopt">
+        <view class="item-left">
+            <i class="iconfont icon-adopt" />
+            <text>宠物领养</text>
+        </view>
+        <view class="item-right">
+            <i class="iconfont icon-xuanzeqixiayige_o" />
+        </view>
+    </view>
     <view class="user-content-item" bind:tap="onShare">
         <view class="item-left">
             <i class="iconfont icon-scan" />

@@ -1,5 +1,6 @@
 {
     "usingComponents": {
         "avatar": "/components/UI/avatar/avatar"
-    }
+    },
+    "navigationBarTitleText": "发表日记"
 }

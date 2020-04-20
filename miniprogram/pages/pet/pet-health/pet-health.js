@@ -56,10 +56,10 @@ Page({
       projectId,
       species
     });
-    this._loadProject(projectId);
+    this._loadProject(petId, projectId);
   },
 
-  _loadProject(projectId) {
+  _loadProject(petId, projectId) {
     wx.showLoading({
       title: "加载中",
       mask: true
@@ -69,6 +69,7 @@ Page({
         name: "petHealth",
         data: {
           $url: "project",
+          petId,
           projectId
         }
       })

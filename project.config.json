@@ -182,6 +182,13 @@
 					"pathName": "pages/user/diary/diary",
 					"query": "",
 					"scene": null
+				},
+				{
+					"id": 19,
+					"name": "0 登录",
+					"pathName": "pages/login/login",
+					"query": "",
+					"scene": null
 				}
 			]
 		}

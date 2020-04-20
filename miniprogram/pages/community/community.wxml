@@ -60,7 +60,7 @@
     </view>
     <!-- 发布动态的悬浮钮 -->
     <view wx:if="{{publishBtnShow}}" class="publish" bind:tap="onPublish">
-        <i class="iconfont icon-pen"></i>
+        <i class="iconfont icon-penleather"></i>
     </view>
     <LP-bottom-line wx:if="{{isAll}}" />
 </view>

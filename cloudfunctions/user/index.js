@@ -3,10 +3,11 @@ const cloud = require("wx-server-sdk");
 const TcbRouter = require("tcb-router");
 
 cloud.init({
-  env: cloud.DYNAMIC_CURRENT_ENV
+  env: cloud.DYNAMIC_CURRENT_ENV,
 });
 
 const db = cloud.database();
+const loginImgCollection = db.collection("loginImg");
 const petCollection = db.collection("pet");
 const momentCollection = db.collection("moments");
 const notifyCollection = db.collection("notification");
@@ -17,7 +18,7 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
   const app = new TcbRouter({ event });
 
-  app.router("login", async ctx => {
+  app.router("login", async (ctx) => {
     const { OPENID } = wxContext;
     const { userInfo, timestamp } = event;
     const { data: user } = await userCollection
@@ -28,23 +29,29 @@ exports.main = async (event, context) => {
       result = await userCollection.where({ _openid: OPENID }).update({
         data: {
           ...userInfo,
-          timestamp
-        }
+          timestamp,
+        },
       });
     } else {
       result = await userCollection.add({
         data: {
           _openid: OPENID,
           ...userInfo,
-          timestamp
-        }
+          timestamp,
+        },
       });
     }
     ctx.body = result;
   });
 
+  app.router("loginImg", async (ctx) => {
+    const { data: loginImg } = await loginImgCollection.get();
+    console.log(loginImg)
+    ctx.body = loginImg;
+  });
+
   // 首页
-  app.router("index", async ctx => {
+  app.router("index", async (ctx) => {
     const { OPENID } = wxContext;
     const { data: petList } = await petCollection
       .where({ owner_id: OPENID })
@@ -55,7 +62,7 @@ exports.main = async (event, context) => {
       .get();
     ctx.body = {
       petNum: petList.length,
-      unReadMsgNum: total.length
+      unReadMsgNum: total.length,
     };
   });
 
@@ -76,7 +83,7 @@ exports.main = async (event, context) => {
       .limit(count)
       .orderBy("createTime", "desc")
       .get();
-    momentList.map(moment => {
+    momentList.map((moment) => {
       const { likes, stars } = moment;
       moment.isLike = likes.includes(OPENID);
       moment.isStar = stars.includes(OPENID);
@@ -89,13 +96,13 @@ exports.main = async (event, context) => {
     const { start = 0, count = 10 } = event;
     const { data: momentList } = await momentCollection
       .where({
-        stars: OPENID
+        stars: OPENID,
       })
       .skip(start)
       .limit(count)
       .orderBy("createTime", "desc")
       .get();
-    momentList.map(moment => {
+    momentList.map((moment) => {
       moment.isStar = true;
       const { likes } = moment;
       moment.isLike = likes.includes(OPENID);
@@ -108,13 +115,13 @@ exports.main = async (event, context) => {
     const { start = 0, count = 10 } = event;
     const { data: momentList } = await momentCollection
       .where({
-        likes: OPENID
+        likes: OPENID,
       })
       .skip(start)
       .limit(count)
       .orderBy("createTime", "desc")
       .get();
-    momentList.map(moment => {
+    momentList.map((moment) => {
       moment.isLike = true;
       const { stars } = moment;
       moment.isStar = stars.includes(OPENID);
@@ -126,17 +133,17 @@ exports.main = async (event, context) => {
   app.router("share", async (ctx, next) => {
     const { OPENID } = wxContext;
     const { buffer } = await cloud.openapi.wxacode.getUnlimited({
-      scene: OPENID
+      scene: OPENID,
     });
     const { fileID } = await cloud.uploadFile({
       cloudPath: `qrcode/${Date.now()}-${Math.random() * 1000000}.png`,
-      fileContent: buffer
+      fileContent: buffer,
     });
     ctx.body = fileID;
   });
 
   // 获取已授权登录的用户
-  app.router("/user/list", async ctx => {
+  app.router("/user/list", async (ctx) => {
     const { start = 0, count = 10 } = event;
     const { data: userList } = await userCollection
       .skip(start)

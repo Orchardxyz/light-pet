@@ -19,7 +19,8 @@
     "pages/topic/topic-publish/topic-publish",
     "pages/topic/topic-detail/topic-detail",
     "pages/topic/comment-detail/comment-detail",
-    "pages/notification/topic/topic"
+    "pages/notification/topic/topic",
+    "pages/login/login"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -53,6 +54,9 @@
       }
     ]
   },
+  "navigateToMiniProgramAppIdList": [
+    "wxfcab74a6b36a17b1"
+  ],
   "sitemapLocation": "sitemap.json",
   "style": "v2"
 }

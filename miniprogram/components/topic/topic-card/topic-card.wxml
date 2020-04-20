@@ -1,7 +1,7 @@
 <view class="container">
   <view class="topic-wrapper">
     <!-- 封面图 -->
-    <image src="{{topic.cover}}" class="cover" />
+    <image src="{{topic.cover}}" mode="aspectFill" class="cover" />
     <!-- 右侧话题基本信息 -->
     <view class="info">
       <view class="topic">

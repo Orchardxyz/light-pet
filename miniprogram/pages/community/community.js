@@ -9,20 +9,20 @@ const MAX_TOPIC = 10;
 const topicRankType = [
   {
     type: rankType.COMPREHENSIVE,
-    text: "综合排序"
+    text: "综合排序",
   },
   {
     type: rankType.NEWEST,
-    text: "最新话题"
+    text: "最新话题",
   },
   {
     type: rankType.MOST_COMMENT,
-    text: "评价最多"
+    text: "评价最多",
   },
   {
     type: rankType.MOST_VIEW,
-    text: "浏览量最高"
-  }
+    text: "浏览量最高",
+  },
 ];
 
 const app = getApp();
@@ -46,14 +46,18 @@ Page({
     petList: [],
     animation: {},
     publishBtnShow: true,
-    isAll: false
+    isAll: false,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     const { index = 0 } = options;
+    if (!app.isLogin()) {
+      this._setLoginShow();
+      // wx.navigateTo({url: '/pages/login/login'})
+    }
     this._refreshData(parseInt(index));
   },
 
@@ -64,7 +68,7 @@ Page({
       topicList: [],
       isPetSelected: false,
       currentIndex: -1,
-      isAll: false
+      isAll: false,
     });
   },
 
@@ -72,7 +76,7 @@ Page({
   _refreshData(navbarActiveIndex = 0) {
     this._initData();
     this.setData({
-      navbarActiveIndex
+      navbarActiveIndex,
     });
     switch (navbarActiveIndex) {
       case 0:
@@ -83,7 +87,7 @@ Page({
         break;
       case 2:
         this.setData({
-          publishBtnShow: false
+          publishBtnShow: false,
         });
         const { topicSortType } = this.data;
         const result = topicRankType.find(({ text }) => text === topicSortType);
@@ -98,7 +102,7 @@ Page({
   _loadCommunityMoments(start = 0, type = rankType.COMPREHENSIVE) {
     wx.showLoading({
       title: "拼命加载中",
-      mask: true
+      mask: true,
     });
     // 请求数据
     wx.cloud
@@ -108,30 +112,30 @@ Page({
           start,
           type,
           count: MAX_COUNT,
-          $url: "getAllMomentList"
-        }
+          $url: "getAllMomentList",
+        },
       })
-      .then(res => {
+      .then((res) => {
         const { momentList } = this.data;
         const { result } = res;
         if (result.length > 0) {
           this.setData({
             init: false,
-            [`momentList[${momentList.length}]`]: result
+            [`momentList[${momentList.length}]`]: result,
           });
         } else if (start === 0) {
           this.setData({
             init: false,
-            isAll: false
+            isAll: false,
           });
         } else {
           this.setData({
             init: false,
-            isAll: true
+            isAll: true,
           });
         }
         this.setData({
-          publishBtnShow: true
+          publishBtnShow: true,
         });
         wx.hideLoading();
         wx.stopPullDownRefresh();
@@ -142,7 +146,7 @@ Page({
   _loadTopicList(start = 0, type = rankType.COMPREHENSIVE) {
     wx.showLoading({
       title: "加载中",
-      mask: true
+      mask: true,
     });
     wx.cloud
       .callFunction({
@@ -151,21 +155,21 @@ Page({
           $url: "getAll",
           start,
           count: MAX_TOPIC,
-          type
-        }
+          type,
+        },
       })
-      .then(res => {
+      .then((res) => {
         const { result } = res;
         const { topicList } = this.data;
         if (result.length > 0) {
           this.setData({
             init: false,
-            [`topicList[${topicList.length}]`]: result
+            [`topicList[${topicList.length}]`]: result,
           });
         } else {
           this.setData({
             init: false,
-            isAll: true
+            isAll: true,
           });
         }
         wx.hideLoading();
@@ -175,7 +179,7 @@ Page({
 
   _setLoginShow() {
     this.setData({
-      loginShow: true
+      loginShow: true,
     });
   },
 
@@ -183,11 +187,11 @@ Page({
   handleClick(event) {
     const {
       currentTarget: {
-        dataset: { index }
-      }
+        dataset: { index },
+      },
     } = event;
     this.setData({
-      currentIndex: index
+      currentIndex: index,
     });
   },
 
@@ -204,18 +208,18 @@ Page({
           cancelColor: "#000000",
           confirmText: "马上去",
           confirmColor: "#3CC51F",
-          success: result => {
+          success: (result) => {
             if (result.confirm) {
               wx.switchTab({
-                url: "/pages/pet/pet"
+                url: "/pages/pet/pet",
               });
             }
-          }
+          },
         });
       } else {
         this.setData({
           isPetDialogOpen: true,
-          petList
+          petList,
         });
       }
     } else {
@@ -228,7 +232,7 @@ Page({
     if (currentIndex > -1) {
       const { nickName, avatarUrl } = app.getUserInfo();
       wx.navigateTo({
-        url: `../moment/moment-edit-box/moment-edit-box?nickName=${nickName}&avatarUrl=${avatarUrl}&index=${currentIndex}`
+        url: `../moment/moment-edit-box/moment-edit-box?nickName=${nickName}&avatarUrl=${avatarUrl}&index=${currentIndex}`,
       });
       this.closeDialog();
     } else {
@@ -239,7 +243,7 @@ Page({
   closeDialog() {
     this.setData({
       isPetDialogOpen: false,
-      currentIndex: -1
+      currentIndex: -1,
     });
   },
 
@@ -250,8 +254,8 @@ Page({
     if (app.isLogin()) {
       const {
         currentTarget: {
-          dataset: { navbarIndex }
-        }
+          dataset: { navbarIndex },
+        },
       } = event;
       this._refreshData(navbarIndex);
     } else {
@@ -264,31 +268,31 @@ Page({
     const { detail: momentId } = event;
     wx.showLoading({
       title: "删除中",
-      mask: true
+      mask: true,
     });
     wx.cloud
       .callFunction({
         name: "community",
         data: {
           $url: "deleteMoment",
-          momentId
-        }
+          momentId,
+        },
       })
       .then(() => {
         const {
           currentTarget: {
-            dataset: { index }
-          }
+            dataset: { index },
+          },
         } = event;
         const { momentList } = this.data;
-        momentList.map(moment => {
+        momentList.map((moment) => {
           const { _id } = moment[index];
           if (_id === momentId) {
             moment.splice(index, 1);
           }
         });
         this.setData({
-          momentList
+          momentList,
         });
         wx.hideLoading();
       });
@@ -299,16 +303,16 @@ Page({
     if (app.isLogin()) {
       const {
         target: {
-          dataset: { momentid, islike }
-        }
+          dataset: { momentid, islike },
+        },
       } = event;
       wx.navigateTo({
-        url: `../moment/moment-detail/moment-detail?momentId=${momentid}&isLike=${islike}`
+        url: `../moment/moment-detail/moment-detail?momentId=${momentid}&isLike=${islike}`,
       });
       increaseView(momentid);
     } else {
       this.setData({
-        loginShow: true
+        loginShow: true,
       });
     }
   },
@@ -317,8 +321,8 @@ Page({
   entailTopicDetail(event) {
     const {
       currentTarget: {
-        dataset: { topicid: topicId }
-      }
+        dataset: { topicid: topicId },
+      },
     } = event;
     // 增加浏览量
     wx.cloud
@@ -326,12 +330,12 @@ Page({
         name: "topic",
         data: {
           $url: "/view/increase",
-          topicId
-        }
+          topicId,
+        },
       })
       .then(() => {
         wx.navigateTo({
-          url: `../topic/topic-detail/topic-detail?topicId=${topicId}`
+          url: `../topic/topic-detail/topic-detail?topicId=${topicId}`,
         });
       });
   },
@@ -345,15 +349,15 @@ Page({
       wx.showActionSheet({
         itemList,
         itemColor: "#000000",
-        success: result => {
+        success: (result) => {
           if (result.errMsg === "showActionSheet:ok") {
             const { tapIndex } = result;
             this.setData({
-              topicSortType: itemList[tapIndex]
+              topicSortType: itemList[tapIndex],
             });
             this._refreshData(navbarActiveIndex);
           }
-        }
+        },
       });
     }
   },
@@ -361,27 +365,27 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {},
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {},
+  onShow: function () {},
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {},
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {},
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
     const { navbarActiveIndex } = this.data;
     this._refreshData(navbarActiveIndex);
   },
@@ -389,7 +393,7 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
+  onReachBottom: function () {
     const { navbarActiveIndex, momentList, topicList, isAll } = this.data;
     if (!isAll) {
       switch (navbarActiveIndex) {
@@ -418,5 +422,5 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {}
+  onShareAppMessage: function () {},
 });

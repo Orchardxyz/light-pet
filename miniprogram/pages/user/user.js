@@ -9,20 +9,20 @@ Page({
     loginShow: false,
     userInfo: {},
     petNum: 0,
-    unReadMsgNum: undefined
+    unReadMsgNum: undefined,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     this._init();
   },
 
   handleLogin() {
     this.setData({
       loginStatus: false,
-      loginShow: true
+      loginShow: true,
     });
   },
 
@@ -30,28 +30,28 @@ Page({
     if (app.isLogin()) {
       wx.showLoading({
         title: "稍等",
-        mask: true
+        mask: true,
       });
       const userInfo = wx.getStorageSync("userInfo");
       this.setData({
-        userInfo
+        userInfo,
       });
       wx.cloud
         .callFunction({
           name: "user",
           data: {
-            $url: "index"
-          }
+            $url: "index",
+          },
         })
-        .then(res => {
+        .then((res) => {
           const {
-            result: { petNum, unReadMsgNum }
+            result: { petNum, unReadMsgNum },
           } = res;
           this.setData({
             petNum,
             unReadMsgNum,
             loginStatus: true,
-            loginShow: false
+            loginShow: false,
           });
           wx.hideLoading();
         });
@@ -63,7 +63,7 @@ Page({
   enterDiary() {
     if (app.isLogin()) {
       wx.navigateTo({
-        url: "./diary/diary"
+        url: "./diary/diary",
       });
     } else {
       this.handleLogin();
@@ -73,7 +73,7 @@ Page({
   enterMyLike() {
     if (app.isLogin()) {
       wx.navigateTo({
-        url: "./like/like"
+        url: "./like/like",
       });
     } else {
       this.handleLogin();
@@ -83,7 +83,7 @@ Page({
   enterMyStar() {
     if (app.isLogin()) {
       wx.navigateTo({
-        url: "./star/star"
+        url: "./star/star",
       });
     } else {
       this.handleLogin();
@@ -93,61 +93,73 @@ Page({
   onShare() {
     wx.showLoading({
       title: "生成中",
-      mask: true
+      mask: true,
     });
     wx.cloud
       .callFunction({
         name: "user",
         data: {
-          $url: "share"
-        }
+          $url: "share",
+        },
       })
-      .then(res => {
+      .then((res) => {
         const { result: fileID } = res;
         wx.previewImage({
           current: fileID,
-          urls: [fileID]
+          urls: [fileID],
         });
         wx.hideLoading();
       });
   },
 
+  enterAdopt() {
+    wx.navigateToMiniProgram({
+      appId: "wxfcab74a6b36a17b1",
+      path: "/page/home/home",
+      extraData: {},
+      envVersion: "develop",
+      success: res => {
+        console.log(res)
+      }
+    });
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {},
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
+  onShow: function () {
     this._init();
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {},
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {},
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
     this._init();
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {},
+  onReachBottom: function () {},
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {}
+  onShareAppMessage: function () {},
 });

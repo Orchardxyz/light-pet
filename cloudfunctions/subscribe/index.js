@@ -36,7 +36,7 @@ exports.main = async (event, context) => {
             value: project
           },
           date3: {
-            value: moment(planTime).format('YYYY年M月D日 hh:mm')
+            value: moment(planTime).format('YYYY年M月D日 HH:mm')
           },
           thing5: {
             value: note
