@@ -13,14 +13,14 @@ Page({
     momentList: [],
     timelineList: [],
     isAll: false,
-    phone: "" // 获取本机机型，用来适配时间轴组件样式
+    phone: "", // 获取本机机型，用来适配时间轴组件样式
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-    this._getPhone()
+  onLoad: function (options) {
+    this._getPhone();
     this._loadDiary();
   },
 
@@ -28,14 +28,14 @@ Page({
     this.setData({
       momentList: [],
       timelineList: [],
-      isAll: false
+      isAll: false,
     });
   },
 
   _loadDiary(start = 0) {
     wx.showLoading({
       title: "加载中",
-      mask: true
+      mask: true,
     });
     wx.cloud
       .callFunction({
@@ -43,19 +43,19 @@ Page({
         data: {
           $url: "diary",
           start,
-          count: MAX_COUNT
-        }
+          count: MAX_COUNT,
+        },
       })
-      .then(res => {
+      .then((res) => {
         const { result } = res;
         const { momentList } = this.data;
         if (result.length > 0) {
           this.setData({
-            [`momentList[${momentList.length}]`]: result
+            [`momentList[${momentList.length}]`]: result,
           });
         } else {
           this.setData({
-            isAll: true
+            isAll: true,
           });
         }
         wx.hideLoading();
@@ -66,7 +66,7 @@ Page({
   _loadTimeline(start = 0) {
     wx.showLoading({
       title: "加载中",
-      mask: true
+      mask: true,
     });
     wx.cloud
       .callFunction({
@@ -74,15 +74,19 @@ Page({
         data: {
           $url: "/timeline/all",
           start,
-          count: MAX_TIMELINE
-        }
+          count: MAX_TIMELINE,
+        },
       })
-      .then(res => {
+      .then((res) => {
         const { result } = res;
         const { timelineList } = this.data;
         if (result.length > 0) {
           this.setData({
-            [`timelineList[${timelineList.length}]`]: formatTimeline(result)
+            [`timelineList[${timelineList.length}]`]: formatTimeline(result),
+          });
+        } else {
+          this.setData({
+            isAll: true,
           });
         }
         wx.hideLoading();
@@ -93,7 +97,7 @@ Page({
   _refreshData(navbarIndex) {
     this._init();
     this.setData({
-      navbarActiveIndex: navbarIndex
+      navbarActiveIndex: navbarIndex,
     });
     switch (navbarIndex) {
       case 0:
@@ -110,8 +114,8 @@ Page({
   handleNavBarTap(event) {
     const {
       currentTarget: {
-        dataset: { navbarIndex }
-      }
+        dataset: { navbarIndex },
+      },
     } = event;
     this._refreshData(navbarIndex);
   },
@@ -119,7 +123,7 @@ Page({
   _getPhone() {
     const { model } = wx.getSystemInfoSync();
     this.setData({
-      phone: model
+      phone: model,
     });
   },
 
@@ -127,38 +131,38 @@ Page({
   enterMomentDetail(event) {
     const {
       target: {
-        dataset: { momentid, islike }
-      }
+        dataset: { momentid, islike },
+      },
     } = event;
     wx.navigateTo({
-      url: `../../moment/moment-detail/moment-detail?momentId=${momentid}&isLike=${islike}`
+      url: `../../moment/moment-detail/moment-detail?momentId=${momentid}&isLike=${islike}`,
     });
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {},
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {},
+  onShow: function () {},
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {},
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {},
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
     const { navbarActiveIndex } = this.data;
     this._refreshData(navbarActiveIndex);
   },
@@ -166,15 +170,15 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
-    const { isAll, momentList, navbarActiveIndex } = this.data;
+  onReachBottom: function () {
+    const { isAll, momentList, timelineList, navbarActiveIndex } = this.data;
     if (!isAll) {
       switch (navbarActiveIndex) {
         case 0:
           this._loadDiary(momentList.length * MAX_COUNT);
           break;
         case 1:
-          this._loadTimeline();
+          this._loadTimeline(timelineList.length * MAX_TIMELINE);
           break;
       }
     }
@@ -183,5 +187,5 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {}
+  onShareAppMessage: function () {},
 });
