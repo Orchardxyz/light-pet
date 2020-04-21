@@ -56,7 +56,10 @@ Page({
           wx.hideLoading();
         });
     } else {
-      this.handleLogin();
+      // this.handleLogin();
+      this.setData({
+        loginStatus: false,
+      });
     }
   },
 
@@ -128,9 +131,9 @@ Page({
       path: "/page/home/home",
       extraData: {},
       envVersion: "develop",
-      success: res => {
-        console.log(res)
-      }
+      success: (res) => {
+        console.log(res);
+      },
     });
   },
 

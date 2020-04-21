@@ -1,6 +1,7 @@
 {
   "usingComponents": {
-    "LP-login": "/components/login/login"
+    "LP-login": "/components/login/login",
+    "LP-hover-login": "/components/hover-login/hover-login"
   },
   "navigationBarTitleText": "我的"
 }

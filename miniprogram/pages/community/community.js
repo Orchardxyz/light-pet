@@ -55,7 +55,9 @@ Page({
   onLoad: function (options) {
     const { index = 0 } = options;
     if (!app.isLogin()) {
-      this._setLoginShow();
+      this.setData({
+        loginStatus: false,
+      });
     }
     this._refreshData(parseInt(index));
   },

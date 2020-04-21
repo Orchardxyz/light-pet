@@ -11,9 +11,7 @@
             <view class="pet">爱宠：{{petNum}}只</view>
         </view>
     </view>
-    <view wx:else class="user-login" bind:tap="handleLogin">
-        点击登录
-    </view>
+    <view wx:else class="user-login">暂无数据</view>
 </view>
 <view class="user-content">
     <view class="user-content-item" bind:tap="enterDiary">
@@ -74,4 +72,5 @@
         </view>
     </view>
 </view>
+<LP-hover-login isShow="{{!loginStatus}}" bind:tap="handleLogin" />
 <LP-login modalShow="{{loginShow}}" />

@@ -66,7 +66,10 @@ Page({
           wx.stopPullDownRefresh();
         });
     } else {
-      this.handleLogin();
+      // this.handleLogin();
+      this.setData({
+        loginStatus: false,
+      });
     }
   },
 
