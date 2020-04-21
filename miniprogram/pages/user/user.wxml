@@ -1,8 +1,8 @@
-<view class="user-container" style="background: url({{userInfo.avatarUrl}}) no-repeat top/cover" />
+<view class="user-container" style="background: url({{userInfo.avatarUrl}}) no-repeat top/cover;" />
 <view class="user-mask" />
 <view class="user-header">
-    <image src="{{userInfo.avatarUrl}}" class="user-avatarUrl" mode="aspectFill" />
-    <view class="user-detail">
+    <image src="{{loginStatus ? userInfo.avatarUrl : '../../images/default-user.jpg'}}" class="user-avatarUrl" mode="aspectFill" />
+    <view wx:if="{{loginStatus}}" class="user-detail">
         <view class="user-nickname">{{userInfo.nickName}}</view>
         <view class="user-info">
             <view wx:if="{{userInfo.gender}}" style="color: {{userInfo.gender === 1 ? '#99CCFF' : 'pink'}};">
@@ -11,9 +11,11 @@
             <view class="pet">爱宠：{{petNum}}只</view>
         </view>
     </view>
+    <view wx:else class="user-login" bind:tap="handleLogin">
+        点击登录
+    </view>
 </view>
-<no-data wx:if="{{loginShow}}" loginStatus="{{loginStatus}}" bind:onLogin="handleLogin" />
-<view wx:else class="user-content">
+<view class="user-content">
     <view class="user-content-item" bind:tap="enterDiary">
         <view class="item-left">
             <i class="iconfont icon-diary" />
@@ -41,7 +43,7 @@
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
     </view>
-    <navigator class="user-content-item" url="../notification/notification">
+    <view class="user-content-item" bind:tap="enterNotification">
         <view class="item-left">
             <i class="iconfont icon-message" />
             <text>消息箱</text>
@@ -52,7 +54,7 @@
             </view>
             <i class="iconfont icon-xuanzeqixiayige_o" />
         </view>
-    </navigator>
+    </view>
     <view class="user-content-item" bind:tap="enterAdopt">
         <view class="item-left">
             <i class="iconfont icon-adopt" />

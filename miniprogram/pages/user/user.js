@@ -9,7 +9,7 @@ Page({
     loginShow: false,
     userInfo: {},
     petNum: 0,
-    unReadMsgNum: undefined,
+    unReadMsgNum: 0,
   },
 
   /**
@@ -84,6 +84,16 @@ Page({
     if (app.isLogin()) {
       wx.navigateTo({
         url: "./star/star",
+      });
+    } else {
+      this.handleLogin();
+    }
+  },
+
+  enterNotification() {
+    if (app.isLogin()) {
+      wx.navigateTo({
+        url: "../notification/notification",
       });
     } else {
       this.handleLogin();

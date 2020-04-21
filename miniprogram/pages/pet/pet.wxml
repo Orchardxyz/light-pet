@@ -1,7 +1,7 @@
-<view wx:if="{{init}}" class="no-data">
+<!-- <view wx:if="{{init}}" class="no-data">
     <no-data loginStatus="{{loginStatus}}" bind:onLogin="handleLogin" />
-</view>
-<view wx:else class="record">
+</view> -->
+<view class="record">
     <view class="record-title">
         <view class="left">
             <text>我的宠物</text>
@@ -16,7 +16,7 @@
             <i class="iconfont icon-plus-line" style="font-size: 75rpx" />
         </view>
         <view class="blank-addPet" style="margin-top: 10rpx; font-size: 32rpx; color: #333">
-            <text>(ฅʕ•̫͡•ʔฅ快来添加你的第一只爱宠吧！)</text>
+            <text>(快来添加你的第一只爱宠吧！)</text>
         </view>
     </view>
     <scroll-view wx:else scroll-y="{{true}}">
@@ -80,6 +80,7 @@
         </block>
     </scroll-view>
 </view>
+<LP-hover-login isShow="{{!loginStatus}}" bind:tap="handleLogin" />
 <LP-login modalShow="{{loginShow}}" />
 <!-- 选择操作 -->
 <view class="weui-demo-dialog {{isMenuOpen ? 'weui-demo-dialog_show' : ''}}">

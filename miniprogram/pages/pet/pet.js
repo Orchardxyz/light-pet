@@ -23,13 +23,13 @@ Page({
     btnIsLoading: [],
     currentHealthProjects: [],
     isMenuOpen: false,
-    selectedPetId: "" // 操作时被选的宠物id
+    selectedPetId: "", // 操作时被选的宠物id
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     this._loadPetList();
   },
 
@@ -38,28 +38,28 @@ Page({
     if (app.isLogin()) {
       wx.showLoading({
         title: "加载中",
-        mask: true
+        mask: true,
       });
       wx.cloud
         .callFunction({
           name: "pet",
           data: {
-            $url: "/list/detail"
-          }
+            $url: "/list/detail",
+          },
         })
-        .then(res => {
+        .then((res) => {
           const { result: petList = [] } = res;
           this.setData({
             loginStatus: true,
             loginShow: false,
             pets: petList,
-            init: false
+            init: false,
           });
           wx.setStorageSync("petList", petList);
           petList.map(() => {
             const { btnIsLoading = [] } = this.data;
             this.setData({
-              btnIsLoading: btnIsLoading.concat([false])
+              btnIsLoading: btnIsLoading.concat([false]),
             });
           });
           wx.hideLoading();
@@ -73,15 +73,15 @@ Page({
   handleLogin() {
     this.setData({
       loginShow: true,
-      loginStatus: false
+      loginStatus: false,
     });
   },
 
   openDrawer(event) {
     const {
       currentTarget: {
-        dataset: { pet, index }
-      }
+        dataset: { pet, index },
+      },
     } = event;
     const { _id: petId, petName, species } = pet;
     const { btnIsLoading } = this.data;
@@ -91,7 +91,7 @@ Page({
     this.setData({
       currentPetName: petName,
       currentSpecies: formatSpecies(species),
-      btnIsLoading
+      btnIsLoading,
     });
     wx.cloud
       .callFunction({
@@ -99,23 +99,23 @@ Page({
         data: {
           $url: "projectList",
           petId,
-          species
-        }
+          species,
+        },
       })
-      .then(res => {
+      .then((res) => {
         const { result } = res;
         this.setData(
           {
-            currentHealthProjects: result
+            currentHealthProjects: result,
           },
           () => {
             btnIsLoading[currentIndex] = false;
             this.setData({
               drawerShow: true,
-              btnIsLoading
+              btnIsLoading,
             });
             this.setData({
-              drawerShow: true
+              drawerShow: true,
             });
           }
         );
@@ -124,7 +124,7 @@ Page({
 
   closeDrawer() {
     this.setData({
-      drawerShow: false
+      drawerShow: false,
     });
   },
 
@@ -132,19 +132,19 @@ Page({
   openMenu(event) {
     const {
       currentTarget: {
-        dataset: { petid }
-      }
+        dataset: { petid },
+      },
     } = event;
     this.setData({
       isMenuOpen: true,
-      currentPetId: petid
+      currentPetId: petid,
     });
   },
 
   // 关闭菜单
   closeMenu() {
     this.setData({
-      isMenuOpen: false
+      isMenuOpen: false,
     });
   },
 
@@ -160,66 +160,65 @@ Page({
       }
     });
     wx.navigateTo({
-      url: `../moment/moment-edit-box/moment-edit-box?nickName=${nickName}&avatarUrl=${avatarUrl}&index=${currentIndex}`
+      url: `../moment/moment-edit-box/moment-edit-box?nickName=${nickName}&avatarUrl=${avatarUrl}&index=${currentIndex}`,
     });
   },
 
   // 进入宠物添加页
   enterPetAdd() {
-    wx.navigateTo({
-      url: "./pet-add/pet-add"
-    });
+    if (app.isLogin()) {
+      wx.navigateTo({
+        url: "./pet-add/pet-add",
+      });
+    } else {
+      this.handleLogin();
+    }
   },
 
   // 进入宠物健康管理页
   enterDetailPage(event) {
     const {
       currentTarget: {
-        dataset: { project }
-      }
+        dataset: { project },
+      },
     } = event;
     const { _id, hasSet, remindId = "" } = project;
     const { currentPetName, currentSpecies } = this.data;
     if (hasSet) {
       wx.navigateTo({
-        url: `./open-remind/open-remind?remindId=${remindId}&projectId=${_id}`
+        url: `./open-remind/open-remind?remindId=${remindId}&projectId=${_id}`,
       });
     } else {
       wx.navigateTo({
-        url: `./pet-health/pet-health?petId=${currentPetId}&petName=${currentPetName}&projectId=${_id}&species=${currentSpecies}`
+        url: `./pet-health/pet-health?petId=${currentPetId}&petName=${currentPetName}&projectId=${_id}&species=${currentSpecies}`,
       });
     }
   },
 
-  // 进入历史记录页
-  // enterHealthHistory() {
-  //   wx.navigateTo
-  // },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {},
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {},
+  onShow: function () {},
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {},
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {},
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
     this.closeDrawer();
     this._loadPetList();
   },
@@ -227,10 +226,10 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {},
+  onReachBottom: function () {},
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {}
+  onShareAppMessage: function () {},
 });

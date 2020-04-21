@@ -63,9 +63,6 @@ Component({
       this.setData({
         loginShow: false
       });
-      wx.switchTab({
-        url: "/pages/community/community"
-      });
     }
   }
 });

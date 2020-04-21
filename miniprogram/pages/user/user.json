@@ -1,7 +1,6 @@
 {
   "usingComponents": {
-    "LP-login": "/components/login/login",
-    "no-data": "/components/UI/no-data/no-data"
+    "LP-login": "/components/login/login"
   },
   "navigationBarTitleText": "我的"
 }

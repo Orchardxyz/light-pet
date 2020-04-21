@@ -1,0 +1,6 @@
+.hover-login {
+  position: fixed;
+  bottom: 3%;
+  width: 100%;
+  /* background-color: #fff; */
+}

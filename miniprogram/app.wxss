@@ -6,3 +6,9 @@ page {
   background-color: #f7f7f7;
   color: #333;
 }
+
+.icon-weixin {
+  color: #fff;
+  font-size: 36rpx;
+  font-weight: 400;
+}

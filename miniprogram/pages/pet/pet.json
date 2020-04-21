@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "no-data": "/components/UI/no-data/no-data",
-    "LP-login": "/components/login/login"
+    "LP-login": "/components/login/login",
+    "LP-hover-login": "/components/hover-login/hover-login"
   },
   "navigationBarTitleText": "宠物中心"
 }

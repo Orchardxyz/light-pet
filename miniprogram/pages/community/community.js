@@ -34,12 +34,12 @@ Page({
   data: {
     init: true,
     loginShow: false,
+    loginStatus: true,
     navbarActiveIndex: 0,
     navbarTitle: ["热门动态", "实时动态", "话题中心"],
     momentList: [[]],
     topicList: [],
     topicSortType: "综合排序", // 排序方式
-    // isPetSelected: false,
     isPetDialogOpen: false,
     animation: {},
     currentIndex: -1,
@@ -56,7 +56,6 @@ Page({
     const { index = 0 } = options;
     if (!app.isLogin()) {
       this._setLoginShow();
-      // wx.navigateTo({url: '/pages/login/login'})
     }
     this._refreshData(parseInt(index));
   },
@@ -180,6 +179,7 @@ Page({
   _setLoginShow() {
     this.setData({
       loginShow: true,
+      loginStatus: false,
     });
   },
 

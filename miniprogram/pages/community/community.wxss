@@ -7,19 +7,22 @@
   display: flex;
   align-items: center;
   position: fixed;
-  top: 85%;
+  /* top: 85%; */
   left: 80%;
   z-index: 99;
 
-  width: 110rpx;
-  height: 110rpx;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 50%;
-  background-color: #009161;
+  background-color: #FFF;
+  box-shadow: 0 0 10rpx #CCC;
 }
 .icon-penleather {
-  margin-left: 18rpx;
+  display: block;
+  margin-left: 12rpx;
+  padding: 0;
   font-size: 73rpx;
-  color: #fff;
+  color: #009A61;
 }
 
 /* 社区的动态列表样式 */

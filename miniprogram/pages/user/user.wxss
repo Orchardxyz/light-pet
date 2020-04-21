@@ -41,13 +41,21 @@ page {
   border: 1px solid #ccc;
 }
 
-.user-detail {
+.user-detail,
+.user-login {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-left: 15rpx;
   font-size: 35rpx;
   color: #fff;
+}
+
+.user-login {
+  padding: 10rpx 20rpx;
+  border: 2rpx solid #999;
+  border-radius: 50rpx;
+  font-weight: 200;
 }
 
 .user-detail .user-nickname {

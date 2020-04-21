@@ -58,6 +58,7 @@ Page({
         if (res.errMsg === "cloud.getTempFileURL:ok") {
           const { fileList = [] } = res;
           const { tempFileURL = "" } = fileList[0];
+          console.log(tempFileURL)
           this.setData({ background: tempFileURL });
         }
       },

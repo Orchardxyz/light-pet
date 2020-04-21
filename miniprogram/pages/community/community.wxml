@@ -58,9 +58,11 @@
         </view>
         <no-data wx:if="{{navbarActiveIndex === 2 && topicList.length === 0}}" />
     </view>
+    <!-- 提示登录 -->
+    <LP-hover-login isShow="{{!loginStatus}}" bind:tap="_setLoginShow" />
     <!-- 发布动态的悬浮钮 -->
-    <view wx:if="{{publishBtnShow}}" class="publish" bind:tap="onPublish">
-        <i class="iconfont icon-penleather"></i>
+    <view wx:if="{{publishBtnShow}}" class="publish" bind:tap="onPublish" style="top: {{loginStatus ? '85%' : '80%'}}">
+        <i class="iconfont icon-penleather" />
     </view>
     <LP-bottom-line wx:if="{{isAll}}" />
 </view>
