@@ -7,36 +7,43 @@ const app = getApp();
 
 Component({
   data: {
+    loginStatus: false,
     loginShow: false,
     createTime: "",
     isStar: false,
     menuShow: false,
-    isMenuOpen: false
+    isMenuOpen: false,
   },
   properties: {
-    moment: Object
+    moment: Object,
   },
   options: {
-    styleIsolation: "apply-shared"
+    styleIsolation: "apply-shared",
   },
   observers: {
-    ["moment.createTime"](time) {
-      if (time) {
+    moment(mObj) {
+      const { createTime, isStar } = mObj;
+      if (app.isLogin()) {
         this.setData({
-          createTime: formatTime(new Date(time))
+          loginStatus: true,
+        });
+        if (isStar) {
+          this.setData({
+            isStar,
+          });
+        }
+      }
+      if (createTime) {
+        this.setData({
+          createTime: formatTime(new Date(createTime)),
         });
       }
     },
-    ["moment.isStar"](isStar) {
-      this.setData({
-        isStar
-      });
-    }
   },
   methods: {
     _setLoginShow() {
       this.setData({
-        loginShow: true
+        loginShow: true,
       });
     },
 
@@ -44,7 +51,7 @@ Component({
       const dataset = event.target.dataset;
       wx.previewImage({
         current: dataset.imgsrc,
-        urls: dataset.imgs
+        urls: dataset.imgs,
       });
     },
 
@@ -56,7 +63,7 @@ Component({
         const { _id: momentId } = moment;
         wx.showLoading({
           title: "稍等",
-          mask: true
+          mask: true,
         });
         if (isStar) {
           wx.cloud
@@ -64,17 +71,17 @@ Component({
               name: "community",
               data: {
                 $url: "unstar",
-                momentId
-              }
+                momentId,
+              },
             })
             .then(() => {
               this.setData({
-                isStar: !isStar
+                isStar: !isStar,
               });
               wx.hideLoading();
               wx.showToast({
                 title: "取消收藏",
-                icon: "none"
+                icon: "none",
               });
             });
         } else {
@@ -83,17 +90,17 @@ Component({
               name: "community",
               data: {
                 $url: "star",
-                moment
-              }
+                moment,
+              },
             })
             .then(() => {
               this.setData({
-                isStar: !isStar
+                isStar: !isStar,
               });
               wx.hideLoading();
               wx.showToast({
                 title: "收藏成功",
-                icon: "none"
+                icon: "none",
               });
               const { _openid, nickName, img = [], content } = moment;
               const _img = img.length > 0 ? img[0] : "";
@@ -115,13 +122,13 @@ Component({
 
     openMenu() {
       this.setData({
-        isMenuOpen: true
+        isMenuOpen: true,
       });
     },
 
     closeMenu() {
       this.setData({
-        isMenuOpen: false
+        isMenuOpen: false,
       });
     },
 
@@ -134,16 +141,16 @@ Component({
         cancelColor: "#000000",
         confirmText: "确定",
         confirmColor: "#3CC51F",
-        success: result => {
+        success: (result) => {
           if (result.confirm) {
             const {
-              moment: { _id: momentId }
+              moment: { _id: momentId },
             } = this.data;
-            this.closeMenu()
+            this.closeMenu();
             this.triggerEvent("onDelete", momentId);
           }
-        }
+        },
       });
-    }
-  }
+    },
+  },
 });

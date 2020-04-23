@@ -8,8 +8,8 @@
         <nameplate pet="{{moment.pet}}" />
       </view>
     </view>
-    <i class="iconfont {{isStar ? 'icon-star' : 'icon-star-copy'}} " style="color: {{isStar ? '#FF9900' : undefined}};" catch:tap="handleStar" />
-    <i wx:if="{{moment.isOwner}}" class="iconfont icon-menu" catch:tap="openMenu" />
+    <i class="iconfont {{ isStar ? 'icon-star' : 'icon-star-copy'}} " style="color: {{isStar ? '#FF9900' : undefined}};" catch:tap="handleStar" />
+    <i wx:if="{{loginStatus && moment.isOwner}}" class="iconfont icon-menu" catch:tap="openMenu" />
   </view>
   <!-- 文字内容 -->
   <view class="moment-content">
