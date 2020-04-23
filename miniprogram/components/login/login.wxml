@@ -27,7 +27,7 @@
             <i class="iconfont icon-weixin" style="margin-right: 8rpx" />
             <text>微信快捷登录</text>
           </button>
-          <button type="default" class="weui-btn" style="width: 65%;" catch:tap="closeLoginDialog">我再看看</button>
+          <button type="default" class="weui-btn" style="width: 65%;" catch:tap="closeLoginDialog">不了，再看看</button>
         </view>
       </view>
     </view>

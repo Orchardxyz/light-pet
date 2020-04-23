@@ -29,7 +29,7 @@ Page({
       "提前两天",
       "提前三天",
       "提前四天",
-      "提前五天"
+      "提前五天",
     ],
     index: 0,
     remindDay: 0,
@@ -39,22 +39,22 @@ Page({
     btnShow: false,
     btnDisabled: false,
     openBtnTxt: OPEN_TXT,
-    openBtnLoading: false
+    openBtnLoading: false,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     const { petId, petName, projectId, species } = options;
     wx.setNavigationBarTitle({
-      title: `${species}提醒事项`
+      title: `${species}提醒事项`,
     });
     this.setData({
       petId,
       petName,
       projectId,
-      species
+      species,
     });
     this._loadProject(petId, projectId);
   },
@@ -62,7 +62,7 @@ Page({
   _loadProject(petId, projectId) {
     wx.showLoading({
       title: "加载中",
-      mask: true
+      mask: true,
     });
     wx.cloud
       .callFunction({
@@ -70,10 +70,10 @@ Page({
         data: {
           $url: "project",
           petId,
-          projectId
-        }
+          projectId,
+        },
       })
-      .then(res => {
+      .then((res) => {
         const { result } = res;
         const {
           project,
@@ -81,7 +81,7 @@ Page({
           advice,
           icon,
           color,
-          lastTime = ""
+          lastTime = "",
         } = result;
         const tomorrow = this._getTomorrow();
         this.setData({
@@ -94,7 +94,7 @@ Page({
           introduction: introduction.split("&&&").join("\n"),
           advice: advice.split("&&&").join("\n"),
           lastTime,
-          planTime: tomorrow
+          planTime: tomorrow,
         });
         wx.hideLoading();
       });
@@ -114,29 +114,29 @@ Page({
 
   planDateChange(event) {
     const {
-      detail: { value }
+      detail: { value },
     } = event;
     this.setData({
-      planTime: value
+      planTime: value,
     });
   },
 
   clockChange(event) {
     const {
-      detail: { value }
+      detail: { value },
     } = event;
     this.setData({
-      planClock: value
+      planClock: value,
     });
   },
 
   remindTimeChange(event) {
     const {
-      detail: { value }
+      detail: { value },
     } = event;
     this.setData({
       index: value,
-      remindDay: value
+      remindDay: value,
     });
   },
 
@@ -145,16 +145,16 @@ Page({
     wx.requestSubscribeMessage({
       // 最多允许三条订阅消息
       tmplIds: [SUBSCRIBE_REMIND_TEMPID],
-      success: res => {
+      success: (res) => {
         if (res[SUBSCRIBE_REMIND_TEMPID] === "accept") {
           this.handleOpenRemind();
         } else if (res[SUBSCRIBE_REMIND_TEMPID] === "reject") {
           wx.showToast({
             title: "请先允许订阅消息才能开启提醒功能",
-            icon: "none"
+            icon: "none",
           });
         }
-      }
+      },
     });
   },
 
@@ -168,13 +168,23 @@ Page({
       project,
       remindDay,
       planTime,
-      planClock
+      planClock,
     } = this.data;
+    if (
+      Date.now() >
+      new Date(planTime).getTime() - remindDay * 24 * 60 * 60 * 1000
+    ) {
+      wx.showModal({
+        title: "请检查",
+        content: "提醒时间与项目时间冲突！",
+      });
+      return;
+    }
     this.setData({
       openBtnLoading: true,
       btnDisabled: true,
       btnSet: true,
-      openBtnTxt: "开启中"
+      openBtnTxt: "开启中",
     });
     wx.cloud.callFunction({
       name: "petHealth",
@@ -187,29 +197,29 @@ Page({
         project,
         planTime,
         planClock,
-        remindDay
+        remindDay,
       },
-      success: res => {
+      success: (res) => {
         const {
-          result: { _id }
+          result: { _id },
         } = res;
         wx.cloud
           .callFunction({
             name: "subscribe",
             data: {
               remindId: _id,
-              templateId: SUBSCRIBE_REMIND_TEMPID
-            }
+              templateId: SUBSCRIBE_REMIND_TEMPID,
+            },
           })
-          .then(res => {
+          .then((res) => {
             this.setData({
               hasSet: true,
               openBtnTxt: "已开启",
               btnShow: true,
-              openBtnLoading: false
+              openBtnLoading: false,
             });
           });
-      }
+      },
     });
   },
 
@@ -225,35 +235,35 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {},
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {},
+  onShow: function () {},
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {},
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {},
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {},
+  onPullDownRefresh: function () {},
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {},
+  onReachBottom: function () {},
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {}
+  onShareAppMessage: function () {},
 });

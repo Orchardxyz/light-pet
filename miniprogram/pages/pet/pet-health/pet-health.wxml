@@ -30,11 +30,6 @@
                 <i class="iconfont {{hasSet ? 'icon-kaiqi' : 'icon-xitong'}}" />
                 {{hasSet ? '已设置提醒时间' : '设置提醒时间'}}
             </view>
-            <!-- <view wx:if="{{hasSet}}" class="content">
-                <view class="hasSet">
-                    <i class="iconfont icon-tixing" />
-                </view>
-            </view> -->
             <view hidden="{{hasSet}}" class="content">
                 <view wx:if="{{lastTime}}" class="content-item" style="color: #D3D3D3">
                     <text class="item-left">上次{{project}}提醒时间</text>
@@ -47,7 +42,7 @@
                      <i style="color: #FFF" class="iconfont icon-xuanzeqixiayige_o" />
                 </view>
                 <view class="content-item">
-                    <text class="item-left">设置本次的{{project}}时间</text>
+                    <text class="item-left">设置本次的{{project}}日期</text>
                     <view class="item-right">
                         <picker mode="date" start="{{tomorrow}}" value="{{planTime}}" bindchange="planDateChange">
                             <input class="item-right" 
@@ -88,10 +83,6 @@
                         <i class="iconfont icon-xuanzeqixiayige_o" />
                     </view>
                 </view>
-            
-            
-            
-            
             </view>
             <!-- <text style="font-size: 30rpx">注：若无设置具体时间小程序将默认会在上午10:00提醒您哦</text> -->
         </view>

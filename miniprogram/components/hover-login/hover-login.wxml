@@ -1,9 +1,4 @@
 <view wx:if="{{isShow}}" class="hover-login">
-  <!-- <button class="weui-button" type="primary" style="width: 40%; border-radius: 45rpx; box-shadow: 0 0 10rpx #CCC;">
-    <i class="iconfont icon-weixin" style="margin-right: 8rpx" />
-    <text>微信登录</text>
-  </button> -->
-  <!-- <button>点击登录</button> -->
   <view class="btn">
     <i class="iconfont icon-login" style="margin-right: 8rpx" />
     <text>用户登录</text>

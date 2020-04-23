@@ -17,13 +17,13 @@ Page({
     variety: "",
     today: "",
     birthday: "",
-    adoptTime: ""
+    adoptTime: "",
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
+  onLoad: function (options) {
     this._init();
   },
 
@@ -36,7 +36,7 @@ Page({
         : date.getMonth() + 1;
     const day = date.getDate();
     this.setData({
-      today: `${year}-${month}-${day}`
+      today: `${year}-${month}-${day}`,
     });
   },
 
@@ -46,20 +46,20 @@ Page({
       count: 1,
       sizeType: ["original", "compressed"],
       sourceType: ["album", "camera"],
-      success: res => {
+      success: (res) => {
         if (res.errMsg === "chooseImage:ok") {
           const { tempFilePaths } = res;
           this.setData({
-            avatar: tempFilePaths[0]
+            avatar: tempFilePaths[0],
           });
         }
       },
       fail: () => {
         wx.showToast({
           title: "操作失败",
-          icon: "warn"
+          icon: "warn",
         });
-      }
+      },
     });
   },
 
@@ -67,11 +67,11 @@ Page({
   selectSex(event) {
     const {
       currentTarget: {
-        dataset: { sex }
-      }
+        dataset: { sex },
+      },
     } = event;
     this.setData({
-      selectedSex: sex
+      selectedSex: sex,
     });
   },
 
@@ -79,8 +79,8 @@ Page({
   selectSpecies(event) {
     const {
       currentTarget: {
-        dataset: { species }
-      }
+        dataset: { species },
+      },
     } = event;
     let varieties = [];
     if (species === "cat") {
@@ -90,49 +90,56 @@ Page({
     }
     this.setData({
       selectedSpecies: species,
-      varieties
+      varieties,
     });
   },
 
   handleVarietyChange(event) {
     const {
-      detail: { value }
+      detail: { value },
     } = event;
     const { varieties } = this.data;
     this.setData({
-      variety: varieties[value]
+      variety: varieties[value],
     });
   },
 
   handleBirthdayChange(event) {
     const {
-      detail: { value }
+      detail: { value },
     } = event;
     this.setData({
-      birthday: value
+      birthday: value,
     });
   },
 
   handleAdoptChange(event) {
     const {
-      detail: { value }
+      detail: { value },
     } = event;
     this.setData({
-      adoptTime: value
+      adoptTime: value,
     });
   },
 
   handleSubmit(event) {
     const {
       detail: {
-        value: { petName, birthday, adoptTime }
-      }
+        value: { petName, birthday, adoptTime },
+      },
     } = event;
     const { avatar, selectedSex, selectedSpecies, variety } = this.data;
     if (avatar === DEFAULT_AVATAR) {
-      wx.showToast({
-        title: "请先上传头像！",
-        icon: "none"
+      wx.showModal({
+        title: "警告",
+        content: "请先上传头像！",
+      });
+      return;
+    }
+    if (new Date(birthday).getTime() > new Date(adoptTime).getTime()) {
+      wx.showModal({
+        title: "警告",
+        content: "请检查爱宠生日或收养时间是否正确",
       });
       return;
     }
@@ -146,7 +153,7 @@ Page({
     ) {
       wx.showLoading({
         title: "保存中",
-        mask: true
+        mask: true,
       });
       if (imgCheck(avatar)) {
         const sex = selectedSex === "male" ? 0 : 1;
@@ -155,7 +162,7 @@ Page({
           // 路径名称唯一
           cloudPath: `pet/${Date.now()}-${Math.random() * 1000000}${suffix}`,
           filePath: avatar,
-          success: res => {
+          success: (res) => {
             if (res.errMsg === "cloud.uploadFile:ok") {
               const { fileID } = res;
               wx.cloud
@@ -169,10 +176,10 @@ Page({
                     species: selectedSpecies,
                     variety,
                     birthday,
-                    adoptTime
-                  }
+                    adoptTime,
+                  },
                 })
-                .then(res => {
+                .then((res) => {
                   const { result } = res;
                   const pet = [result].map(
                     ({ _id, petAvatar, petName, sex, species, variety }) => ({
@@ -181,7 +188,7 @@ Page({
                       petName,
                       sex,
                       species,
-                      variety
+                      variety,
                     })
                   );
                   const petList = wx.getStorageSync("petList");
@@ -195,10 +202,10 @@ Page({
             } else {
               wx.showToast({
                 title: "操作失败",
-                icon: "warn"
+                icon: "warn",
               });
             }
-          }
+          },
         });
       } else {
         wx.hideLoading();
@@ -208,7 +215,7 @@ Page({
     } else {
       wx.showToast({
         title: "请将爱宠信息补充完整！",
-        icon: "none"
+        icon: "none",
       });
     }
   },
@@ -217,7 +224,7 @@ Page({
     const currentPages = getCurrentPages();
     if (currentPages.length > 1) {
       wx.navigateBack({
-        delta: 1
+        delta: 1,
       });
     }
   },
@@ -225,35 +232,35 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function() {},
+  onReady: function () {},
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {},
+  onShow: function () {},
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {},
+  onHide: function () {},
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function() {},
+  onUnload: function () {},
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {},
+  onPullDownRefresh: function () {},
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {},
+  onReachBottom: function () {},
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {}
+  onShareAppMessage: function () {},
 });
